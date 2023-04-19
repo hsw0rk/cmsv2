@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import './Login.css'
-import 'D:/Harish/Projects/Office/loginregister/client/src/App.css'
+import 'D:/Harish/Projects/Office/cms/client/src/App.css'
 import { Link, useNavigate } from 'react-router-dom';
-import video from 'D:/Harish/Projects/Office/loginregister/client/src/LoginAssets/leafvideo.mp4';
-import logo from 'D:/Harish/Projects/Office/loginregister/client/src/LoginAssets/leaflogo.png';
+import way from 'D:/Harish/Projects/Office/cms/client/src/LoginAssets/sundaram-way.png';
+import logo from 'D:/Harish/Projects/Office/cms/client/src/LoginAssets/sftransparentlogo.png';
 import {FaUserShield} from 'react-icons/fa';
 import {BsFillShieldLockFill} from 'react-icons/bs';
 import {AiOutlineSwapRight} from 'react-icons/ai';
@@ -12,7 +12,7 @@ import Axios from 'axios';
 
 const Login = () => {
   // UseState Hook to store inputs
-  const [loginUserName, setLoginUserName] = useState('')
+  const [loginEmployeecode, setLoginEmployeecode] = useState('')
   const [loginPassword, setLoginPassword] = useState('')
   const navigateTo = useNavigate()
 
@@ -28,17 +28,17 @@ const Login = () => {
     // Using Axios to create an API that connects to the server
     Axios.post('http://localhost:3002/login',{
       // Creating variable to send to server through the route
-      LoginUserName: loginUserName,
+      LoginEmployeecode: loginEmployeecode,
       LoginPassword: loginPassword
     }).then((response)=>{
       console.log()
-      if(response.data.message || loginUserName == '' || loginPassword == ''){
+      if(response.data.message || loginEmployeecode == '' || loginPassword == ''){
         // if credentials dont match
         navigateTo('/')
         setLoginStatus(`Credentials don't exist!`)
       }
       else{
-        navigateTo('/dashboard' , { state: { username: response.data[0].username, email: response.data[0].email } }) // if match
+        navigateTo('/dashboard' , { state: { employeename: response.data[0].employeename } }) // if match
       }
     })
   }
@@ -54,7 +54,7 @@ const Login = () => {
 
   // clear form on submit
   const onSubmit = ()=>{
-    setLoginUserName('')
+    setLoginEmployeecode('')
     setLoginPassword('')
   }
 
@@ -63,11 +63,11 @@ const Login = () => {
     <div className='container flex'>
       
       <div className='videoDiv'>
-        <video src={video} autoPlay muted loop></video>
+        {/* <img src={way} /> */}
 
         <div className='textDiv'>
-          <h2 className='title'>Create and sell extraordinary products</h2>
-          <p>Adopt the peace of nature!</p>
+          <h2 className='title'>CMS</h2>
+          <p>Sundaram Direct</p>
         </div>
 
         <div className='footerDiv flex'>
@@ -87,12 +87,12 @@ const Login = () => {
         <form action="" className='form grid' onSubmit={onSubmit}>
           <span className={statusHolder}>{loginStatus}</span>
           <div className='inputDiv'>
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">Employee Id</label>
             <div className='input flex'>
               <FaUserShield className='icon' />
-              <input type="text" id='username' placeholder='Enter Username' 
+              <input type="text" id='username' placeholder='Enter Employee ID' 
               onChange={(event)=>{
-                setLoginUserName(event.target.value)
+                setLoginEmployeecode(event.target.value)
               }}/>
             </div>
           </div>

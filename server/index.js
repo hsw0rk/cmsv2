@@ -17,19 +17,19 @@ const db = mysql.createConnection({
     user: 'root',
     host: 'localhost',
     password: '',
-    database: 'plantdb',
+    database: 'cmslite',
 })
 
 // register server
 app.post('/register', (req, res)=>{
     // get variables from the form
-    const sentEmail = req.body.Email
-    const sentUserName = req.body.UserName
+    const sentEmployeecode = req.body.Employeecode
+    const sentEmployeename = req.body.Employeename
     const sentPassword = req.body.Password
 
     // Creating SQL statement to insert user to the database table users
-    const SQL = `INSERT INTO Users (email, username, password) VALUES (?, ?, ?)`;
-    const VALUES = [sentEmail, sentUserName, sentPassword]
+    const SQL = `INSERT INTO employeemaster (employeecode, employeename, password) VALUES (?, ?, ?)`;
+    const VALUES = [sentEmployeecode, sentEmployeename, sentPassword]
 
     // Query to execute the sql statement stated above
     db.query(SQL, VALUES, (err, results)=>{
@@ -46,12 +46,12 @@ app.post('/register', (req, res)=>{
 // login with these credentials from a registered user
 app.post('/login', (req, res)=>{
     // get variables from the form
-    const sentLoginUserName = req.body.LoginUserName
+    const sentLoginEmployeecode = req.body.LoginEmployeecode
     const sentLoginPassword = req.body.LoginPassword
 
     // Creating SQL statement to insert user to the database table users
-    const SQL = `SELECT * FROM users WHERE username = ? && password = ?`;
-    const VALUES = [sentLoginUserName, sentLoginPassword]
+    const SQL = `SELECT * FROM employeemaster WHERE employeecode = ? && password = ?`;
+    const VALUES = [sentLoginEmployeecode, sentLoginPassword]
 
     // Query to execute the sql statement stated above
     db.query(SQL, VALUES, (err, results)=>{

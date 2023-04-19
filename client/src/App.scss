@@ -10,13 +10,14 @@
 // setting up default styling
 :root{
     --primaryColor: hsl(94, 55%, 96%);
-    --hoverColor: hsl(93, 75%, 76%);
+    --hoverColor: hsl(207, 100%, 69%);
     --paleGreen: hsl(90, 75%, 89%);
     --whiteColor: hsl(0, 0%, 100%);
     --blackColor: hsl(0, 0%, 10%);
     --greyText: hsl(0, 0%, 75%);
     --bgColor: hsl(113, 11%, 85%);
     --inputColor: hsl(330, 12%, 97%);
+    --sfColor: #003f82;
 
 
     // font Typography
@@ -99,9 +100,9 @@ img, video{
     height: 100vh;
     width: 100%;
     margin: auto;
-    border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 7px 50px rgb(214, 223, 213);
+    background-color: #003f82;
 
     .container{
         height: 75vh;
@@ -109,7 +110,8 @@ img, video{
         margin: auto;
         justify-content: space-between;
         border-radius: 10px;
-        background: hsl(0, 0%, 91%);
+        background: hsl(0, 0%, 100%);
+        box-shadow: rgba(23, 23, 23, .5) 0px 8px 24px;;
 
         .videoDiv{
         position: relative;
@@ -142,13 +144,13 @@ img, video{
             position: relative;
 
             .title{
-                color: var(--whiteColor);
+                color: var(--blackColor);
                 font-size: 35px;
                 font-weight: 800;
             }
 
             p{
-                color: var(--whiteColor);
+                color: var(--blackColor);
                 padding: 1rem;
                 font-weight: 400;
             }
@@ -158,7 +160,7 @@ img, video{
             bottom: 10px;
             padding: 0 1rem;
             height: 60px;
-            background: rgba(255, 255, 255, 0.248);
+            background: rgba(110, 158, 255, 0.438);
             left: 10px;
             right: 10px;
             justify-content: space-between;
@@ -166,12 +168,12 @@ img, video{
             border-radius: 10px;
 
             .text{
-                color: var(--whiteColor);
+                color: var(--blackColor);
             }
 
             .btn{
-                background: var(--whiteColor);
-                color: var(--greyText);
+                background: var(--sfColor);
+                color: var(--whiteColor);
                 padding: .8rem 1.5rem;
                 border-radius: 10px;
                 font-weight: 400;
@@ -242,9 +244,9 @@ img, video{
 
             .btn{
                 padding: .8rem;
-                background: var(--primaryColor);
+                background: var(--sfColor);
                 border-radius: 10px;
-                color: var(--greyText);
+                color: var(--whiteColor);
                 align-items: center;
                 margin: auto;
                 justify-content: center;

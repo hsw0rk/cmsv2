@@ -1,13 +1,22 @@
 import { useLocation } from 'react-router-dom';
+import './Dashboard.css';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const location = useLocation();
-  const { username, email } = location.state;
+  const { employeename } = location.state;
 
   return (
     <div>
-      <h1>Welcome, {username}!</h1>
-      <p>Your email is: {email}</p>
+      <p className='username'>{employeename}</p>
+
+      
+          <Link to={'/investments'}>
+          <p className='investments'>Investments</p>
+          </Link>
+      
+      <p className='loans'>Loans</p>
+      <p className='insurance'>Insurance</p>
     </div>
   );
 };

@@ -1,0 +1,17 @@
+form {
+    background-color: aqua;
+    width: auto;
+    display: grid;
+    padding: 10px;
+    gap: 10px;
+    height: auto;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    
+}
+
+button{
+    width: auto;
+
+}
+
