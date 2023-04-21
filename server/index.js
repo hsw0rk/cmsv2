@@ -3,6 +3,8 @@ const express = require('express')
 const app = express()
 const mysql = require('mysql')
 const cors = require('cors')
+require('dotenv').config();
+
 
 app.use(express.json())
 app.use(cors())
@@ -14,10 +16,10 @@ app.listen(3002, ()=>{
 
 // Database connection
 const db = mysql.createConnection({
-    user: 'root',
-    host: 'localhost',
-    password: '',
-    database: 'cmslite',
+    user: process.env.USER,
+    host: process.env.HOST,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE
 })
 
 // register server
