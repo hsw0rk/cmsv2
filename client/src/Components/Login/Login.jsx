@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import './Login.css'
-import 'D:/Harish/Projects/Office/cms/client/src/App.css'
+import '../../App.css'
 import { Link, useNavigate } from 'react-router-dom';
-import way from 'D:/Harish/Projects/Office/cms/client/src/LoginAssets/sundaram-way.png';
-import logo from 'D:/Harish/Projects/Office/cms/client/src/LoginAssets/sftransparentlogo.png';
+import way from '../../LoginAssets/sundaram-way.png';
+import logo from '../../LoginAssets/sftransparentlogo.png'
 import {FaUserShield} from 'react-icons/fa';
 import {BsFillShieldLockFill} from 'react-icons/bs';
 import {AiOutlineSwapRight} from 'react-icons/ai';

@@ -22,20 +22,20 @@ const db = mysql.createConnection({
 
 // register server
 app.post('/register', (req, res)=>{
-    // get variables from the form
+  // get variables from the form
     const sentEmployeecode = req.body.Employeecode
     const sentEmployeename = req.body.Employeename
     const sentPassword = req.body.Password
 
     // Creating SQL statement to insert user to the database table users
-    const SQL = `INSERT INTO employeemaster (employeecode, employeename, password) VALUES (?, ?, ?)`;
+  const SQL = `INSERT INTO employeemaster (employeecode, employeename, password) VALUES (?, ?, ?)`;
     const VALUES = [sentEmployeecode, sentEmployeename, sentPassword]
 
     // Query to execute the sql statement stated above
     db.query(SQL, VALUES, (err, results)=>{
         if(err){
             res.send(err)
-        }
+    }
         else{
             console.log('User inserted successfully!')
             res.send({message: 'User added!'})
@@ -45,7 +45,7 @@ app.post('/register', (req, res)=>{
 
 // login with these credentials from a registered user
 app.post('/login', (req, res)=>{
-    // get variables from the form
+  // get variables from the form
     const sentLoginEmployeecode = req.body.LoginEmployeecode
     const sentLoginPassword = req.body.LoginPassword
 
@@ -57,12 +57,59 @@ app.post('/login', (req, res)=>{
     db.query(SQL, VALUES, (err, results)=>{
         if(err){
             res.send({error: err})
-        }
+    }
         if(results.length > 0){
             res.send(results)
-        }
+    }
         else{
             res.send({message: `Credentials don't match`})
         }
     })    
 })
+
+// handle POST request from investments.jsx form
+app.post('/investments', (req, res) => {
+  // extract data from request body
+  const {
+    name,
+    product,
+    principal,
+    customername,
+    pan,
+    mobileno,
+    creditbranch,
+    business,
+    vertical,
+    employeename,
+      employeecode
+  } = req.body;
+
+  // create MySQL query to insert data into cmsverticalform table
+  const SQL = `INSERT INTO cmsverticalform
+                  (name, product, principal, customername, pan, mobileno, creditbranch, business, vertical, employeename, employeecode)
+                  VALUES
+                  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const VALUES = [
+    name,
+    product,
+    principal,
+    customername,
+    pan,
+    mobileno,
+    creditbranch,
+    business,
+    vertical,
+    employeename,
+        employeecode]              
+
+  // execute MySQL query using connection pool
+    db.query(SQL, VALUES, (err, results)=>{
+        if(err){
+            res.send(err)
+    }
+        else{
+            console.log('Inserted successfully!')
+            res.send({message: 'info added!'})
+        }
+    })
+  });
