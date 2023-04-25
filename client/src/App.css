@@ -98,7 +98,7 @@ img, video {
   background-color: #003f82;
 }
 .loginPage .container, .registerPage .container {
-  height: 75vh;
+  height: 90vh;
   width: 60%;
   margin: auto;
   justify-content: space-between;
