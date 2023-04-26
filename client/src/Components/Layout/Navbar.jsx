@@ -18,9 +18,9 @@ const Navbar = () => {
       <Link to={'/'}><img src={logo} alt="Company Logo" className='header-logo' /></Link>
       <span className="empname">Welcome {currentUser.employeename}!</span>
             <div className="buttons">
-                <button onClick="" className="button is-light">
+                <a href="/login" ><button onClick="" className="button is-light">
                   Log out
-                </button>
+                </button></a>
               </div>
       </header>
     </div>

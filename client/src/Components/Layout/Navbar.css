@@ -22,5 +22,6 @@
     cursor: pointer;
     justify-content:flex-end;
     align-items:end;
-    /* margin-left: 75rem; */
+    margin-left: 65rem;
+    font-size: 16px;
 }

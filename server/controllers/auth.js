@@ -61,43 +61,68 @@ export const login = (req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.clearCookie("accessToken",{
-    secure:true,
-    sameSite:"none"
-  }).status(200).json("User has been logged out.")
+  res
+    .clearCookie("accessToken", {
+      secure: true,
+      sameSite: "none",
+    })
+    .status(200)
+    .json("User has been logged out.");
 };
 
+// export const investments = (req, res) => {
+//   //CHECK IF INVESTMENT EXISTS
+
+//   const q = "SELECT * FROM cmsverticalform WHERE pan = ?";
+
+//   db.query(q, [req.body.pan], (err, data) => {
+//     if (err) return res.status(500).json(err);
+//     if (data.length) return res.status(409).json("Investment already exists!");
+//     //CREATE A NEW INVESTMENT
+
+//     const q =
+//       "INSERT INTO cmsverticalform (`principal`,`product`,`freshrenewal`,`pan`,`mobileno`,`customername`,`creditbranch`,`business`,`vertical`,`employeename`,`employeecode`) VALUES (?)";
+
+//     const values = [
+//       req.body.principal,
+//       req.body.product,
+//       req.body.freshrenewal,
+//       req.body.pan,
+//       req.body.mobileno,
+//       req.body.customername,
+//       req.body.creditbranch,
+//       req.body.business,
+//       req.body.vertical,
+//       req.body.employeename,
+//       req.body.employeecode,
+//     ];
+
+//     db.query(q, [values], (err, data) => {
+//       if (err) return res.status(500).json(err);
+//       return res.status(200).json("Investment has been added!");
+//     });
+//   });
+// };
 
 export const investments = (req, res) => {
-  //CHECK IF INVESTMENT EXISTS
+  const q = "INSERT INTO cmsverticalform (`principal`,`product`,`freshrenewal`,`pan`,`mobileno`,`customername`,`creditbranch`,`business`,`vertical`,`employeename`,`employeecode`) VALUES (?)";
 
-  const q = "SELECT * FROM cmsverticalform WHERE pan = ?";
+  const values = [
+    req.body.principal,
+    req.body.product,
+    req.body.freshrenewal,
+    req.body.pan,
+    req.body.mobileno,
+    req.body.customername,
+    req.body.creditbranch,
+    req.body.business,
+    req.body.vertical,
+    req.body.employeename,
+    req.body.employeecode,
+  ];
 
-  db.query(q, [req.body.pan], (err, data) => {
+  db.query(q, [values], (err, data) => {
     if (err) return res.status(500).json(err);
-    if (data.length) return res.status(409).json("Investment already exists!");
-    //CREATE A NEW INVESTMENT
-
-    const q =
-      "INSERT INTO cmsverticalform (`principal`,`product`,`freshrenewal`,`pan`,`mobileno`,`customername`,`creditbranch`,`business`,`vertical`,`employeename`,`employeecode`) VALUES (?)";
-
-    const values = [
-      req.body.principal,
-      req.body.product,
-      req.body.freshrenewal,
-      req.body.pan,
-      req.body.mobileno,
-      req.body.customername,
-      req.body.creditbranch,
-      req.body.business,
-      req.body.vertical,
-      req.body.employeename,
-      req.body.employeecode,
-    ];
-
-    db.query(q, [values], (err, data) => {
-      if (err) return res.status(500).json(err);
-      return res.status(200).json("Investment has been added!");
-    });
+    return res.status(200).json("Investment has been created!");
   });
 };

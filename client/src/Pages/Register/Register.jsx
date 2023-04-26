@@ -110,6 +110,7 @@ const Register = () => {
               <label htmlFor="mobilenumber">Mobile Number</label>
               <div className="input flex">
                 <FaUserShield className="icon" />
+                
                 <input
                   type="text"
                   id="mobilenumber"
