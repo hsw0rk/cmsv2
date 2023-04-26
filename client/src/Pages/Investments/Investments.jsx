@@ -180,7 +180,9 @@ style={{
 style={{
   color: "green",
   fontSize: "20px",
+  display: "flex",
   justifyContent: "center",
+  alignItems: "center",
   fontWeight: "bold",
 }}
 >
