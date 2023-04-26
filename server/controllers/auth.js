@@ -27,7 +27,7 @@ export const register = (req, res) => {
 
     db.query(q, [values], (err, data) => {
       if (err) return res.status(500).json(err);
-      return res.status(200).json("User has been created.");
+      return res.status(200).json("User has been created!");
     });
   });
 };
@@ -69,35 +69,35 @@ export const logout = (req, res) => {
 
 
 export const investments = (req, res) => {
-// investments server
-app.post('http://localhost:8800/api/investments', (req, res)=>{
-  // get variables from the form
-  const sentprincipal = req.body.principal
-  const sentproduct = req.body.product
-  const sentFreshRenewal = req.body.FreshRenewal
-  const sentpan = req.body.pan
-  const sentmobileno = req.body.mobileno
-  const sentcustomername = req.body.customername
-  const sentcreditbranch = req.body.creditbranch
-  const sentbusiness = req.body.business
-  const sentvertical = req.body.vertical
-  const sentemployeename = req.body.employeename
-  const sentemployeecode = req.body.employeecode
- 
+  //CHECK IF INVESTMENT EXISTS
 
-  // Creating SQL statement to insert user to the database table users
-  const SQL = `INSERT INTO cmsverticalform (principal, product, FreshRenewal,pan,mobileno,customername,creditbranch,business,vertical,employeename,employeecode) VALUES (?, ?, ?,?,?,?,?,?,?,?,?)`;
-  const VALUES = [sentprincipal, sentproduct, sentFreshRenewal,sentpan,sentmobileno,sentcustomername,sentcreditbranch,sentbusiness,sentvertical,sentemployeename ,sentemployeecode]
+  const q = "SELECT * FROM cmsverticalform WHERE pan = ?";
 
-  // Query to execute the sql statement stated above
-  db.query(SQL, VALUES, (err, results)=>{
-      if(err){
-          res.send(err)
-      }
-      else{
-          console.log('User inserted successfully!')
-          res.send({message: 'User added!'})
-      }
-  })
-})
-}
+  db.query(q, [req.body.pan], (err, data) => {
+    if (err) return res.status(500).json(err);
+    if (data.length) return res.status(409).json("Investment already exists!");
+    //CREATE A NEW INVESTMENT
+
+    const q =
+      "INSERT INTO cmsverticalform (`principal`,`product`,`freshrenewal`,`pan`,`mobileno`,`customername`,`creditbranch`,`business`,`vertical`,`employeename`,`employeecode`) VALUES (?)";
+
+    const values = [
+      req.body.principal,
+      req.body.product,
+      req.body.freshrenewal,
+      req.body.pan,
+      req.body.mobileno,
+      req.body.customername,
+      req.body.creditbranch,
+      req.body.business,
+      req.body.vertical,
+      req.body.employeename,
+      req.body.employeecode,
+    ];
+
+    db.query(q, [values], (err, data) => {
+      if (err) return res.status(500).json(err);
+      return res.status(200).json("Investment has been added!");
+    });
+  });
+};

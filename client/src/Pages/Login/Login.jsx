@@ -73,7 +73,7 @@ const Login = () => {
               <FaUserShield className='icon' />
               <input type="text" id='employeecode' placeholder='Enter Employee ID' 
               name="employeecode" 
-              onChange={handleChange}/>
+              onChange={handleChange} required />
             </div>
           </div>
 
@@ -83,10 +83,10 @@ const Login = () => {
               <BsFillShieldLockFill className='icon' />
               <input type="password" id='password' placeholder='Enter Password' 
               name="password"
-              onChange={handleChange}/>
+              onChange={handleChange} required/>
             </div>
           </div>
-
+          {err && err}
           <button type='submit' className='btn flex' onClick={handleLogin}>
             <span>Login</span>
             <AiOutlineSwapRight className='icon' />

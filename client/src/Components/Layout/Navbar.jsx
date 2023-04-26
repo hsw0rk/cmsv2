@@ -15,7 +15,7 @@ const Navbar = () => {
   return (
     <div>
       <header className='header'>
-      <Link to={'/dashboard'}><img src={logo} alt="Company Logo" className='header-logo' /></Link>
+      <Link to={'/'}><img src={logo} alt="Company Logo" className='header-logo' /></Link>
       <span className="empname">Welcome {currentUser.employeename}!</span>
             <div className="buttons">
                 <button onClick="" className="button is-light">
