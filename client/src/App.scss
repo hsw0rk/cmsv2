@@ -105,7 +105,7 @@ img, video{
     background-color: #003f82;
 
     .container{
-        height: 90vh;
+        height: 95vh;
         width: 60%;
         margin: auto;
         justify-content: space-between;
@@ -191,7 +191,7 @@ img, video{
         flex-basis: 50%;
         margin: auto;
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 1rem;
         transform: translateY(-1rem);
 
             .headerDiv{
@@ -211,7 +211,7 @@ img, video{
             }
 
             .form{
-            gap: 1rem;
+            gap: .5rem;
             
 
             .inputDiv{

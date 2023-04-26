@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import "./register.scss";
+// import "./register.scss";
 import "../../App.css";
 import axios from "axios";
 import logo from "../../Assets/sftransparentlogo.png";
@@ -8,6 +8,8 @@ import { FaUserShield } from "react-icons/fa";
 import { BsFillShieldLockFill } from "react-icons/bs";
 import { AiOutlineSwapRight } from "react-icons/ai";
 import { MdMarkEmailRead } from "react-icons/md";
+import { CiMobile2 } from "react-icons/ci";
+
 
 const Register = () => {
   const [inputs, setInputs] = useState({
@@ -109,7 +111,7 @@ const Register = () => {
             <div className="inputDiv">
               <label htmlFor="mobilenumber">Mobile Number</label>
               <div className="input flex">
-                <FaUserShield className="icon" />
+                <CiMobile2 className="icon" />
                 
                 <input
                   type="text"
