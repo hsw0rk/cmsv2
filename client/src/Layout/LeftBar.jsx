@@ -1,5 +1,5 @@
 // import "./leftBar.scss";
-import { AuthContext } from "../../context/authContext";
+import { AuthContext } from "../context/authContext";
 import { useContext } from "react";
 
 const LeftBar = () => {

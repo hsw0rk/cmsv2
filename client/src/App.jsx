@@ -6,9 +6,9 @@ import {
   Outlet,
   Navigate,
 } from "react-router-dom";
-import Navbar from "./Components/Layout/Navbar";
-import LeftBar from "./Components/Layout/LeftBar";
-import RightBar from "./Components/Layout/RightBar";
+import Navbar from "./Layout/Navbar";
+import LeftBar from "./Layout/LeftBar";
+import RightBar from "./Layout/RightBar";
 import Home from "./Pages/Dashboard/Dashboard";
 import Investments from "./Pages/Investments/Investments";
 import "../src/App.scss"
