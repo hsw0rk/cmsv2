@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import "../../App.css";
 import axios from "axios";
 import logo from "../../Assets/sftransparentlogo.png";
+import way from '../../Assets/sundaram-way.png';
+import video from '../../Assets/video.mp4';
 import { FaUserShield } from "react-icons/fa";
 import { BsFillShieldLockFill } from "react-icons/bs";
 import { AiOutlineSwapRight } from "react-icons/ai";
@@ -45,13 +47,17 @@ const Register = () => {
 
   return (
     <div className="registerPage flex">
+           <div class="video-bg">
+  <video src={video} width="320" height="240" autoPlay loop muted playsInline>
+  </video>
+</div>
       <div className="container flex">
         <div className="videoDiv">
-          {/* <video src={video} autoPlay muted loop></video> */}
+          <img src={way}></img>
 
           <div className="textDiv">
-            <h2 className="title">SD Employee Site</h2>
-            <p>Sundaram Finance</p>
+            <h2 className="title"></h2>
+            <p></p>
           </div>
           <div
             className="error"

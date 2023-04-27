@@ -18,6 +18,7 @@
     --bgColor: hsl(113, 11%, 85%);
     --inputColor: hsl(330, 12%, 97%);
     --sfColor: #003f82;
+    --glass: rgba(255, 255, 255, 0.54);
 
 
     // font Typography
@@ -94,7 +95,20 @@ img, video{
     background: var(--paleGreen);
 }
 
-
+.video-bg {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    
+    video {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+    }
+   }
+   
 // Pages stylings
 .loginPage, .registerPage{
     height: 100vh;
@@ -103,15 +117,25 @@ img, video{
     overflow: hidden;
     box-shadow: 0 7px 50px rgb(214, 223, 213);
     background-color: #003f82;
-
+    background: linear-gradient(
+        106.37deg,
+        #356bb7 29.63%,
+        #00255d 51.55%,
+        #2c5aa3 90.85%
+      );
+    
+      
     .container{
         height: 95vh;
         width: 60%;
         margin: auto;
         justify-content: space-between;
         border-radius: 10px;
-        background: hsl(0, 0%, 100%);
-        box-shadow: rgba(23, 23, 23, .5) 0px 8px 24px;;
+        background: var(--glass);
+        box-shadow: rgba(23, 23, 23, .5) 0px 8px 24px;
+        backdrop-filter: blur(1px);
+
+        
 
         .videoDiv{
         position: relative;

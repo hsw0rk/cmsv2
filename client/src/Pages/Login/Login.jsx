@@ -5,6 +5,7 @@ import { AuthContext } from "../../context/authContext";
 import "../../App.css";
 import way from '../../Assets/sundaram-way.png';
 import logo from '../../Assets/sftransparentlogo.png'
+import video from '../../Assets/video.mp4';
 import {FaUserShield} from 'react-icons/fa';
 import {BsFillShieldLockFill} from 'react-icons/bs';
 import {AiOutlineSwapRight} from 'react-icons/ai';
@@ -42,14 +43,19 @@ const Login = () => {
   
   return (
     <div className='loginPage flex'>
+      <div class="video-bg">
+  <video src={video} width="320" height="240" autoPlay loop muted playsInline>
+  </video>
+</div>
+
     <div className='container flex'>
       
       <div className='videoDiv'>
-        {/* <img src={way} /> */}
+        <img src={way} />
 
         <div className='textDiv'>
-          <h2 className='title'>SD Employee Site</h2>
-          <p>Sundaram Finance</p>
+          <h2 className='title'></h2>
+          <p></p>
         </div>
 
         <div className='footerDiv flex'>
