@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
-// import "./login.scss";
+import "./Login.scss";
 import "../../App.css";
 import way from '../../Assets/sundaram-way.png';
 import logo from '../../Assets/sftransparentlogo.png'
@@ -43,7 +43,7 @@ const Login = () => {
   
   return (
     <div className='loginPage flex'>
-      <div class="video-bg">
+      <div className="video-bg">
   <video src={video} width="320" height="240" autoPlay loop muted playsInline>
   </video>
 </div>

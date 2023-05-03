@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-// import "./register.scss";
+import "./Register.scss";
 import "../../App.css";
 import axios from "axios";
 import logo from "../../Assets/sftransparentlogo.png";
@@ -47,7 +47,7 @@ const Register = () => {
 
   return (
     <div className="registerPage flex">
-           <div class="video-bg">
+           <div className="video-bg">
   <video src={video} width="320" height="240" autoPlay loop muted playsInline>
   </video>
 </div>

@@ -1,36 +1,26 @@
-// import "./leftBar.scss";
-import { AuthContext } from "../context/authContext";
-import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import './RightBar.scss'
+import OverallList from '../Components/overall-list/OverallList';
+import RevenueList from '../Components/revenue-list/RevenueList';
 
-export const logout = (navigate) => {
-  document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  navigate('/login');
-};
-
-const RightBar = () => {
-
-  const { currentUser } = useContext(AuthContext);
-
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout(navigate);
-  };
-
+const DashboardWrapperRight = () => {
   return (
-    <div className="leftBar">
-      <div className="container">
-        <div className="menu">
-          <div className="user">
-            <p>Welcome, {currentUser.employeename}</p>
-          </div>
-        </div>
-        <hr />
-        <button onClick={handleLogout}>Logout</button>
-      </div>
+    <div className='dashboard-wrapper__right'>
+      <div className="title mb">Overall</div>
+  <div className="mb">
+    <OverallList />
+  </div>
+  <div className="title mb">Revenue by channel</div>
+  <div className="mb">
+    <RevenueList />
+  </div>
     </div>
   );
 };
 
-export default RightBar;
+export default DashboardWrapperRight;
+
+// // usage
+// <DashboardWrapperRight>
+  
+// </DashboardWrapperRight>

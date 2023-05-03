@@ -1,0 +1,76 @@
+@use '../../scss/abstracts/' as *;
+
+.user-info {
+    @include flex(center, flex-start);
+    background-color: $mainBg;
+    border-radius: $borderRadius;
+    height: 50px;
+    width: max-content;
+    box-shadow: 0 0px 32px 0 rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    position: relative;
+
+    &__img {
+        --size: 50px;
+        width: var(--size);
+        height: var(--size);
+        border-radius: $borderRadius;
+        transition: all 0.3s ease-in-out;
+
+        img {
+            border-radius: $borderRadius;
+            
+        }
+
+        &:hover{
+            transform: translateX(3px);
+        }
+    }
+
+    &__name {
+        padding: 0 $spacing;
+        font-size: $fontSizeMedium;
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 13rem; 
+
+        @include tablet {
+            padding: 0 $mobileSpacing;
+        }
+    }
+
+    &__menu__icon {
+        justify-content: space-between;
+        margin-top: .3rem;
+        margin-right: 1rem;
+        margin-left: 2rem;
+        gap: .8rem;
+        --size: 50px;
+        width: var(--size);
+        height: var(--size);
+        @include flex(center, end);
+
+        @include tablet {
+            margin-right: 1rem;
+        }
+
+        i {
+            font-size: 1.9rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .settings:hover {
+            color: $mainColor;
+            transform: rotate(360deg);
+          }
+          
+        .logout:hover {
+            color: $mainColor;
+            transform: translateX(-3px);
+          }
+    }
+
+    
+}    

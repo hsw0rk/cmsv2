@@ -22,5 +22,3 @@ app.use("/api/auth", authRoutes);
 app.listen(8800, () => {
   console.log("API working!");
 });
-
-
