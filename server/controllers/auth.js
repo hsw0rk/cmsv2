@@ -120,13 +120,54 @@ export const investments = (req, res) => {
   });
 };
 
-
-
 export const cmsverticalformdata = (req, res) => {
   const q = "SELECT * FROM cmsverticalform";
 
   db.query(q, (err, data) => {
     if (err) return res.status(500).json(err);
     return res.status(200).json(data);
+  });
+};
+
+export const investmentsCount = (req, res) => {
+  const sql = "SELECT COUNT(id) as investments FROM cmsverticalform WHERE vertical = 'investments'";
+  db.query(sql, (err, result) => {
+    if (err) return res.json({ Error: "Error in running query" });
+    return res.json(result);
+  });
+};
+
+
+export const homeloansCount = (req, res) => {
+  const sql = "SELECT COUNT(id) as homeloans FROM cmsverticalform WHERE vertical = 'homeloans'";
+  db.query(sql, (err, result) => {
+    if (err) return res.json({ Error: "Error in running query" });
+    return res.json(result);
+  });
+}
+
+export const insuranceCount = (req, res) => {
+
+  const sql = "SELECT COUNT(id) as insurance FROM cmsverticalform WHERE vertical = 'insurance'";
+  db.query(sql, (err, result) => {
+    if (err) return res.json({ Error: "Error in running query" });
+    return res.json(result);
+  });
+}
+
+export const orderbookCount = (req, res) => {
+  const sql = `
+    SELECT 
+      (SELECT COUNT(id) FROM cmsverticalform WHERE vertical = 'investments') as investments,
+      (SELECT COUNT(id) FROM cmsverticalform WHERE vertical = 'homeloans') as homeloans,
+      (SELECT COUNT(id) FROM cmsverticalform WHERE vertical = 'insurance') as insurance
+  `;
+  db.query(sql, (err, result) => {
+    if (err) return res.json({ Error: "Error in running query" });
+    const count =
+      (result[0].investments || 0) +
+      (result[0].homeloans || 0) +
+      (result[0].insurance || 0);
+    return res.json([{ orderbook: count }]);
   });
 };

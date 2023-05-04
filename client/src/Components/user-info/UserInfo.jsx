@@ -25,7 +25,7 @@ const UserInfo = ({ user }) => {
             <Link to="/profile"><img src={user.img} alt="profile" title="profile" /></Link>
             </div>
             <div className="user-info__name">
-                <span>{currentUser.employeename}</span>
+                <span>{currentUser.employeename.split(" ")[0]}</span>
             </div>
             <div className="user-info__menu" >
                 <div className="user-info__menu__icon">

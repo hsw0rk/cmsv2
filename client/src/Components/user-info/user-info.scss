@@ -4,7 +4,7 @@
     @include flex(center, flex-start);
     background-color: $mainBg;
     border-radius: $borderRadius;
-    height: 50px;
+    height: 50px;        
     width: max-content;
     box-shadow: 0 0px 32px 0 rgba(0, 0, 0, 0.2);
     cursor: pointer;
@@ -28,14 +28,15 @@
     }
 
     &__name {
-        padding: 0 $spacing;
+        padding: 2px;
         font-size: $fontSizeMedium;
         font-weight: 700;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 13rem; 
-
+        max-width: 13rem;
+        word-break: break-all;
+    
         @include tablet {
             padding: 0 $mobileSpacing;
         }

@@ -4,6 +4,7 @@ import { AuthContext } from "../../context/authContext";
 import "./Login.scss";
 import "../../App.css";
 import way from '../../Assets/sundaram-way.png';
+import sd from '../../Assets/sdtransparentlogo.png';
 import logo from '../../Assets/sftransparentlogo.png'
 import video from '../../Assets/video.mp4';
 import {FaUserShield} from 'react-icons/fa';
@@ -43,10 +44,10 @@ const Login = () => {
   
   return (
     <div className='loginPage flex'>
-      <div className="video-bg">
+      {/* <div className="video-bg">
   <video src={video} width="320" height="240" autoPlay loop muted playsInline>
   </video>
-</div>
+</div> */}
 
     <div className='container flex'>
       
@@ -68,7 +69,7 @@ const Login = () => {
 
       <div className="formDiv flex">
         <div className="headerDiv">
-          <img src={logo} alt="Logo Image" />
+          <img src={sd} alt="Logo Image" />
           <h3>Welcome!</h3>
         </div>
 

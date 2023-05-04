@@ -51,11 +51,11 @@ const Dashboard = () => {
                     </div> */}
                 </div>
                 <div className="row">
-                    {/* <div className="col-12">
+                    <div className="col-12">
                         <Box>
                             <RevenueByMonthsChart />
                         </Box>
-                    </div> */}
+                    </div>
                 </div>
             </DashboardWrapperMain>
             <DashboardWrapperRight>
@@ -66,10 +66,10 @@ const Dashboard = () => {
                 <div className="mb">
                     <OverallList />
                 </div>
-                <div className="title mb">Revenue by channel</div>
+                {/* <div className="title mb">Revenue by channel</div>
                 <div className="mb">
                     <RevenueList />
-                </div>
+                </div> */}
             </DashboardWrapperRight>
         </DashboardWrapper>
     )

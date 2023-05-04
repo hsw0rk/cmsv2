@@ -6,6 +6,7 @@ import axios from "axios";
 import logo from "../../Assets/sftransparentlogo.png";
 import way from '../../Assets/sundaram-way.png';
 import video from '../../Assets/video.mp4';
+import sd from '../../Assets/sdtransparentlogo.png';
 import { FaUserShield } from "react-icons/fa";
 import { BsFillShieldLockFill } from "react-icons/bs";
 import { AiOutlineSwapRight } from "react-icons/ai";
@@ -47,10 +48,10 @@ const Register = () => {
 
   return (
     <div className="registerPage flex">
-           <div className="video-bg">
+           {/* <div className="video-bg">
   <video src={video} width="320" height="240" autoPlay loop muted playsInline>
   </video>
-</div>
+</div> */}
       <div className="container flex">
         <div className="videoDiv">
           <img src={way}></img>
@@ -79,7 +80,7 @@ const Register = () => {
 
         <div className="formDiv flex">
           <div className="headerDiv">
-            <img src={logo} alt="Logo Image" />
+            <img src={sd} alt="Logo Image" />
             <h3>Welcome!</h3>
           </div>
 

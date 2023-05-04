@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import "./orderbook.css";
 import { AuthContext } from "../../context/authContext";
+import { saveAs } from 'file-saver';
+import exc from '../../Assets/exc.svg';
 
 const OrderBook = () => {
   const [data, setData] = useState([]);
@@ -65,9 +67,46 @@ const OrderBook = () => {
     setSearchQuery(event.target.value);
   };
 
+  const handleDownload = () => {
+    const headers = [
+      { label: 'Vertical', key: 'vertical' },
+      { label: 'Principal', key: 'principal' },
+      { label: 'Product', key: 'product' },
+      { label: 'PAN', key: 'pan' },
+      { label: 'Credit Branch', key: 'creditbranch' },
+      { label: 'Mobile No', key: 'mobileno' },
+    ];
+
+    const exportData = filteredData.map((row) => ({
+      vertical: row.vertical,
+      principal: row.principal,
+      product: row.product,
+      pan: row.pan,
+      creditbranch: row.creditbranch,
+      mobileno: row.mobileno,
+    }));
+
+    const stringify = (value) => {
+      if (value === null || value === undefined) {
+        return '';
+      }
+      return value.toString();
+    };
+
+    const csvData = [
+      headers.map((header) => stringify(header.label)).join(','),
+      ...exportData.map((row) => headers.map((header) => stringify(row[header.key])).join(',')),
+    ].join('\r\n');
+
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8' });
+    saveAs(blob, 'orderbook.csv');
+  };
   return (
 
     <div>
+       <p style={{
+  fontSize:"20px"
+ }}>Order Book</p>
       <div className="flexclassorderbook">
 
         <div>
@@ -83,7 +122,8 @@ const OrderBook = () => {
             <input type="date" id="toDateInput" /></label>
 
 
-          <button className="orderbookdatefilter" onClick={handleFilter}>Filter</button>
+          <button className="orderbookdatefilter" onClick={handleFilter}>Show</button>
+          {/* <img src={exc} alt="Excel Download" className="excellogo" onClick={handleDownload} title="Download CSV" /> */}
 
         </div>
       </div>

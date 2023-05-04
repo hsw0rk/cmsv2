@@ -57,9 +57,9 @@ const Sidebar = () => {
                     ))
                 }
                 <div className="sidebar__menu__item">
-                    <div className="sidebar__menu__item__icon">
+                    {/* <div className="sidebar__menu__item__icon">
                         <i className='bx bx-log-out'></i>
-                    </div>
+                    </div> */}
                     <div className="sidebar__menu__item__txt">
                         <button onClick={handleLogout} >
                             Log out

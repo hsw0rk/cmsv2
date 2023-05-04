@@ -160,11 +160,12 @@ const Investments = () => {
 
   return (
     <>
- 
 
-
-
+ <p style={{
+  fontSize:"20px"
+ }}>Investments</p>
       <div className="form-container-investments">
+        
         <form className="forminvestments" onSubmit={handleSubmit}>
           <div>
             <label>
@@ -291,7 +292,11 @@ const Investments = () => {
           <button type="submit" className="Submitbuttoninvestments">Submit</button>
 
 
-          {err && (
+          
+
+
+        </form>
+        {err && (
             <>
               <div className="popup-background"></div>
               <div className="popup-wrapper">
@@ -314,10 +319,6 @@ const Investments = () => {
               </div>
             </>
           )}
-
-
-        </form>
-
       </div>
     </>
   );
