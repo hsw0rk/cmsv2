@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 export const register = (req, res) => {
   //CHECK USER IF EXISTS
 
-  const q = "SELECT * FROM employeemaster WHERE employeecode = ?";
+  const q = "SELECT * FROM usermaster WHERE employeecode = ?";
 
   db.query(q, [req.body.employeecode], (err, data) => {
     if (err) return res.status(500).json(err);
@@ -16,7 +16,7 @@ export const register = (req, res) => {
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
     const q =
-      "INSERT INTO employeemaster (`employeecode`,`employeename`,`mobilenumber`,`password`) VALUE (?)";
+      "INSERT INTO approvalmaster (`employeecode`,`employeename`,`mobilenumber`,`password`) VALUE (?)";
 
     const values = [
       req.body.employeecode,
@@ -33,11 +33,11 @@ export const register = (req, res) => {
 };
 
 export const login = (req, res) => {
-  const q = "SELECT * FROM employeemaster WHERE employeecode = ?";
+  const q = "SELECT * FROM usermaster WHERE employeecode = ?";
 
   db.query(q, [req.body.employeecode], (err, data) => {
     if (err) return res.status(500).json("User not found!");
-    if (data.length === 0) return res.status(404).json("Fill the Fileds");
+    if (data.length === 0) return res.status(404).json("Fill the Fields");
 
     const checkPassword = bcrypt.compareSync(
       req.body.password,
@@ -45,7 +45,7 @@ export const login = (req, res) => {
     );
 
     if (!checkPassword)
-      return res.status(400).json("Wrong password or username!");
+      return res.status(400).json("Wrong password or employeecode!");
 
     const token = jwt.sign({ id: data[0].id }, "secretkey");
 
