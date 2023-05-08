@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+// setting up default styling
+:root{
+    --primaryColor: hsl(94, 55%, 96%);
+    --hoverColor: hsl(207, 100%, 69%);
+    --paleGreen: hsl(90, 75%, 89%);
+    --whiteColor: hsl(0, 0%, 100%);
+    --blackColor: hsl(0, 0%, 10%);
+    --greyText: hsl(0, 0%, 75%);
+    --bgColor: hsl(113, 11%, 85%);
+    --inputColor: hsl(330, 12%, 97%);
+    --sfColor: #003f82;
+    --glass: rgba(255, 255, 255, 0.54);
+
+
+    // font Typography
+    --biggestFontSie: 2.5rem;
+    --h1FontSize: 1.5rem;
+    --h2FontSize: 1rem;
+    --h3FontSize: 1rem;
+    --normalFontSize: .938rem;
+    --smallFontSize: .813rem;
+    --smallestFontSize: .75rem;
+}
+
+.flex{
+    display: flex;
+    align-items: center;
+}
+
+.grid{
+    display: grid;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+html{
+    font-size: 90%;
+}
+
+a{
+    text-decoration: none;
+}
+
+li{
+    list-style: none;
+}
+
+.icon{
+    font-size: var(--h2FontSize);
+    cursor: pointer;
+}
+
+img, video{
+    height: auto;
+    width: 100%;
+}
+
+.message{
+    display: none;
+}
+
+.showMessage{
+    display: block;
+    color: var(--whiteColor);
+    padding: 10px;
+    background: rgb(255, 0, 0);
+    border-radius: 3px;
+    text-align: center;
+}
+
+.btn{
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 8px;
+    padding: .8rem 1rem;
+    color: var(--greyText);
+}
+
+.btn .icon{
+    margin-left: .5rem;
+}
+
+.btn:hover{
+    color: var(--primaryColor);
+    background: var(--paleGreen);
+}
+
+.video-bg {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    
+    video {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+    }
+   }
+   
+// hide scrollbar
+::-webkit-scrollbar{
+    display: none;
+}

@@ -10,6 +10,12 @@ export const register = (req, res) => {
   db.query(q, [req.body.employeecode], (err, data) => {
     if (err) return res.status(500).json(err);
     if (data.length) return res.status(409).json("User already exists!");
+
+    const q = "SELECT * FROM approvalmaster WHERE employeecode = ?";
+
+    db.query(q, [req.body.employeecode], (err, data) => {
+      if (err) return res.status(500).json(err);
+      if (data.length) return res.status(409).json("Your details already sent for approval!");  
     //CREATE A NEW USER
     //Hash the password
     const salt = bcrypt.genSaltSync(10);
@@ -27,17 +33,18 @@ export const register = (req, res) => {
 
     db.query(q, [values], (err, data) => {
       if (err) return res.status(500).json(err);
-      return res.status(200).json("User has been created!");
+      return res.status(200).json("Sent for Approval!");
     });
   });
+});
 };
 
 export const login = (req, res) => {
   const q = "SELECT * FROM usermaster WHERE employeecode = ?";
 
   db.query(q, [req.body.employeecode], (err, data) => {
-    if (err) return res.status(500).json("User not found!");
-    if (data.length === 0) return res.status(404).json("Fill the Fields");
+    if (err) return res.status(500).json("Internal server error");
+    if (data.length === 0) return res.status(404).json("User not found, Contact Admin");
 
     const checkPassword = bcrypt.compareSync(
       req.body.password,
@@ -45,7 +52,10 @@ export const login = (req, res) => {
     );
 
     if (!checkPassword)
-      return res.status(400).json("Wrong password or employeecode!");
+      return res.status(400).json("Invalid employeecode/password");
+
+    if (!req.body.employeecode || !req.body.password)
+      return res.status(400).json("Fill the details");
 
     const token = jwt.sign({ id: data[0].id }, "secretkey");
 
@@ -132,7 +142,7 @@ export const cmsverticalformdata = (req, res) => {
 export const investmentsCount = (req, res) => {
   const sql = "SELECT COUNT(id) as investments FROM cmsverticalform WHERE vertical = 'investments'";
   db.query(sql, (err, result) => {
-    if (err) return res.json({ Error: "Error in running query" });
+    if (err) return res.json({ Error: "Error in running investmentsCount query" });
     return res.json(result);
   });
 };
@@ -141,7 +151,7 @@ export const investmentsCount = (req, res) => {
 export const homeloansCount = (req, res) => {
   const sql = "SELECT COUNT(id) as homeloans FROM cmsverticalform WHERE vertical = 'homeloans'";
   db.query(sql, (err, result) => {
-    if (err) return res.json({ Error: "Error in running query" });
+    if (err) return res.json({ Error: "Error in running homeloansCount query" });
     return res.json(result);
   });
 }
@@ -150,7 +160,7 @@ export const insuranceCount = (req, res) => {
 
   const sql = "SELECT COUNT(id) as insurance FROM cmsverticalform WHERE vertical = 'insurance'";
   db.query(sql, (err, result) => {
-    if (err) return res.json({ Error: "Error in running query" });
+    if (err) return res.json({ Error: "Error in running insuranceCount query" });
     return res.json(result);
   });
 }
@@ -163,7 +173,7 @@ export const orderbookCount = (req, res) => {
       (SELECT COUNT(id) FROM cmsverticalform WHERE vertical = 'insurance') as insurance
   `;
   db.query(sql, (err, result) => {
-    if (err) return res.json({ Error: "Error in running query" });
+    if (err) return res.json({ Error: "Error in running orderbookCount query" });
     const count =
       (result[0].investments || 0) +
       (result[0].homeloans || 0) +
