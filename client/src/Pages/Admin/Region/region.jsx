@@ -69,7 +69,6 @@ const handleSubmit = async (e) => {
         );
         setEditedPost(null);
         setEditDialogVisible(false);
-        toast.current.show({ severity: 'success', summary: 'Success', detail: 'Data Saved' });
       })
       .catch((error) => console.log(error));
   };
