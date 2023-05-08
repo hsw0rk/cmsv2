@@ -10,6 +10,7 @@ import MainLayout from './Layout/MainLayout'
 import Login from "./Pages/Login/Login";
 import Investments from "./Pages/Investments/Investments";
 import OrderBook from './Pages/orderbook/orderbook'
+import Region from './Pages/Admin/Region/region';
 
 function App() {
     return (
@@ -20,7 +21,7 @@ function App() {
                     <Route index element={<Dashboard />} />
                     <Route path="investments" element={<Investments />} />
                     <Route path="homeloans" element={<Investments />} />
-                    <Route path="insurance" element={<Investments />} />
+                    <Route path="adminregion" element={<Region />} />
                     <Route path="settings" element={<Investments />} />
                     <Route path="cmsverticalformdata" element={<OrderBook />} />
                 </Route>

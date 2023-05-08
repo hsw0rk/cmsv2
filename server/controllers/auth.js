@@ -139,6 +139,58 @@ export const cmsverticalformdata = (req, res) => {
   });
 };
 
+export const regiondata = (req, res) => {
+  const q = "SELECT * FROM regionmaster";
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const editRegion = (req, res) => {
+  const id = req.params.id;
+  const { regionname, regioncode } = req.body;
+  const q = `UPDATE regionmaster SET regionname='${regionname}', regioncode='${regioncode}' WHERE id=${id}`;
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const adminregion = (req, res) => {
+  const regionname = req.body.regionname;
+  const regioncode = req.body.regioncode;
+
+  // Check if the data already exists in the database based on multiple fields
+  const checkDuplicateQuery = "SELECT * FROM regionmaster WHERE regionname = ? AND regioncode = ?";
+  const values = [regionname, regioncode];
+
+  db.query(checkDuplicateQuery, values, (err, results) => {
+    if (err) return res.status(500).json(err);
+
+    if (results.length > 0) {
+      // If the data already exists, return an error response
+      return res.status(400).json("Data already exists! Do you want to submit?");
+    } else {
+      // If the data does not exist, insert the data into the database
+      const insertQuery = "INSERT INTO regionmaster (`regionname`,`regioncode`) VALUES (?)";
+
+      const insertValues = [
+        regionname,
+        regioncode
+      ];
+
+      db.query(insertQuery, [insertValues], (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("Investment data has been created!");
+      });
+    }
+  });
+};
+
+
 export const investmentsCount = (req, res) => {
   const sql = "SELECT COUNT(id) as investments FROM cmsverticalform WHERE vertical = 'investments'";
   db.query(sql, (err, result) => {

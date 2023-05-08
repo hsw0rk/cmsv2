@@ -18,10 +18,10 @@ const sidebarNav = [
         text: 'Home loans'
     },
     {
-        link: '/insurance',
-        section: 'insurance',
+        link: '/adminregion',
+        section: 'adminregion',
         icon: <i className='bx bx-user'></i>,
-        text: 'Insurance'
+        text: 'Region'
     },
     {
         link: '/cmsverticalformdata',

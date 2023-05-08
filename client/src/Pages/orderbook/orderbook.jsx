@@ -10,7 +10,7 @@ import exc from "../../Assets/exc.svg";
 import axios from "axios";
 import "./orderbook.css";
 
-const DataTableExample = () => {
+const OrderBook = () => {
   const { currentUser } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
@@ -232,4 +232,4 @@ const DataTableExample = () => {
   );
 };
 
-export default DataTableExample;
+export default OrderBook;

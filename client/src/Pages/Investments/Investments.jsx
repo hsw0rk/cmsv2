@@ -19,7 +19,7 @@ const Investments = () => {
     customername: "",
     creditbranch: "",
     business: "",
-    vertical: "investments",
+    vertical: "Investments",
     employeename: currentUser.employeename,
     employeecode: currentUser.employeecode,
   });
