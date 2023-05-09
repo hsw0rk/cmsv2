@@ -7,6 +7,9 @@ import { InputText } from "primereact/inputtext";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import exc from "../../../Assets/exc.svg";
 import axios from "axios";
+import Papa from "papaparse";
+import { CSVLink } from "react-csv"
+
 import "./region.css";
 
 const Region = () => {
@@ -21,35 +24,32 @@ const Region = () => {
   const [msg, setMsg] = useState(null);
 
   const [inputs, setInputs] = useState({
-      regionname: "",
-      regioncode: "",
+    regionname: "",
+    regioncode: "",
   });
 
-  
   const handleChange = (e) => {
     setInputs((prev) => ({
-        ...prev,
-        [e.target.name]: e.target.value
+      ...prev,
+      [e.target.name]: e.target.value,
     }));
-};
+  };
 
-
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-        const response = await axios.post(
-            "http://localhost:8800/api/auth/adminregion",
-            { ...inputs }
-        );
-        setMsg(response.data);
-        setErr(null);
+      const response = await axios.post(
+        "http://localhost:8800/api/auth/adminregion",
+        { ...inputs }
+      );
+      setMsg(response.data);
+      setErr(null);
     } catch (err) {
-        setErr(err.response.data);
-        setMsg(null);
+      setErr(err.response.data);
+      setMsg(null);
     }
-};
-
+  };
 
   useEffect(() => {
     axios.get("http://localhost:8800/api/auth/regiondata").then((res) => {
@@ -72,8 +72,6 @@ const handleSubmit = async (e) => {
       })
       .catch((error) => console.log(error));
   };
-
-
 
   const clearFilter = () => {
     initFilters();
@@ -118,52 +116,122 @@ const handleSubmit = async (e) => {
     document.body.removeChild(link);
   };
 
+  const samplecsv = [
+    {id:"", regionname:"", regioncode:"" }
+  ]
+
+  const handleFileUpload = (file) => {
+    Papa.parse(file, {
+      header: true,
+      complete: async (results) => {
+        const { data } = results;
+        const filteredData = data.filter(row => {
+          // Check if all values in the row are empty or not
+          return Object.values(row).some(value => value.trim() !== '');
+        });
+        for (let i = 0; i < filteredData.length; i++) {
+          const row = filteredData[i];
+          try {
+            await axios.post(
+              "http://localhost:8800/api/auth/adminregion",
+              row
+            );
+            console.log(`Inserted row ${i + 1}: ${JSON.stringify(row)}`);
+          } catch (err) {
+            console.error(`Error inserting row ${i + 1}: ${JSON.stringify(row)}`);
+            console.error(err);
+            alert("Error occurred while uploading data. Please try again.");
+            return;
+          }
+        }
+        setPosts(filteredData);
+        alert("Data has been uploaded successfully.");
+      },
+      error: (error) => {
+        console.error(error);
+        alert("Error occurred while uploading data. Please try again.");
+      },
+    });
+  };
+
   return (
     <div className="form">
-        <p style={{
-                fontSize: "20px"
-            }}>Region</p>
-            <div className="form-container-region">
+      <p
+        style={{
+          fontSize: "20px",
+        }}
+      >
+        Region
+      </p>
+      <div className="form-container-region">
+        <form className="formregion" onSubmit={handleSubmit}>
+          <div>
+            <label>
+              Region Name
+              <input
+                required
+                className="regioninput"
+                id="regionname"
+                name="regionname"
+                onChange={handleChange}
+              />
+            </label>
+          </div>
 
-                <form className="formregion" onSubmit={handleSubmit}>
+          <div>
+            <label>
+              Region Code
+              <input
+                required
+                className="regioninput"
+                id="regioncode"
+                name="regioncode"
+                onChange={handleChange}
+              />
+            </label>
+          </div>
 
-                    <div>
-                        <label>Region Name<input required className="regioninput" id="regionname"
-                            name="regionname" onChange={handleChange} /></label>
-                    </div>
-
-                    <div>
-                        <label>Region Code<input required className="regioninput" id="regioncode" name="regioncode"
-                            onChange={handleChange} /></label>
-                    </div>
-
-                    <button type="submit" className="Submitbuttonregion">Submit</button>
-
-                </form>
-                {err && (
-                    <>
-                        <div className="popup-background"></div>
-                        <div className="popup-wrapper">
-                            <p className="investmsgp">{err}</p>
-                            <div className="investmsg-buttons">
-                                <button className="investmsg-yes" onClick={handleSubmit}>Yes</button>
-                                <a href="/adminregion"><button className="investmsg-no" onClick={() => setErr(null)}>No</button></a>
-                            </div>
-                        </div>
-                    </>
-                )}
-
-
-                {msg && (
-                    <>
-                        <div className="popup-background"></div>
-                        <div className="popup-wrapper">
-                            <p className="investmsgp">{msg}</p>
-                            <a href="/adminregion"><p className="investmsgclose" onClick={() => setMsg(null)}>close</p></a>
-                        </div>
-                    </>
-                )}
+          <button type="submit" className="Submitbuttonregion">
+            Submit
+          </button>
+          <input
+            type="file"
+            onChange={(e) => handleFileUpload(e.target.files[0])}
+          />
+        </form>
+        {err && (
+          <>
+            <div className="popup-background"></div>
+            <div className="popup-wrapper">
+              <p className="investmsgp">{err}</p>
+              <div className="investmsg-buttons">
+                <button className="investmsg-yes" onClick={handleSubmit}>
+                  Yes
+                </button>
+                <a href="/adminregion">
+                  <button className="investmsg-no" onClick={() => setErr(null)}>
+                    No
+                  </button>
+                </a>
+              </div>
             </div>
+          </>
+        )}
+
+        {msg && (
+          <>
+            <div className="popup-background"></div>
+            <div className="popup-wrapper">
+              <p className="investmsgp">{msg}</p>
+              <a href="/adminregion">
+                <p className="investmsgclose" onClick={() => setMsg(null)}>
+                  close
+                </p>
+              </a>
+            </div>
+          </>
+        )}
+      </div>
       <div className="flex justify-content-between gap-5 clearred">
         <Button
           type="button"
@@ -183,6 +251,11 @@ const handleSubmit = async (e) => {
           />
         </span>
         <div className="flex align-items-end justify-content-end gap-2 exc">
+            <Button><CSVLink
+            data={samplecsv}
+            filename={"sampleregiondata"}
+            target="_blank"
+            >Sample</CSVLink></Button>
           <Button
             type="button"
             icon={<img alt="excel icon" src={exc} />}
@@ -216,8 +289,8 @@ const handleSubmit = async (e) => {
         onRowSelect={(e) => setSelectedPost(e.data)}
         onRowUnselect={() => setSelectedPost(null)}
       >
-        <Column field="regionname" sortable header="regionname"></Column>
-        <Column field="regioncode" sortable header="regioncode"></Column>
+        <Column field="regionname" sortable header="Region Name"></Column>
+        <Column field="regioncode" sortable header="Region Code"></Column>
         <Column
           body={(rowData) => (
             <Button
@@ -234,7 +307,7 @@ const handleSubmit = async (e) => {
       <Dialog
         header="Edit Post"
         visible={editDialogVisible}
-        style={{ width: "50vw"}}
+        style={{ width: "50vw" }}
         modal
         onHide={() => setEditDialogVisible(false)}
         className="my-dialog"
@@ -242,8 +315,7 @@ const handleSubmit = async (e) => {
         {editedPost && (
           <div>
             <div className="p-fluid">
-              <div className="p-field"
-              style={{paddingBottom:"10px"}}>
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
                 <label htmlFor="regionname">Region Name</label>
                 <InputText
                   id="regionname"
@@ -253,8 +325,7 @@ const handleSubmit = async (e) => {
                   }
                 />
               </div>
-              <div className="p-field"
-              style={{paddingBottom:"10px"}}>
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
                 <label htmlFor="regioncode">Region Code</label>
                 <InputText
                   id="regioncode"
@@ -265,7 +336,7 @@ const handleSubmit = async (e) => {
                 />
               </div>
             </div>
-            <Button label="Save" icon="pi pi-check" onClick={saveEditedPost}/>
+            <Button label="Save" icon="pi pi-check" onClick={saveEditedPost} />
           </div>
         )}
       </Dialog>

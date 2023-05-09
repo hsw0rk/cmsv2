@@ -86,6 +86,7 @@
         flex-direction: column;
         flex-grow: 1;
         margin-top: -5px;
+        margin-bottom: -5px;
 
         &__item {
             @include flex(center, flex-start);

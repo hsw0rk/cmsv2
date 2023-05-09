@@ -171,8 +171,14 @@ export const adminregion = (req, res) => {
     if (err) return res.status(500).json(err);
 
     if (results.length > 0) {
-      // If the data already exists, return an error response
-      return res.status(400).json("Data already exists! Do you want to submit?");
+      // If the data already exists, update the existing row
+      const updateQuery = "UPDATE regionmaster SET regionname = ?, regioncode = ? WHERE regionname = ? AND regioncode = ?";
+      const updateValues = [regionname, regioncode, regionname, regioncode];
+
+      db.query(updateQuery, updateValues, (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("Region data has been updated!");
+      });
     } else {
       // If the data does not exist, insert the data into the database
       const insertQuery = "INSERT INTO regionmaster (`regionname`,`regioncode`) VALUES (?)";
@@ -184,12 +190,11 @@ export const adminregion = (req, res) => {
 
       db.query(insertQuery, [insertValues], (err, data) => {
         if (err) return res.status(500).json(err);
-        return res.status(200).json("Investment data has been created!");
+        return res.status(200).json("Region data has been created!");
       });
     }
   });
 };
-
 
 export const investmentsCount = (req, res) => {
   const sql = "SELECT COUNT(id) as investments FROM cmsverticalform WHERE vertical = 'investments'";
