@@ -69,6 +69,7 @@ const Region = () => {
         );
         setEditedPost(null);
         setEditDialogVisible(false);
+        alert("You have edited the data.");
       })
       .catch((error) => console.log(error));
   };
@@ -169,6 +170,7 @@ const Region = () => {
             <label>
               Region Name
               <input
+                autoComplete="off"
                 required
                 className="regioninput"
                 id="regionname"
@@ -183,6 +185,7 @@ const Region = () => {
               Region Code
               <input
                 required
+                autoComplete="off"
                 className="regioninput"
                 id="regioncode"
                 name="regioncode"
@@ -194,6 +197,7 @@ const Region = () => {
           <button type="submit" className="Submitbuttonregion">
             Submit
           </button>
+          
           <input
             type="file"
             onChange={(e) => handleFileUpload(e.target.files[0])}

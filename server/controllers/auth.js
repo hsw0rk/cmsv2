@@ -15,28 +15,28 @@ export const register = (req, res) => {
 
     db.query(q, [req.body.employeecode], (err, data) => {
       if (err) return res.status(500).json(err);
-      if (data.length) return res.status(409).json("Your details already sent for approval!");  
-    //CREATE A NEW USER
-    //Hash the password
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(req.body.password, salt);
+      if (data.length) return res.status(409).json("Your details already sent for approval!");
+      //CREATE A NEW USER
+      //Hash the password
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
-    const q =
-      "INSERT INTO approvalmaster (`employeecode`,`employeename`,`mobilenumber`,`password`) VALUE (?)";
+      const q =
+        "INSERT INTO approvalmaster (`employeecode`,`employeename`,`mobilenumber`,`password`) VALUE (?)";
 
-    const values = [
-      req.body.employeecode,
-      req.body.employeename,
-      req.body.mobilenumber,
-      hashedPassword,
-    ];
+      const values = [
+        req.body.employeecode,
+        req.body.employeename,
+        req.body.mobilenumber,
+        hashedPassword,
+      ];
 
-    db.query(q, [values], (err, data) => {
-      if (err) return res.status(500).json(err);
-      return res.status(200).json("Sent for Approval!");
+      db.query(q, [values], (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("Sent for Approval!");
+      });
     });
   });
-});
 };
 
 export const login = (req, res) => {
@@ -139,6 +139,52 @@ export const cmsverticalformdata = (req, res) => {
   });
 };
 
+
+export const investmentsCount = (req, res) => {
+  const sql = "SELECT COUNT(id) as investments FROM cmsverticalform WHERE vertical = 'investments'";
+  db.query(sql, (err, result) => {
+    if (err) return res.json({ Error: "Error in running investmentsCount query" });
+    return res.json(result);
+  });
+};
+
+
+export const homeloansCount = (req, res) => {
+  const sql = "SELECT COUNT(id) as homeloans FROM cmsverticalform WHERE vertical = 'homeloans'";
+  db.query(sql, (err, result) => {
+    if (err) return res.json({ Error: "Error in running homeloansCount query" });
+    return res.json(result);
+  });
+}
+
+export const insuranceCount = (req, res) => {
+
+  const sql = "SELECT COUNT(id) as insurance FROM cmsverticalform WHERE vertical = 'insurance'";
+  db.query(sql, (err, result) => {
+    if (err) return res.json({ Error: "Error in running insuranceCount query" });
+    return res.json(result);
+  });
+}
+
+export const orderbookCount = (req, res) => {
+  const sql = `
+    SELECT 
+      (SELECT COUNT(id) FROM cmsverticalform WHERE vertical = 'investments') as investments,
+      (SELECT COUNT(id) FROM cmsverticalform WHERE vertical = 'homeloans') as homeloans,
+      (SELECT COUNT(id) FROM cmsverticalform WHERE vertical = 'insurance') as insurance
+  `;
+  db.query(sql, (err, result) => {
+    if (err) return res.json({ Error: "Error in running orderbookCount query" });
+    const count =
+      (result[0].investments || 0) +
+      (result[0].homeloans || 0) +
+      (result[0].insurance || 0);
+    return res.json([{ orderbook: count }]);
+  });
+};
+
+/////////////////////////////////////////////////////
+
 export const regiondata = (req, res) => {
   const q = "SELECT * FROM regionmaster";
 
@@ -196,45 +242,147 @@ export const adminregion = (req, res) => {
   });
 };
 
-export const investmentsCount = (req, res) => {
-  const sql = "SELECT COUNT(id) as investments FROM cmsverticalform WHERE vertical = 'investments'";
-  db.query(sql, (err, result) => {
-    if (err) return res.json({ Error: "Error in running investmentsCount query" });
-    return res.json(result);
+
+
+//////////////////////////////////////////////////////
+
+
+export const branchdata = (req, res) => {
+  const q = "SELECT * FROM branchmaster";
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const editbranch = (req, res) => {
+  const id = req.params.id;
+  const { regionname, regioncode, branchcode, branchname } = req.body;
+  const q = `UPDATE branchmaster SET regionname='${regionname}', regioncode='${regioncode}', branchcode='${branchcode}', branchname='${branchname}' WHERE id=${id}`;
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const adminbranch = (req, res) => {
+  const regionname = req.body.regionname;
+  const regioncode = req.body.regioncode;
+  const branchcode = req.body.branchcode;
+  const branchname = req.body.branchname;
+
+  // Check if the data already exists in the database based on multiple fields
+  const checkDuplicateQuery = "SELECT * FROM branchmaster WHERE regionname = ? AND regioncode = ? AND branchcode = ? AND branchname = ?";
+  const values = [regionname, regioncode, branchname, branchcode];
+
+  db.query(checkDuplicateQuery, values, (err, results) => {
+    if (err) return res.status(500).json(err);
+
+    if (results.length > 0) {
+      // If the data already exists, update the existing row
+      const updateQuery = "UPDATE branchmaster SET regionname = ?, regioncode = ?branchname = ?, branchcode = ? WHERE branchname = ? AND branchcode = ?";
+      const updateValues = [regionname, regioncode, branchcode, branchname, regionname, regioncode, branchcode, branchname];
+
+      db.query(updateQuery, updateValues, (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("Branch data has been updated!");
+      });
+    } else {
+      // If the data does not exist, insert the data into the database
+      const insertQuery = "INSERT INTO branchmaster (`regionname`,`regioncode`,`branchcode`,`branchname`) VALUES (?)";
+
+      const insertValues = [
+        regionname,
+        regioncode,
+        branchcode,
+        branchname
+      ];
+
+      db.query(insertQuery, [insertValues], (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("Branch data has been created!");
+      });
+    }
+  });
+};
+/////////////////////////////////////////////////////////////////////////////////////
+
+export const userdata = (req, res) => {
+  const q = "SELECT * FROM usermaster";
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const edituser = (req, res) => {
+  const id = req.params.id;
+  const { employeename, employeecode, mobilenumber, password,RegionCode,RegionName,Branchname1,Branchcode1 } = req.body;
+  const q = `UPDATE usermaster SET employeename='${employeename}', employeecode='${employeecode}', mobilenumber='${mobilenumber}', password='${password}', RegionCode='${RegionCode}', RegionName='${RegionName}', Branchname1='${Branchname1}', Branchcode1='${Branchcode1}' WHERE id=${id}`;
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const adminuser = (req, res) => {
+  const employeename = req.body.employeename;
+  const employeecode = req.body.employeecode;
+  const mobilenumber = req.body.mobilenumber;
+  const password = req.body.password;
+  const RegionCode = req.body.RegionCode;
+  const RegionName = req.body.RegionName;
+  const Branchname1 = req.body.Branchname1;
+  const Branchcode1 = req.body.Branchcode1;
+
+  // Check if the data already exists in the database based on multiple fields
+  const checkDuplicateQuery = "SELECT * FROM usermaster WHERE employeename = ? AND employeecode = ? AND mobilenumber = ? AND password = ? AND RegionCode = ?AND RegionName = ? AND Branchname1 = ?AND Branchcode1 = ?";
+  const values = [employeename, employeecode, mobilenumber, password,RegionCode,RegionName,Branchname1,Branchcode1 ];
+
+  db.query(checkDuplicateQuery, values, (err, results) => {
+    if (err) return res.status(500).json(err);
+
+    if (results.length > 0) {
+      // If the data already exists, update the existing row
+      const updateQuery = "UPDATE usermaster SET employeename = ? AND employeecode = ? AND mobilenumber = ? AND password = ? AND RegionCode = ?AND RegionName = ? AND Branchname1 = ?AND Branchcode1 = ?";
+      const updateValues = [employeename, employeecode, mobilenumber, password,RegionCode,RegionName,Branchname1,Branchcode1 ,employeename, employeecode, mobilenumber, password,RegionCode,RegionName,Branchname1,Branchcode1];
+
+      db.query(updateQuery, updateValues, (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("User data has been updated!");
+      });
+    } else {
+      // If the data does not exist, insert the data into the database
+      const insertQuery = "INSERT INTO Usermaster (`employeename`,`employeecode`,`mobilenumber`,`password`,`RegionCode`,`RegionName`,`Branchname1`,`Branchcode1`) VALUES (?)";
+
+      const insertValues = [
+        employeename,
+        employeecode,
+        mobilenumber,
+        password,
+        RegionCode,
+        RegionName,
+        Branchname1,
+        Branchcode1
+      ];
+
+      db.query(insertQuery, [insertValues], (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("Branch data has been created!");
+      });
+    }
   });
 };
 
 
-export const homeloansCount = (req, res) => {
-  const sql = "SELECT COUNT(id) as homeloans FROM cmsverticalform WHERE vertical = 'homeloans'";
-  db.query(sql, (err, result) => {
-    if (err) return res.json({ Error: "Error in running homeloansCount query" });
-    return res.json(result);
-  });
-}
-
-export const insuranceCount = (req, res) => {
-
-  const sql = "SELECT COUNT(id) as insurance FROM cmsverticalform WHERE vertical = 'insurance'";
-  db.query(sql, (err, result) => {
-    if (err) return res.json({ Error: "Error in running insuranceCount query" });
-    return res.json(result);
-  });
-}
-
-export const orderbookCount = (req, res) => {
-  const sql = `
-    SELECT 
-      (SELECT COUNT(id) FROM cmsverticalform WHERE vertical = 'investments') as investments,
-      (SELECT COUNT(id) FROM cmsverticalform WHERE vertical = 'homeloans') as homeloans,
-      (SELECT COUNT(id) FROM cmsverticalform WHERE vertical = 'insurance') as insurance
-  `;
-  db.query(sql, (err, result) => {
-    if (err) return res.json({ Error: "Error in running orderbookCount query" });
-    const count =
-      (result[0].investments || 0) +
-      (result[0].homeloans || 0) +
-      (result[0].insurance || 0);
-    return res.json([{ orderbook: count }]);
+export const getbrancheinuser = (req, res) => {
+  const q = "SELECT * FROM branchmaster";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
   });
 };

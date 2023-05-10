@@ -12,6 +12,13 @@ import {
   homeloansCount,
   insuranceCount,
   orderbookCount,
+  branchdata,
+  editbranch,
+  adminbranch,
+  userdata,
+  edituser,
+  adminuser,
+  getbrancheinuser
 } from "../controllers/auth.js";
 
 const router = express.Router();
@@ -28,5 +35,12 @@ router.get("/investmentscount", investmentsCount);
 router.get("/homeloanscount", homeloansCount);
 router.get("/insurancecount", insuranceCount);
 router.get("/orderbookcount", orderbookCount);
+router.get("/branchdata", branchdata);
+router.put("/editbranch/:id", editbranch);
+router.post("/adminbranch", adminbranch);
+router.get("/userdata", userdata);
+router.put("/edituser/:id", edituser);
+router.post("/adminuser", adminuser);
+router.get("/getbrancheinuser", getbrancheinuser);
 
 export default router;

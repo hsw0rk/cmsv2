@@ -21,16 +21,24 @@ function LoginRegister() {
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-  const { login } = useContext(AuthContext);
+  const { login, isAdmin } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       await login(inputs);
-      navigate("/");
+      if (isAdmin()) {
+        navigate("/e");
+      } else {
+        navigate("/a");
+      }
     } catch (err) {
-      // setErr(err.response.data);
-      toast.current.show({ severity: 'error', summary: 'Error', detail: err.response.data, life: 3000 });
+      toast.current.show({
+        severity: "error",
+        summary: "Error",
+        detail: err.response.data,
+        life: 3000,
+      });
     }
   };
 
@@ -116,7 +124,7 @@ function LoginRegister() {
         <input
           id="employeecode"
           name="employeecode"
-          type="number"
+          type="text"
           placeholder="Employee Code"
           required
           onChange={handleChange}

@@ -1,8 +1,8 @@
 import React from 'react'
-import './main-layout.scss'
+import './admin-layout.scss'
 import { Outlet } from 'react-router-dom'
-import Sidebar from '../Components/User/sidebar/Sidebar'
-import TopNav from '../Components/User/topnav/TopNav'
+import Sidebar from '../Components/Admin/sidebar/Sidebar'
+import TopNav from '../Components/Admin/topnav/TopNav'
 
 const MainLayout = () => {
     return (

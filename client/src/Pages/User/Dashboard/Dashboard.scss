@@ -1,0 +1,12 @@
+@use '../../../scss/abstracts/' as *;
+
+.user {
+    @include flex(center, space-between);
+    margin-bottom: 15px;
+    z-index: 2;
+    
+    @include tablet {
+        margin-bottom: $mobileSpacing;
+    }
+}
+
