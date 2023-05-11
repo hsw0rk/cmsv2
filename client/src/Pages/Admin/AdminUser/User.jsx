@@ -185,7 +185,7 @@ const User = () => {
     return (
         
         <div className="form">
-            <div className='user'>
+            <div className='suser'>
                 <UserInfo user={data.user} />
             </div>
             <p

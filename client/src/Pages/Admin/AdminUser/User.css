@@ -94,18 +94,16 @@
     cursor: pointer;
 }
 
-/* 
- .user {
-    position: relative;
-    width: 20px;
+
+.suser {
     position: fixed;
-    top: 0;
-    right: 0;
-    background: linear-gradient(135deg, rgba(115, 140, 194, 0.324), rgba(38, 89, 126, 0.151));
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 0px 32px 0 rgba(0, 0, 0, 0.37);
-    border: 1px solid rgba(255,255,255,0.18);
-} */
+    top: 20px;
+    right: 20px;
+    z-index: 20;
+}
 
-
+@media screen and (max-width: 768px) {
+    .suser {
+        display: none;
+    }
+}

@@ -184,7 +184,7 @@ export const orderbookCount = (req, res) => {
 };
 
 /////////////////////////////////////////////////////
-
+// Regionmaster
 export const regiondata = (req, res) => {
   const q = "SELECT * FROM regionmaster";
 
@@ -246,7 +246,7 @@ export const adminregion = (req, res) => {
 
 //////////////////////////////////////////////////////
 
-
+// Branchmaster
 export const branchdata = (req, res) => {
   const q = "SELECT * FROM branchmaster";
 
@@ -308,7 +308,7 @@ export const adminbranch = (req, res) => {
   });
 };
 /////////////////////////////////////////////////////////////////////////////////////
-
+// Usermaster
 export const userdata = (req, res) => {
   const q = "SELECT * FROM usermaster";
 
@@ -384,5 +384,133 @@ export const getbrancheinuser = (req, res) => {
   db.query(q, (err, data) => {
     if (err) return res.status(500).json("Internal server error");
     return res.status(200).json(data);
+  });
+};
+
+export const getproductininvestments = (req, res) => {
+  const q = "SELECT * FROM productmaster";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
+  });
+};
+
+export const getverticalininvestments = (req, res) => {
+  const q = "SELECT * FROM verticalmaster WHERE investmentsvt = ?";
+  db.query(q, [req.params.investmentsvt], (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
+  });
+};
+
+// Verticalmaster
+export const verticaldata = (req, res) => {
+  const q = "SELECT * FROM verticalmaster";
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const editVertical = (req, res) => {
+  const id = req.params.id;
+  const { investmentsvt, homeloansvt, insurancevt} = req.body;
+  const q = `UPDATE verticalmaster SET investmentsvt='${investmentsvt}', homeloansvt='${homeloansvt}', insurancevt='${insurancevt}' WHERE id=${id}`;
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const adminvertical = (req, res) => {
+  const { columnname, verticalname } = req.body;
+
+  // Check if column already exists in verticalmaster table
+  const checkColumnQuery = `SELECT ${columnname} FROM verticalmaster LIMIT 1`;
+  db.query(checkColumnQuery, (err, result) => {
+    if (result && result.length > 0) {
+      return res.status(400).send("Column already exists in verticalmaster table");
+    }
+
+    // ALTER TABLE query to add a new column to the verticalmaster table
+    const alterTableQuery = `ALTER TABLE verticalmaster ADD COLUMN ${columnname} VARCHAR(255)`;
+
+    db.query(alterTableQuery, (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).send("Error adding column to verticalmaster table");
+      }
+
+      // INSERT INTO query to add the new vertical to the verticalmaster table
+      const insertVerticalQuery = `UPDATE verticalmaster SET ${columnname} = '${verticalname}' WHERE id = 1`;
+
+      db.query(insertVerticalQuery, (err, result) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).send("Error adding new vertical to verticalmaster table");
+        }
+        return res.status(200).send("Column and vertical added successfully to verticalmaster table");
+      });
+    });
+  });
+};
+
+
+// Productmaster
+export const productdata = (req, res) => {
+  const q = "SELECT * FROM productmaster";
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const editProduct = (req, res) => {
+  const id = req.params.id;
+  const { productininvestments, productinhomeloans, productininsurance} = req.body;
+  const q = `UPDATE productmaster SET productininvestments='${productininvestments}', productinhomeloans='${productinhomeloans}', productininsurance='${productininsurance}' WHERE id=${id}`;
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+
+// Approvalmaster
+export const approvaldata = (req, res) => {
+  const q = "SELECT * FROM approvalmaster";
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const editapproval = (req, res) => {
+  const id = req.params.id;
+  const { employeename, employeecode, mobilenumber, password, RegionCode, RegionName, Branchname1, Branchcode1 } = req.body;
+  const q = `UPDATE approvalmaster SET employeename='${employeename}', employeecode='${employeecode}', mobilenumber='${mobilenumber}', password='${password}', RegionCode='${RegionCode}', RegionName='${RegionName}', Branchname1='${Branchname1}', Branchcode1='${Branchcode1}' WHERE id=${id}`;
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const adminapproval = (req, res) => {
+  const row = req.body;
+
+  // Insert the row into the usermaster table
+  const insertQuery = "INSERT INTO usermaster (`employeename`,`employeecode`,`mobilenumber`,`password`,`RegionCode`,`RegionName`,`Branchname1`,`Branchcode1`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+  const values = [row.employeename, row.employeecode, row.mobilenumber, row.password, row.RegionCode, row.RegionName, row.Branchname1, row.Branchcode1];
+
+  db.query(insertQuery, values, (err, data) => {
+    if (err) return res.status(500).json({ error: err.message });
+    // Show a success message
+    return res.status(200).json({ message: "User data has been inserted successfully!" });
   });
 };

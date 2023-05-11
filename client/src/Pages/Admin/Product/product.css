@@ -1,0 +1,12 @@
+.suser {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 20;
+}
+
+@media screen and (max-width: 768px) {
+    .suser {
+        display: none;
+    }
+}

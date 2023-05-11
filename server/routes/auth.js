@@ -18,6 +18,9 @@ import {
   userdata,
   edituser,
   adminuser,
+  approvaldata,
+  editapproval,
+  adminapproval,
   getbrancheinuser
 } from "../controllers/auth.js";
 
@@ -42,5 +45,8 @@ router.get("/userdata", userdata);
 router.put("/edituser/:id", edituser);
 router.post("/adminuser", adminuser);
 router.get("/getbrancheinuser", getbrancheinuser);
+router.get("/approvaldata", approvaldata);
+router.put("/editapproval/:id", editapproval);
+router.put("/adminapproval", adminapproval);
 
 export default router;

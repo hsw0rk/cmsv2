@@ -15,7 +15,9 @@ import OrderBook from './Pages/User/orderbook/orderbook'
 import Region from './Pages/Admin/Region/region';
 import Branch from './Pages/Admin/Branch/branch';
 import User from './Pages/Admin/AdminUser/User';
-
+import Vertical from './Pages/Admin/Vertical/vertical';
+import Product from './Pages/Admin/Product/product';
+import Approval from './Pages/Admin/Approval/approval';
 
 function App() {
     return (
@@ -35,9 +37,9 @@ function App() {
                     <Route path="regionmaster" element={<Region />} />
                     <Route path="branchmaster" element={<Branch />} />
                     <Route path="usermaster" element={<User />} />
-                    <Route path="approvalmaster" element={<Investments />} />
-                    <Route path="productmaster" element={<Investments />} />
-                    <Route path="verticalmaster" element={<OrderBook />} />
+                    <Route path="approvalmaster" element={<Approval />} />
+                    <Route path="productmaster" element={<Product />} />
+                    <Route path="verticalmaster" element={<Vertical />} />
                     <Route path="leads" element={<Investments />} />
 
                 </Route>

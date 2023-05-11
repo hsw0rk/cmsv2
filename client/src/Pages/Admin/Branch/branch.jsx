@@ -9,6 +9,8 @@ import exc from "../../../Assets/exc.svg";
 import axios from "axios";
 import Papa from "papaparse";
 import { CSVLink } from "react-csv"
+import { data } from '../../../constants/admindata'
+import UserInfo from '../../../Components/Admin/user-info/UserInfo'
 
 import "./Branch.css";
 
@@ -162,6 +164,9 @@ const Branch = () => {
 
     return (
         <div className="form">
+            <div className='suser'>
+                <UserInfo user={data.user} />
+            </div>
             <p
                 style={{
                     fontSize: "20px",
