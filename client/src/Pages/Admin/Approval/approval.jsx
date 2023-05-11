@@ -1,15 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
-import exc from "../../../Assets/exc.svg";
 import axios from "axios";
-import Papa from "papaparse";
-import { CSVLink } from "react-csv"
 import "./Approval.css";
+import { data } from '../../../constants/admindata'
+import UserInfo from '../../../Components/Admin/user-info/UserInfo'
 
 const Approval = () => {
     const [posts, setPosts] = useState([]);
@@ -79,6 +77,9 @@ const Approval = () => {
 
     return (
         <div className="form">
+            <div className='suser'>
+                <UserInfo user={data.user} />
+            </div>
             <p
                 style={{
                     fontSize: "20px",

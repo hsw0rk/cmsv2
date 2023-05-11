@@ -254,7 +254,7 @@ const Branch = () => {
                                 <button className="investmsg-yes" onClick={handleSubmit}>
                                     Yes
                                 </button>
-                                <a href="/adminbranchc">
+                                <a href="/admin/branchmaster">
                                     <button className="investmsg-no" onClick={() => setErr(null)}>
                                         No
                                     </button>
@@ -269,7 +269,7 @@ const Branch = () => {
                         <div className="popup-background"></div>
                         <div className="popup-wrapper">
                             <p className="investmsgp">{msg}</p>
-                            <a href="/adminbranch">
+                            <a href="/admin/branchmaster">
                                 <p className="investmsgclose" onClick={() => setMsg(null)}>
                                     close
                                 </p>

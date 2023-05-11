@@ -28,9 +28,9 @@ function LoginRegister() {
     try {
       await login(inputs);
       if (isAdmin()) {
-        navigate("/e");
+        navigate("/employee");
       } else {
-        navigate("/a");
+        navigate("/admin/regionmaster");
       }
     } catch (err) {
       toast.current.show({

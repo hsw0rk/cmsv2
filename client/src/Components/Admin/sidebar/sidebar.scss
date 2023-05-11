@@ -85,9 +85,12 @@
         @include flex(stretch, flex-start);
         flex-direction: column;
         flex-grow: 1;
-        margin-top: -5px;
+        margin-top: -55px;
         margin-bottom: -5px;
 
+        @include tablet {
+        margin-top: -25px;
+        }
         &__item {
             @include flex(center, flex-start);
             position: relative;

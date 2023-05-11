@@ -20,7 +20,7 @@ const Sidebar = () => {
     };
 
     useEffect(() => {
-        const curPath = window.location.pathname.split('/e/')[1]
+        const curPath = window.location.pathname.split('/employee/')[1]
         const activeItem = sidebarNav.findIndex(item => item.section === curPath)
       
         if (activeItem >= 0) {

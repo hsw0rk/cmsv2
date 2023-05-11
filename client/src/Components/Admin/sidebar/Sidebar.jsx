@@ -20,7 +20,7 @@ const Sidebar = () => {
     };
 
     useEffect(() => {
-        const curPath = window.location.pathname.split('/a/')[1]
+        const curPath = window.location.pathname.split('/admin/')[1]
         const activeItem = sidebarAdminNav.findIndex(item => item.section === curPath)
       
         if (activeItem >= 0) {

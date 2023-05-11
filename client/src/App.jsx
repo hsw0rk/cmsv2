@@ -11,6 +11,8 @@ import MainLayout from './Layout/MainLayout'
 import AdminLayout from './Layout/AdminLayout'
 import Login from "./Pages/Login/Login";
 import Investments from "./Pages/User/Investments/Investments";
+import Homeloans from "./Pages/User/Homeloans/Homeloans";
+import Insurance from "./Pages/User/Insurance/Insurance";
 import OrderBook from './Pages/User/orderbook/orderbook'
 import Region from './Pages/Admin/Region/region';
 import Branch from './Pages/Admin/Branch/branch';
@@ -24,17 +26,17 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path="/login" element={<Login />}/>
-                <Route path="/e" element={<MainLayout />}>
+                <Route path="/employee" element={<MainLayout />}>
                     <Route index element={<Dashboard />} />
                     <Route path="investments" element={<Investments />} />
-                    <Route path="homeloans" element={<Investments />} />
-                    <Route path="insurance" element={<Investments />} />
+                    <Route path="homeloans" element={<Homeloans />} />
+                    <Route path="insurance" element={<Insurance />} />
                     <Route path="orderbook" element={<OrderBook />} />
                     <Route path="settings" element={<Investments />} />
                 </Route>
-                <Route path="/a" element={<AdminLayout />}>
-                    <Route index element={<AdminDashboard />} />
-                    <Route path="regionmaster" element={<Region />} />
+                <Route path="/admin" element={<AdminLayout />}>
+                    {/* <Route index element={<AdminDashboard />} /> */}
+                    <Route path="regionmaster" index element={<Region />} />
                     <Route path="branchmaster" element={<Branch />} />
                     <Route path="usermaster" element={<User />} />
                     <Route path="approvalmaster" element={<Approval />} />

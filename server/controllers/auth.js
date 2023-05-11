@@ -412,6 +412,21 @@ export const getverticalininvestments = (req, res) => {
   });
 };
 
+export const getverticalinhomeloans = (req, res) => {
+  const q = "SELECT homeloansvt FROM verticalmaster WHERE id = 1";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data[0].homeloansvt);
+  });
+};
+
+export const getverticalininsurance = (req, res) => {
+  const q = "SELECT insurancevt FROM verticalmaster WHERE id = 1";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data[0].insurancevt);
+  });
+};
 
 // Verticalmaster
 export const verticaldata = (req, res) => {

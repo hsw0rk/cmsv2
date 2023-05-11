@@ -216,7 +216,7 @@ const Region = () => {
                 <button className="investmsg-yes" onClick={handleSubmit}>
                   Yes
                 </button>
-                <a href="/adminregion">
+                <a href="/admin/regionmaster">
                   <button className="investmsg-no" onClick={() => setErr(null)}>
                     No
                   </button>
@@ -231,7 +231,7 @@ const Region = () => {
             <div className="popup-background"></div>
             <div className="popup-wrapper">
               <p className="investmsgp">{msg}</p>
-              <a href="/adminregion">
+              <a href="/admin/regionmaster">
                 <p className="investmsgclose" onClick={() => setMsg(null)}>
                   close
                 </p>

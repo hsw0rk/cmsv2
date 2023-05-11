@@ -174,6 +174,7 @@ const Investments = () => {
 
   return (
     <>
+    
       <p style={{ fontSize: "20px" }}>{ivertical}</p>
       <div className="form-container-investments">
         <form className="forminvestments" onSubmit={handleSubmit}>

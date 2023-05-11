@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Dialog } from "primereact/dialog";
@@ -183,6 +183,14 @@ const User = () => {
       RegionName: "",
       Branchname1: "",
       Branchcode1: "",
+      Branchname2: "",
+      Branchcode2: "",
+      Branchname3: "",
+      Branchcode3: "",
+      Branchname4: "",
+      Branchcode4: "",
+      Branchname5: "",
+      Branchcode5: "",
     },
   ];
 
@@ -371,9 +379,8 @@ const User = () => {
         </form>
 
         <div
-          className={`additional-branches ${
-            showAdditionalBranches ? "show" : ""
-          }`}
+          className={`additional-branches ${showAdditionalBranches ? "show" : ""
+            }`}
         >
           <div>
             <label>
@@ -558,7 +565,7 @@ const User = () => {
             <div className="popup-wrapper">
               <p className="investmsgp">{err}</p>
               <div className="investmsg-buttons">
-                <a href="/adminbranchc">
+                <a href="/admin/usermaster">
                   <button className="investmsg-no" onClick={() => setErr(null)}>
                     Close
                   </button>
@@ -573,7 +580,7 @@ const User = () => {
             <div className="popup-background"></div>
             <div className="popup-wrapper">
               <p className="investmsgp">{msg}</p>
-              <a href="/adminbranch">
+              <a href="/admin/usermaster">
                 <p className="investmsgclose" onClick={() => setMsg(null)}>
                   close
                 </p>
@@ -748,7 +755,7 @@ const User = () => {
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="Branchname1">Branch Name </label>
+                <label htmlFor="Branchname1">Branch Name 1</label>
                 <InputText
                   id="Branchname1"
                   value={editedPost.Branchname1}
@@ -762,7 +769,7 @@ const User = () => {
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="Branchcode1">Branch Code</label>
+                <label htmlFor="Branchcode1">Branch Code 1</label>
                 <InputText
                   id="Branchcode1"
                   value={editedPost.Branchcode1}
@@ -774,6 +781,123 @@ const User = () => {
                   }
                 />
               </div>
+
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="Branchname2">Branch Name 2</label>
+                <InputText
+                  id="Branchname2"
+                  value={editedPost.Branchname2}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      Branchname2: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="Branchcode2">Branch Code 2</label>
+                <InputText
+                  id="Branchcode2"
+                  value={editedPost.Branchcode2}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      Branchcode2: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="Branchname3">Branch Name 3</label>
+                <InputText
+                  id="Branchname3"
+                  value={editedPost.Branchname3}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      Branchname3: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="Branchcode3">Branch Code 3</label>
+                <InputText
+                  id="Branchcode3"
+                  value={editedPost.Branchcode3}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      Branchcode3: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="Branchname4">Branch Name 4</label>
+                <InputText
+                  id="Branchname4"
+                  value={editedPost.Branchname4}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      Branchname4: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="Branchcode4">Branch Code 4</label>
+                <InputText
+                  id="Branchcode4"
+                  value={editedPost.Branchcode4}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      Branchcode4: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="Branchname5">Branch Name 5</label>
+                <InputText
+                  id="Branchname5"
+                  value={editedPost.Branchname5}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      Branchname5: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="Branchcode5">Branch Code 5</label>
+                <InputText
+                  id="Branchcode5"
+                  value={editedPost.Branchcode5}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      Branchcode5: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+
             </div>
             <Button label="Save" icon="pi pi-check" onClick={saveEditedPost} />
           </div>
