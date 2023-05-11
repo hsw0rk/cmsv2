@@ -117,6 +117,7 @@ const Approval = () => {
                     body={(rowData) => (
                         <>
                             <Button
+                            style={{margin:'15px'}}
                                 label="Edit"
                                 icon="pi pi-pencil"
                                 onClick={() => {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Homeloans.css";
 
-const Investments = () => {
+const Homeloans = () => {
   const [hvertical, sethvertical] = useState([]);
 
   useEffect(() => {
@@ -24,4 +24,4 @@ const Investments = () => {
   );
 };
 
-export default Investments;
+export default Homeloans;

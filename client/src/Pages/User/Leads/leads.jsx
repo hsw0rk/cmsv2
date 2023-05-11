@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./Insurance.css";
+// import "./Insurance.css";
 
 
-const Insurance = () => {
+const Leads = () => {
   const [invertical, setinvertical] = useState([]);
 
   useEffect(() => {
@@ -20,10 +20,10 @@ const Insurance = () => {
   return (
     <>
     
-      <p style={{ fontSize: "20px" }}>{invertical}</p>
+      <p style={{ fontSize: "20px" }}>LEADS</p>
       <span>Coming Soon</span>
     </>
   );
 };
 
-export default Insurance;
+export default Leads;

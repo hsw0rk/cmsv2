@@ -2,13 +2,13 @@ const sidebarAdminNav = [
     {
         link: 'regionmaster',
         section: 'regionmaster',
-        icon: <i className='bx bx-receipt' ></i>,
+        icon: <i className='bx bx-current-location' ></i>,
         text: 'Regionmaster'
     },
     {
         link: 'branchmaster',
         section: 'branchmaster',
-        icon: <i className='bx bx-home-alt'></i>,
+        icon: <i className='bx bx-map-pin'></i>,
         text: 'Branchmaster'
     },
     {
@@ -20,7 +20,7 @@ const sidebarAdminNav = [
     {
         link: 'approvalmaster',
         section: 'approvalmaster',
-        icon: <i className='bx bx-user'></i>,
+        icon: <i className='bx bx-user-pin'></i>,
         text: 'Approvalmaster'
     },
     {
@@ -32,14 +32,14 @@ const sidebarAdminNav = [
     {
         link: 'verticalmaster',
         section: 'verticalmaster',
-        icon: <i className='bx bx-cog'></i>,
+        icon: <i className='bx bx-file-find'></i>,
         text: 'Verticalmaster'
     },
     {
         link: 'leads',
         section: 'leads',
-        icon: <i className='bx bx-cog'></i>,
-        text: 'leads'
+        icon: <i className='bx bx-receipt'></i>,
+        text: 'Leads'
     }
 ]
 

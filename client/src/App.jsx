@@ -14,6 +14,7 @@ import Investments from "./Pages/User/Investments/Investments";
 import Homeloans from "./Pages/User/Homeloans/Homeloans";
 import Insurance from "./Pages/User/Insurance/Insurance";
 import OrderBook from './Pages/User/orderbook/orderbook'
+import Leads from './Pages/User/Leads/leads';
 import Region from './Pages/Admin/Region/region';
 import Branch from './Pages/Admin/Branch/branch';
 import User from './Pages/Admin/AdminUser/User';
@@ -32,7 +33,7 @@ function App() {
                     <Route path="homeloans" element={<Homeloans />} />
                     <Route path="insurance" element={<Insurance />} />
                     <Route path="orderbook" element={<OrderBook />} />
-                    <Route path="settings" element={<Investments />} />
+                    <Route path="leads" element={<Leads />} />
                 </Route>
                 <Route path="/admin" element={<AdminLayout />}>
                     {/* <Route index element={<AdminDashboard />} /> */}
@@ -42,7 +43,7 @@ function App() {
                     <Route path="approvalmaster" element={<Approval />} />
                     <Route path="productmaster" element={<Product />} />
                     <Route path="verticalmaster" element={<Vertical />} />
-                    <Route path="leads" element={<Investments />} />
+                    <Route path="leads" element={<Leads />} />
 
                 </Route>
             </Routes>

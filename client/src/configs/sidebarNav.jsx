@@ -2,13 +2,13 @@ export const sidebarNav = [
     {
         link: '/employee',
         section: 'dashboard',
-        icon: <i className='bx bx-line-chart'></i>,
+        icon: <i className='bx bx-desktop'></i>,
         text: 'Dashboard'
     },
     {
         link: 'investments',
         section: 'investments',
-        icon: <i className='bx bx-receipt' ></i>,
+        icon: <i className='bx bx-line-chart' ></i>,
         text: 'Investments'
     },
     {
@@ -28,6 +28,12 @@ export const sidebarNav = [
         section: 'orderbook',
         icon: <i className='bx bx-cube'></i>,
         text: 'Order book'
+    },
+    {
+        link: 'leads',
+        section: 'leads',
+        icon: <i className='bx bx-receipt'></i>,
+        text: 'Leads'
     }
 ]
 
