@@ -18,10 +18,18 @@ import {
   userdata,
   edituser,
   adminuser,
+  getbrancheinuser,
+  verticaldata,
+  editVertical,
+  adminvertical,
+  productdata,
+  editProduct,
+  getproductininvestments,
+  getverticalininvestments,
   approvaldata,
   editapproval,
   adminapproval,
-  getbrancheinuser
+  getregioninuser
 } from "../controllers/auth.js";
 
 const router = express.Router();
@@ -45,8 +53,17 @@ router.get("/userdata", userdata);
 router.put("/edituser/:id", edituser);
 router.post("/adminuser", adminuser);
 router.get("/getbrancheinuser", getbrancheinuser);
+router.get("/getregioninuser", getregioninuser);
+router.get("/getproductininvestments", getproductininvestments);
+router.get("/getverticalininvestments/", getverticalininvestments);
+router.get("/verticaldata", verticaldata);
+router.put("/editvertical/:id", editVertical);
+router.post("/adminvertical", adminvertical);
+router.get("/productdata", productdata);
+router.put("/editproduct/:id", editProduct);
 router.get("/approvaldata", approvaldata);
 router.put("/editapproval/:id", editapproval);
 router.put("/adminapproval", adminapproval);
+
 
 export default router;

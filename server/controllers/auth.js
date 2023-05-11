@@ -387,6 +387,15 @@ export const getbrancheinuser = (req, res) => {
   });
 };
 
+export const getregioninuser = (req, res) => {
+  const q = "SELECT * FROM regionmaster";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
+  });
+};
+
+
 export const getproductininvestments = (req, res) => {
   const q = "SELECT * FROM productmaster";
   db.query(q, (err, data) => {
@@ -396,12 +405,13 @@ export const getproductininvestments = (req, res) => {
 };
 
 export const getverticalininvestments = (req, res) => {
-  const q = "SELECT * FROM verticalmaster WHERE investmentsvt = ?";
-  db.query(q, [req.params.investmentsvt], (err, data) => {
+  const q = "SELECT investmentsvt FROM verticalmaster WHERE id = 1";
+  db.query(q, (err, data) => {
     if (err) return res.status(500).json("Internal server error");
-    return res.status(200).json(data);
+    return res.status(200).json(data[0].investmentsvt);
   });
 };
+
 
 // Verticalmaster
 export const verticaldata = (req, res) => {

@@ -8,6 +8,17 @@ const Investments = () => {
 
   const [err, setErr] = useState(null);
   const [msg, setMsg] = useState(null);
+  const [ivertical, setivertical] = useState([]);
+
+  useEffect(() => {
+    const fetchivertical = async () => {
+      const res = await axios.get(
+        "http://localhost:8800/api/auth/getverticalininvestments"
+      );
+      setivertical(res.data);
+    };
+    fetchivertical();
+  }, []);
 
   const [inputs, setInputs] = useState({
     principal: "",
@@ -23,17 +34,6 @@ const Investments = () => {
     employeecode: currentUser.employeecode,
   });
 
-  const [ivertical, setivertical] = useState([]);
-
-  useEffect(() => {
-    const fetchivertical = async () => {
-      const res = await axios.get(
-        "http://localhost:8800/api/auth/getverticalininvestments"
-      );
-      setivertical(res.data);
-    };
-    fetchivertical();
-  }, []);
 
   const [iproduct, setiproduct] = useState([]);
 
@@ -174,13 +174,7 @@ const Investments = () => {
 
   return (
     <>
-      <p
-        style={{
-          fontSize: "20px",
-        }}
-      >
-        Investments
-      </p>
+      <p style={{ fontSize: "20px" }}>{ivertical}</p>
       <div className="form-container-investments">
         <form className="forminvestments" onSubmit={handleSubmit}>
           <div>
@@ -436,7 +430,7 @@ const Investments = () => {
                 <button className="investmsg-yes" onClick={handleSubmit}>
                   Yes
                 </button>
-                <a href="/investments">
+                <a href="/e/investments">
                   <button className="investmsg-no" onClick={() => setErr(null)}>
                     No
                   </button>
@@ -451,7 +445,7 @@ const Investments = () => {
             <div className="popup-background"></div>
             <div className="popup-wrapper">
               <p className="investmsgp">{msg}</p>
-              <a href="/investments">
+              <a href="/e/investments">
                 <p className="investmsgclose" onClick={() => setMsg(null)}>
                   close
                 </p>
