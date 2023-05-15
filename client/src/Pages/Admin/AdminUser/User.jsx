@@ -284,81 +284,95 @@ const User = () => {
       >
         User
       </p>
-      <div className="form-container-branch">
-        <form className="formbranch" onSubmit={handleSubmit}>
-          <div>
-            <label>
-              Employee Name
-              <input
-                required
-                className="userinput"
-                id="employeename"
-                name="employeename"
-                onChange={handleChange}
-              />
-            </label>
-          </div>
 
-          <div>
-            <label>
-              Employee Code
-              <input
-                required
-                className="userinput"
-                id="employeecode"
-                name="employeecode"
-                onChange={handleChange}
-              />
-            </label>
-          </div>
+      <p
+        type="button"
+        className="Addbuttonbranch"
+        onClick={() => setShowAdditionalBranches(true)}
+      >
+        <i className="fa fa-plus"></i> Add Branch Name &amp; Branch Code
+      </p>
 
-          <div>
-            <label>
-              Mobile Number
-              <input
-                required
-                className="userinput"
-                id="mobilenumber"
-                name="mobilenumber"
-                onChange={handleChange}
-              />
-            </label>
-          </div>
-
-          <div>
-            <label>
-              password
-              <input
-                required
-                className="userinput"
-                id="password"
-                name="password"
-                onChange={handleChange}
-              />
-            </label>
-          </div>
-
-          <div>
+      <div
+        className={`additional-branches ${
+          showAdditionalBranches ? "show" : ""
+        }`}
+      >
+        <div className="form-container-branch">
+          <form className="formbranch" onSubmit={handleSubmit}>
             <div>
               <label>
-                Region Code
-                <select
+                Employee Name
+                <input
                   required
                   className="userinput"
-                  id="RegionCode"
-                  name="RegionCode"
-                  value={inputs.RegionCode || ""}
+                  id="employeename"
+                  name="employeename"
                   onChange={handleChange}
-                >
-                  <option value="">Select Region Code</option>
-                  {regions.map((region) => (
-                    <option key={region.regioncode} value={region.regioncode}>
-                      {region.regioncode}
-                    </option>
-                  ))}
-                </select>
+                />
               </label>
             </div>
+
+            <div>
+              <label>
+                Employee Code
+                <input
+                  required
+                  className="userinput"
+                  id="employeecode"
+                  name="employeecode"
+                  onChange={handleChange}
+                />
+              </label>
+            </div>
+
+            <div>
+              <label>
+                Mobile Number
+                <input
+                  required
+                  className="userinput"
+                  id="mobilenumber"
+                  name="mobilenumber"
+                  onChange={handleChange}
+                />
+              </label>
+            </div>
+
+            <div>
+              <label>
+                password
+                <input
+                  required
+                  className="userinput"
+                  id="password"
+                  name="password"
+                  onChange={handleChange}
+                />
+              </label>
+            </div>
+
+            <div>
+              <div>
+                <label>
+                  Region Code
+                  <select
+                    required
+                    className="userinput"
+                    id="RegionCode"
+                    name="RegionCode"
+                    value={inputs.RegionCode || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Region Code</option>
+                    {regions.map((region) => (
+                      <option key={region.regioncode} value={region.regioncode}>
+                        {region.regioncode}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
               <div>
                 <label>
                   Region Name
@@ -369,6 +383,7 @@ const User = () => {
                     name="RegionName"
                     value={inputs.RegionName || ""}
                     onChange={handleChange}
+                    disabled
                   >
                     {filteredRegions.map((region) => (
                       <option key={region.regionname} value={region.regionname}>
@@ -398,214 +413,64 @@ const User = () => {
                   </select>
                 </label>
               </div>
-          </div>
+            </div>
 
-          <div>
-            <label>
-              Branch Code
-              <select
-                required
-                className="userinput"
-                id="Branchcode1"
-                name="Branchcode1"
-                value={inputs.Branchcode1 || ""}
-                onChange={handleChange}
-              >
-                {filteredBranchCodes.map((branch) => (
-                  <option key={branch.branchcode} value={branch.branchcode}>
-                    {branch.branchcode}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
+            <div>
+              <label>
+                Branch Code
+                <select
+                  required
+                  className="userinput"
+                  id="Branchcode1"
+                  name="Branchcode1"
+                  value={inputs.Branchcode1 || ""}
+                  onChange={handleChange}
+                  disabled
+                >
+                  {filteredBranchCodes.map((branch) => (
+                    <option key={branch.branchcode} value={branch.branchcode}>
+                      {branch.branchcode}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
 
-          <button type="submit" className="Submitbuttonbranch">
-            Submit
-          </button>
-        </form>
-
-        <div
-          className={`additional-branches ${
-            showAdditionalBranches ? "show" : ""
-          }`}
-        >
-          <div>
-            <label>
-              Branch Name 1
-              <select
-                required
-                className="userinput"
-                id="Branchname2"
-                name="Branchname2"
-                onChange={handleChange}
-              >
-                <option value="">Select Branch Name</option>
-                {branches.map((branch) => (
-                  <option key={branch.branchname} value={branch.branchname}>
-                    {branch.branchname}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <div>
-            <label>
-              Branch Code 1
-              <select
-                required
-                className="userinput"
-                id="Branchcode2"
-                name="Branchcode2"
-                onChange={handleChange}
-              >
-                <option value="">Select Branch Code</option>
-                {branches.map((branch) => (
-                  <option key={branch.branchcode} value={branch.branchcode}>
-                    {branch.branchcode}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <div>
-            <label>
-              Branch Name 2
-              <select
-                required
-                className="userinput"
-                id="Branchname3"
-                name="Branchname3"
-                onChange={handleChange}
-              >
-                <option value="">Select Branch Name</option>
-                {branches.map((branch) => (
-                  <option key={branch.branchname} value={branch.branchname}>
-                    {branch.branchname}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <div>
-            <label>
-              Branch Code 2
-              <select
-                required
-                className="userinput"
-                id="Branchcode3"
-                name="Branchcode3"
-                onChange={handleChange}
-              >
-                <option value="">Select Branch Code</option>
-                {branches.map((branch) => (
-                  <option key={branch.branchcode} value={branch.branchcode}>
-                    {branch.branchcode}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <div>
-            <label>
-              Branch Name 3
-              <select
-                required
-                className="userinput"
-                id="Branchname4"
-                name="Branchname4"
-                onChange={handleChange}
-              >
-                <option value="">Select Branch Name</option>
-                {branches.map((branch) => (
-                  <option key={branch.branchname} value={branch.branchname}>
-                    {branch.branchname}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <div>
-            <label>
-              Branch Code 3
-              <select
-                required
-                className="userinput"
-                id="Branchcode4"
-                name="Branchcode4"
-                onChange={handleChange}
-              >
-                <option value="">Select Branch Code</option>
-                {branches.map((branch) => (
-                  <option key={branch.branchcode} value={branch.branchcode}>
-                    {branch.branchcode}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <div>
-            <label>
-              Branch Name 4
-              <select
-                required
-                className="userinput"
-                id="Branchname5"
-                name="Branchname5"
-                onChange={handleChange}
-              >
-                <option value="">Select Branch Name</option>
-                {branches.map((branch) => (
-                  <option key={branch.branchname} value={branch.branchname}>
-                    {branch.branchname}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <div>
-            <label>
-              Branch Code 4
-              <select
-                required
-                className="userinput"
-                id="Branchcode5"
-                name="Branchcode5"
-                onChange={handleChange}
-              >
-                <option value="">Select Branch Code</option>
-                {branches.map((branch) => (
-                  <option key={branch.branchcode} value={branch.branchcode}>
-                    {branch.branchcode}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          {/* Repeat the above two blocks for each additional branch */}
+            <button type="submit" className="Submitbuttonbranch">
+              Submit
+            </button>
+          </form>
         </div>
+        <div className="flex align-items-end justify-content-end gap-2 exc">
+          <Button>
+            <CSVLink
+              data={samplecsv}
+              filename={"samplebranchdata"}
+              target="_blank"
+            >
+              Sample
+            </CSVLink>
+          </Button>
 
-        <p
-          type="button"
-          className="Addbuttonbranch"
-          onClick={() => setShowAdditionalBranches(true)}
-        >
-          <i className="fa fa-plus"></i> Add Branch Name &amp; Branch Code
-        </p>
+          <Button
+            type="button"
+            icon={<img alt="excel icon" src={exc} />}
+            rounded
+            onClick={downloadCSV}
+            style={{
+              marginRight: "20px",
+              backgroundColor: "lightgreen",
+              border: "none",
+            }}
+            title="Download CSV"
+          />
 
-        <input
-          type="file"
-          className="branchfile"
-          onChange={(e) => handleFileUpload(e.target.files[0])}
-        />
+          <input
+            type="file"
+            className="branchfile"
+            onChange={(e) => handleFileUpload(e.target.files[0])}
+          />
+        </div>
 
         {err && (
           <>
@@ -655,29 +520,6 @@ const User = () => {
             className="searchbar"
           />
         </span>
-        <div className="flex align-items-end justify-content-end gap-2 exc">
-          <Button>
-            <CSVLink
-              data={samplecsv}
-              filename={"samplebranchdata"}
-              target="_blank"
-            >
-              Sample
-            </CSVLink>
-          </Button>
-          <Button
-            type="button"
-            icon={<img alt="excel icon" src={exc} />}
-            rounded
-            onClick={downloadCSV}
-            style={{
-              marginRight: "20px",
-              backgroundColor: "lightgreen",
-              border: "none",
-            }}
-            title="Download CSV"
-          />
-        </div>
       </div>
 
       <DataTable
