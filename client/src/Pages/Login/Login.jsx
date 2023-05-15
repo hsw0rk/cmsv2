@@ -30,7 +30,7 @@ function LoginRegister() {
       if (isAdmin()) {
         navigate("/employee");
       } else {
-        navigate("/admin/regionmaster");
+        navigate("/admin");
       }
     } catch (err) {
       toast.current.show({

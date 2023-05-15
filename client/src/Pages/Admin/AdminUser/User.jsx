@@ -48,7 +48,7 @@ const User = () => {
   const [filteredRegions, setFilteredRegions] = useState([]);
   const [filteredBranches, setFilteredBranches] = useState([]);
   const [filteredBranchCodes, setFilteredBranchCodes] = useState([]);
-  const [showAdditionalBranches, setShowAdditionalBranches] = useState(false);
+  const [showAdditionaluser, setShowAdditionaluser] = useState(false);
 
   useEffect(() => {
     const fetchBranches = async () => {
@@ -286,20 +286,14 @@ const User = () => {
       </p>
 
       <p
-        type="button"
-        className="Addbuttonbranch"
-        onClick={() => setShowAdditionalBranches(true)}
-      >
-        <i className="fa fa-plus"></i> Add Branch Name &amp; Branch Code
-      </p>
+        type="button" className="Addbuttonuser" onClick={() => setShowAdditionaluser(true)}><i className="fa fa-plus"></i>Click Here to Create User </p>
 
       <div
-        className={`additional-branches ${
-          showAdditionalBranches ? "show" : ""
-        }`}
+        className={`additional-user ${showAdditionaluser ? "show" : ""
+          }`}
       >
-        <div className="form-container-branch">
-          <form className="formbranch" onSubmit={handleSubmit}>
+        <div className="form-container-user">
+          <form className="formuser" onSubmit={handleSubmit}>
             <div>
               <label>
                 Employee Name
@@ -339,7 +333,7 @@ const User = () => {
               </label>
             </div>
 
-            <div>
+            <div hidden>
               <label>
                 password
                 <input
@@ -352,68 +346,70 @@ const User = () => {
               </label>
             </div>
 
+
             <div>
-              <div>
-                <label>
-                  Region Code
-                  <select
-                    required
-                    className="userinput"
-                    id="RegionCode"
-                    name="RegionCode"
-                    value={inputs.RegionCode || ""}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Region Code</option>
-                    {regions.map((region) => (
-                      <option key={region.regioncode} value={region.regioncode}>
-                        {region.regioncode}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-              <div>
-                <label>
-                  Region Name
-                  <select
-                    required
-                    className="userinput"
-                    id="RegionName"
-                    name="RegionName"
-                    value={inputs.RegionName || ""}
-                    onChange={handleChange}
-                    disabled
-                  >
-                    {filteredRegions.map((region) => (
-                      <option key={region.regionname} value={region.regionname}>
-                        {region.regionname}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-              <div>
-                <label>
-                  Branch Name
-                  <select
-                    required
-                    className="userinput"
-                    id="Branchname1"
-                    name="Branchname1"
-                    value={inputs.Branchname1 || ""}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Branch Name</option>
-                    {filteredBranches.map((branch) => (
-                      <option key={branch.branchname} value={branch.branchname}>
-                        {branch.branchname}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
+              <label>
+                Region Code
+                <select
+                  required
+                  className="userinput"
+                  id="RegionCode"
+                  name="RegionCode"
+                  value={inputs.RegionCode || ""}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Region Code</option>
+                  {regions.map((region) => (
+                    <option key={region.regioncode} value={region.regioncode}>
+                      {region.regioncode}
+                    </option>
+                  ))}
+                </select>
+              </label>
             </div>
+
+            <div>
+              <label>
+                Region Name
+                <select
+                  required
+                  className="userinput"
+                  id="RegionName"
+                  name="RegionName"
+                  value={inputs.RegionName || ""}
+                  onChange={handleChange}
+                  disabled
+                >
+                  {filteredRegions.map((region) => (
+                    <option key={region.regionname} value={region.regionname}>
+                      {region.regionname}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div>
+
+              <label>
+                Branch Name
+                <select
+                  required
+                  className="userinput"
+                  id="Branchname1"
+                  name="Branchname1"
+                  value={inputs.Branchname1 || ""}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Branch Name</option>
+                  {filteredBranches.map((branch) => (
+                    <option key={branch.branchname} value={branch.branchname}>
+                      {branch.branchname}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
 
             <div>
               <label>
@@ -436,13 +432,25 @@ const User = () => {
               </label>
             </div>
 
-            <button type="submit" className="Submitbuttonbranch">
+            <button type="submit" className="Submitbuttonuser">
               Submit
             </button>
           </form>
         </div>
-        <div className="flex align-items-end justify-content-end gap-2 exc">
-          <Button>
+
+
+        <input
+            type="file"
+            className="userfile"
+            onChange={(e) => handleFileUpload(e.target.files[0])}
+            style={{ flex: '' }}
+          />
+
+
+
+        <div className="flex align-items-end justify-content-end gap-2 exc" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '2px' , marginBottom:'30px' , marginTop:'-60px'}}>
+
+          <Button style={{ flex: '' }}>
             <CSVLink
               data={samplecsv}
               filename={"samplebranchdata"}
@@ -458,49 +466,46 @@ const User = () => {
             rounded
             onClick={downloadCSV}
             style={{
-              marginRight: "20px",
+              flex: '',
+              marginRight: "0px",
               backgroundColor: "lightgreen",
               border: "none",
             }}
             title="Download CSV"
           />
-
-          <input
-            type="file"
-            className="branchfile"
-            onChange={(e) => handleFileUpload(e.target.files[0])}
-          />
         </div>
 
+
         {err && (
-          <>
-            <div className="popup-background"></div>
-            <div className="popup-wrapper">
-              <p className="investmsgp">{err}</p>
-              <div className="investmsg-buttons">
+        <>
+          <div className="popup-background"></div>
+          <div className="popup-wrapper">
+            <p className="investmsgp">{err}</p>
+            <div className="investmsg-buttons">
                 <a href="/admin/usermaster">
                   <button className="investmsg-no" onClick={() => setErr(null)}>
                     Close
-                  </button>
-                </a>
-              </div>
-            </div>
-          </>
-        )}
-
-        {msg && (
-          <>
-            <div className="popup-background"></div>
-            <div className="popup-wrapper">
-              <p className="investmsgp">{msg}</p>
-              <a href="/admin/usermaster">
-                <p className="investmsgclose" onClick={() => setMsg(null)}>
-                  close
-                </p>
+                </button>
               </a>
             </div>
-          </>
-        )}
+          </div>
+        </>
+      )}
+
+      {msg && (
+        <>
+          <div className="popup-background"></div>
+          <div className="popup-wrapper">
+            <p className="investmsgp">{msg}</p>
+              <a href="/admin/usermaster">
+              <p className="investmsgclose" onClick={() => setMsg(null)}>
+                close
+              </p>
+            </a>
+          </div>
+        </>
+      )}
+
       </div>
       <div className="flex justify-content-between gap-5 clearred">
         <Button
@@ -793,3 +798,4 @@ const User = () => {
 };
 
 export default User;
+ 

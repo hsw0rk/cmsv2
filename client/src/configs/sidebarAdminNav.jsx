@@ -1,5 +1,11 @@
 const sidebarAdminNav = [
     {
+        link: '/admin',
+        section: 'dashboard',
+        icon: <i className='bx bx-desktop'></i>,
+        text: 'Dashboard'
+    },
+    {
         link: 'regionmaster',
         section: 'regionmaster',
         icon: <i className='bx bx-current-location' ></i>,

@@ -1,11 +1,3 @@
-.additional-branches {
-    display: none;
-}
-
-.additional-branches.show {
-    display: block;
-}
-
 .form-container-user {
     display: flex;
     justify-content: center;
@@ -15,7 +7,8 @@
 
 .formuser {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
+    /* Update to three columns */
     padding: 10px;
     border-radius: 10px;
     width: 100%;
@@ -35,7 +28,7 @@
 }
 
 .Submitbuttonuser {
-    background-color: #4CAF50;
+    background-color: #4caf50;
     color: white;
     padding: 10px;
     margin: 15px;
@@ -51,6 +44,14 @@
     background-color: #45a049;
 }
 
+.additional-user {
+    display: none;
+}
+
+.additional-user.show {
+    display: block;
+}
+
 .userfile {
     padding: 10px;
     background-color: #6366f1;
@@ -59,7 +60,7 @@
     font-size: 16px;
     color: #ffffff;
     transition: border-color 0.3s ease-in-out;
-    margin-top: 10px;
+    margin-top: 0px;
     margin-bottom: 20px;
     width: 30%;
 }
@@ -84,12 +85,13 @@
 
 }
 
-.Addbuttonbranch{
-    margin-top: 50px;
+.Addbuttonuser {
+    margin-top: 20px;
+    margin-bottom: 10px;
     background-color: #4e73df;
-    padding:10px;
+    padding: 17px;
     border-radius: 5px;
-    width: 30%;
+    width: 25%;
     color: #ffffff;
     cursor: pointer;
 }

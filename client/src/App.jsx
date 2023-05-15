@@ -36,7 +36,7 @@ function App() {
                     <Route path="leads" element={<Leads />} />
                 </Route>
                 <Route path="/admin" element={<AdminLayout />}>
-                    {/* <Route index element={<AdminDashboard />} /> */}
+                    <Route index element={<AdminDashboard />} />
                     <Route path="regionmaster" index element={<Region />} />
                     <Route path="branchmaster" element={<Branch />} />
                     <Route path="usermaster" element={<User />} />
