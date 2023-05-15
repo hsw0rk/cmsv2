@@ -28,11 +28,11 @@ const User = () => {
     employeename: "",
     employeecode: "",
     mobilenumber: "",
-    password: "",
-    RegionCode: "",
-    RegionName: "",
-    Branchname1: "",
-    Branchcode1: "",
+    // password: "",
+    regioncode: "",
+    regionname: "",
+    branchname: "",
+    branchcode: "",
     Branchname2: "",
     Branchcode2: "",
     Branchname3: "",
@@ -68,50 +68,31 @@ const User = () => {
   }, []);
 
   useEffect(() => {
-    if (inputs.RegionCode) {
-      setFilteredRegions(
-        regions.filter((region) => region.regioncode === inputs.RegionCode)
+    if (inputs.regioncode) {
+      const filteredRegions = regions.filter(
+        (region) => region.regioncode === inputs.regioncode
       );
-    } else {
-      setFilteredRegions([]);
-    }
-  }, [inputs.RegionCode, regions]);
-
-  useEffect(() => {
-    if (inputs.RegionCode) {
-      setFilteredBranches(
-        branches.filter((branch) => branch.regioncode === inputs.RegionCode)
-      );
-    } else {
-      setFilteredBranches([]);
-    }
-  }, [inputs.RegionCode, branches]);
-
-  useEffect(() => {
-    if (inputs.RegionCode) {
+      setFilteredRegions(filteredRegions);
+  
       const filteredBranches = branches.filter(
-        (branch) => branch.regioncode === inputs.RegionCode
+        (branch) => branch.regioncode === inputs.regioncode
       );
       setFilteredBranches(filteredBranches);
-    } else {
-      setFilteredBranches([]);
-    }
-  }, [inputs.RegionCode, branches]);
-
-  useEffect(() => {
-    if (inputs.RegionCode && inputs.Branchname1) {
-      setFilteredBranchCodes(
-        branches.filter(
-          (branch) =>
-            branch.regioncode === inputs.RegionCode &&
-            branch.branchname === inputs.Branchname1 &&
-            branch.branchcode !== inputs.Branchcode1 // exclude the currently selected branch code
-        )
+  
+      const filteredBranchCodes = branches.filter(
+        (branch) =>
+          branch.regioncode === inputs.regioncode &&
+          branch.branchname === inputs.branchname &&
+          branch.branchcode !== inputs.branchcode
       );
+      setFilteredBranchCodes(filteredBranchCodes);
     } else {
+      setFilteredRegions([]);
+      setFilteredBranches([]);
       setFilteredBranchCodes([]);
     }
-  }, [inputs.RegionCode, inputs.Branchname1, inputs.Branchcode1, branches]);
+  }, [inputs.regioncode, inputs.branchname, inputs.branchcode, regions, branches]);
+  
 
   const handleChange = (e) => {
     setInputs((prev) => ({
@@ -187,11 +168,11 @@ const User = () => {
       employeename: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       employeecode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       mobilenumber: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      password: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      RegionCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      RegionName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      Branchname1: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      Branchcode1: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      // password: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      regioncode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      regionname: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      branchname: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      branchcode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       Branchname2: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       Branchcode2: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       Branchname3: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
@@ -223,11 +204,11 @@ const User = () => {
       employeename: "",
       employeecode: "",
       mobilenumber: "",
-      password: "",
-      RegionCode: "",
-      RegionName: "",
-      Branchname1: "",
-      Branchcode1: "",
+      // password: "",
+      regioncode: "",
+      regionname: "",
+      branchname: "",
+      branchcode: "",
       Branchname2: "",
       Branchcode2: "",
       Branchname3: "",
@@ -286,12 +267,14 @@ const User = () => {
       </p>
 
       <p
-        type="button" className="Addbuttonuser" onClick={() => setShowAdditionaluser(true)}><i className="fa fa-plus"></i>Click Here to Create User </p>
-
-      <div
-        className={`additional-user ${showAdditionaluser ? "show" : ""
-          }`}
+        type="button"
+        className="Addbuttonuser"
+        onClick={() => setShowAdditionaluser(true)}
       >
+        <i className="fa fa-plus"></i>Click Here to Create User{" "}
+      </p>
+
+      <div className={`additional-user ${showAdditionaluser ? "show" : ""}`}>
         <div className="form-container-user">
           <form className="formuser" onSubmit={handleSubmit}>
             <div>
@@ -333,7 +316,7 @@ const User = () => {
               </label>
             </div>
 
-            <div hidden>
+            {/* <div hidden>
               <label>
                 password
                 <input
@@ -344,8 +327,7 @@ const User = () => {
                   onChange={handleChange}
                 />
               </label>
-            </div>
-
+            </div> */}
 
             <div>
               <label>
@@ -353,9 +335,9 @@ const User = () => {
                 <select
                   required
                   className="userinput"
-                  id="RegionCode"
-                  name="RegionCode"
-                  value={inputs.RegionCode || ""}
+                  id="regioncode"
+                  name="regioncode"
+                  value={inputs.regioncode || ""}
                   onChange={handleChange}
                 >
                   <option value="">Select Region Code</option>
@@ -374,11 +356,10 @@ const User = () => {
                 <select
                   required
                   className="userinput"
-                  id="RegionName"
-                  name="RegionName"
-                  value={inputs.RegionName || ""}
+                  id="regionname"
+                  name="regionname" // update name attribute to "regionname"
+                  value={inputs.regionname || ""}
                   onChange={handleChange}
-                  disabled
                 >
                   {filteredRegions.map((region) => (
                     <option key={region.regionname} value={region.regionname}>
@@ -389,15 +370,14 @@ const User = () => {
               </label>
             </div>
             <div>
-
               <label>
                 Branch Name
                 <select
                   required
                   className="userinput"
-                  id="Branchname1"
-                  name="Branchname1"
-                  value={inputs.Branchname1 || ""}
+                  id="branchname"
+                  name="branchname"
+                  value={inputs.branchname || ""}
                   onChange={handleChange}
                 >
                   <option value="">Select Branch Name</option>
@@ -410,18 +390,16 @@ const User = () => {
               </label>
             </div>
 
-
             <div>
               <label>
                 Branch Code
                 <select
                   required
                   className="userinput"
-                  id="Branchcode1"
-                  name="Branchcode1"
-                  value={inputs.Branchcode1 || ""}
+                  id="branchcode"
+                  name="branchcode" // update name attribute to "branchcode"
+                  value={inputs.branchcode || ""}
                   onChange={handleChange}
-                  disabled
                 >
                   {filteredBranchCodes.map((branch) => (
                     <option key={branch.branchcode} value={branch.branchcode}>
@@ -438,19 +416,25 @@ const User = () => {
           </form>
         </div>
 
-
         <input
-            type="file"
-            className="userfile"
-            onChange={(e) => handleFileUpload(e.target.files[0])}
-            style={{ flex: '' }}
-          />
+          type="file"
+          className="userfile"
+          onChange={(e) => handleFileUpload(e.target.files[0])}
+          style={{ flex: "" }}
+        />
 
-
-
-        <div className="flex align-items-end justify-content-end gap-2 exc" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '2px' , marginBottom:'30px' , marginTop:'-60px'}}>
-
-          <Button style={{ flex: '' }}>
+        <div
+          className="flex align-items-end justify-content-end gap-2 exc"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            gap: "2px",
+            marginBottom: "30px",
+            marginTop: "-60px",
+          }}
+        >
+          <Button style={{ flex: "" }}>
             <CSVLink
               data={samplecsv}
               filename={"samplebranchdata"}
@@ -466,7 +450,7 @@ const User = () => {
             rounded
             onClick={downloadCSV}
             style={{
-              flex: '',
+              flex: "",
               marginRight: "0px",
               backgroundColor: "lightgreen",
               border: "none",
@@ -475,37 +459,35 @@ const User = () => {
           />
         </div>
 
-
         {err && (
-        <>
-          <div className="popup-background"></div>
-          <div className="popup-wrapper">
-            <p className="investmsgp">{err}</p>
-            <div className="investmsg-buttons">
+          <>
+            <div className="popup-background"></div>
+            <div className="popup-wrapper">
+              <p className="investmsgp">{err}</p>
+              <div className="investmsg-buttons">
                 <a href="/admin/usermaster">
                   <button className="investmsg-no" onClick={() => setErr(null)}>
                     Close
-                </button>
+                  </button>
+                </a>
+              </div>
+            </div>
+          </>
+        )}
+
+        {msg && (
+          <>
+            <div className="popup-background"></div>
+            <div className="popup-wrapper">
+              <p className="investmsgp">{msg}</p>
+              <a href="/admin/usermaster">
+                <p className="investmsgclose" onClick={() => setMsg(null)}>
+                  close
+                </p>
               </a>
             </div>
-          </div>
-        </>
-      )}
-
-      {msg && (
-        <>
-          <div className="popup-background"></div>
-          <div className="popup-wrapper">
-            <p className="investmsgp">{msg}</p>
-              <a href="/admin/usermaster">
-              <p className="investmsgclose" onClick={() => setMsg(null)}>
-                close
-              </p>
-            </a>
-          </div>
-        </>
-      )}
-
+          </>
+        )}
       </div>
       <div className="flex justify-content-between gap-5 clearred">
         <Button
@@ -548,10 +530,10 @@ const User = () => {
         <Column field="employeename" sortable header="Employee Name"></Column>
         <Column field="employeecode" sortable header="Employee Code"></Column>
         <Column field="mobilenumber" sortable header="Mobile Number"></Column>
-        <Column field="RegionName" sortable header="Region Name"></Column>
-        <Column field="RegionCode" sortable header="Region Code"></Column>
-        <Column field="Branchname1" sortable header="Branch Name 1"></Column>
-        <Column field="Branchcode1" sortable header="Branch Code 1"></Column>
+        <Column field="regionname" sortable header="Region Name"></Column>
+        <Column field="regioncode" sortable header="Region Code"></Column>
+        <Column field="branchname" sortable header="Branch Name 1"></Column>
+        <Column field="branchcode" sortable header="Branch Code 1"></Column>
         <Column field="Branchcode2" sortable header="Branch Name 2"></Column>
         <Column field="Branchcode2" sortable header="Branch Code 2"></Column>
         <Column field="Branchcode3" sortable header="Branch Name 3"></Column>
@@ -628,50 +610,50 @@ const User = () => {
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="RegionCode">Region Code</label>
+                <label htmlFor="regioncode">Region Code</label>
                 <InputText
-                  id="RegionCode"
-                  value={editedPost.RegionCode}
+                  id="regioncode"
+                  value={editedPost.regioncode}
                   onChange={(e) =>
-                    setEditedPost({ ...editedPost, RegionCode: e.target.value })
+                    setEditedPost({ ...editedPost, regioncode: e.target.value })
                   }
                 />
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="RegionName">Region Name</label>
+                <label htmlFor="regionname">Region Name</label>
                 <InputText
-                  id="RegionName"
-                  value={editedPost.RegionName}
+                  id="regionname"
+                  value={editedPost.regionname}
                   onChange={(e) =>
-                    setEditedPost({ ...editedPost, RegionName: e.target.value })
+                    setEditedPost({ ...editedPost, regionname: e.target.value })
                   }
                 />
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="Branchname1">Branch Name 1</label>
+                <label htmlFor="branchname">Branch Name 1</label>
                 <InputText
-                  id="Branchname1"
-                  value={editedPost.Branchname1}
+                  id="branchname"
+                  value={editedPost.branchname}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      Branchname1: e.target.value,
+                      branchname: e.target.value,
                     })
                   }
                 />
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="Branchcode1">Branch Code 1</label>
+                <label htmlFor="branchcode">Branch Code 1</label>
                 <InputText
-                  id="Branchcode1"
-                  value={editedPost.Branchcode1}
+                  id="branchcode"
+                  value={editedPost.branchcode}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      Branchcode1: e.target.value,
+                      branchcode: e.target.value,
                     })
                   }
                 />
@@ -798,4 +780,3 @@ const User = () => {
 };
 
 export default User;
- 

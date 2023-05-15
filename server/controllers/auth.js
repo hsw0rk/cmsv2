@@ -320,8 +320,8 @@ export const userdata = (req, res) => {
 
 export const edituser = (req, res) => {
   const id = req.params.id;
-  const { employeename, employeecode, mobilenumber, password,RegionCode,RegionName,Branchname1,Branchcode1 } = req.body;
-  const q = `UPDATE usermaster SET employeename='${employeename}', employeecode='${employeecode}', mobilenumber='${mobilenumber}', password='${password}', RegionCode='${RegionCode}', RegionName='${RegionName}', Branchname1='${Branchname1}', Branchcode1='${Branchcode1}' WHERE id=${id}`;
+  const { employeename, employeecode, mobilenumber, password,regioncode,regionname,branchname,branchcode } = req.body;
+  const q = `UPDATE usermaster SET employeename='${employeename}', employeecode='${employeecode}', mobilenumber='${mobilenumber}', password='${password}', regioncode='${regioncode}', regionname='${regionname}', branchname='${branchname}', branchcode='${branchcode}' WHERE id=${id}`;
 
   db.query(q, (err, data) => {
     if (err) return res.status(500).json(err);
@@ -334,22 +334,22 @@ export const adminuser = (req, res) => {
   const employeecode = req.body.employeecode;
   const mobilenumber = req.body.mobilenumber;
   const password = req.body.password;
-  const RegionCode = req.body.RegionCode;
-  const RegionName = req.body.RegionName;
-  const Branchname1 = req.body.Branchname1;
-  const Branchcode1 = req.body.Branchcode1;
+  const regioncode = req.body.regioncode;
+  const regionname = req.body.regionname;
+  const branchname = req.body.branchname;
+  const branchcode = req.body.branchcode;
 
   // Check if the data already exists in the database based on multiple fields
-  const checkDuplicateQuery = "SELECT * FROM usermaster WHERE employeename = ? AND employeecode = ? AND mobilenumber = ? AND password = ? AND RegionCode = ?AND RegionName = ? AND Branchname1 = ?AND Branchcode1 = ?";
-  const values = [employeename, employeecode, mobilenumber, password,RegionCode,RegionName,Branchname1,Branchcode1 ];
+  const checkDuplicateQuery = "SELECT * FROM usermaster WHERE employeename = ? AND employeecode = ? AND mobilenumber = ? AND password = ? AND regioncode = ?AND regionname = ? AND branchname = ?AND branchcode = ?";
+  const values = [employeename, employeecode, mobilenumber, password,regioncode,regionname,branchname,branchcode ];
 
   db.query(checkDuplicateQuery, values, (err, results) => {
     if (err) return res.status(500).json(err);
 
     if (results.length > 0) {
       // If the data already exists, update the existing row
-      const updateQuery = "UPDATE usermaster SET employeename = ? AND employeecode = ? AND mobilenumber = ? AND password = ? AND RegionCode = ?AND RegionName = ? AND Branchname1 = ?AND Branchcode1 = ?";
-      const updateValues = [employeename, employeecode, mobilenumber, password,RegionCode,RegionName,Branchname1,Branchcode1 ,employeename, employeecode, mobilenumber, password,RegionCode,RegionName,Branchname1,Branchcode1];
+      const updateQuery = "UPDATE usermaster SET employeename = ? AND employeecode = ? AND mobilenumber = ? AND password = ? AND regioncode = ?AND regionname = ? AND branchname = ?AND branchcode = ?";
+      const updateValues = [employeename, employeecode, mobilenumber, password,regioncode,regionname,branchname,branchcode ,employeename, employeecode, mobilenumber, password,regioncode,regionname,branchname,branchcode];
 
       db.query(updateQuery, updateValues, (err, data) => {
         if (err) return res.status(500).json(err);
@@ -357,17 +357,17 @@ export const adminuser = (req, res) => {
       });
     } else {
       // If the data does not exist, insert the data into the database
-      const insertQuery = "INSERT INTO Usermaster (`employeename`,`employeecode`,`mobilenumber`,`password`,`RegionCode`,`RegionName`,`Branchname1`,`Branchcode1`) VALUES (?)";
+      const insertQuery = "INSERT INTO Usermaster (`employeename`,`employeecode`,`mobilenumber`,`password`,`regioncode`,`regionname`,`branchname`,`branchcode`) VALUES (?)";
 
       const insertValues = [
         employeename,
         employeecode,
         mobilenumber,
         password,
-        RegionCode,
-        RegionName,
-        Branchname1,
-        Branchcode1
+        regioncode,
+        regionname,
+        branchname,
+        branchcode
       ];
 
       db.query(insertQuery, [insertValues], (err, data) => {
@@ -517,8 +517,8 @@ export const approvaldata = (req, res) => {
 
 export const editapproval = (req, res) => {
   const id = req.params.id;
-  const { employeename, employeecode, mobilenumber, password, RegionCode, RegionName, Branchname1, Branchcode1 } = req.body;
-  const q = `UPDATE approvalmaster SET employeename='${employeename}', employeecode='${employeecode}', mobilenumber='${mobilenumber}', password='${password}', RegionCode='${RegionCode}', RegionName='${RegionName}', Branchname1='${Branchname1}', Branchcode1='${Branchcode1}' WHERE id=${id}`;
+  const { employeename, employeecode, mobilenumber, password, RegionCode, RegionName, branchname, branchcode } = req.body;
+  const q = `UPDATE approvalmaster SET employeename='${employeename}', employeecode='${employeecode}', mobilenumber='${mobilenumber}', password='${password}', RegionCode='${RegionCode}', RegionName='${RegionName}', branchname='${branchname}', branchcode='${branchcode}' WHERE id=${id}`;
 
   db.query(q, (err, data) => {
     if (err) return res.status(500).json(err);
@@ -530,8 +530,8 @@ export const adminapproval = (req, res) => {
   const row = req.body;
 
   // Insert the row into the usermaster table
-  const insertQuery = "INSERT INTO usermaster (`employeename`,`employeecode`,`mobilenumber`,`password`,`RegionCode`,`RegionName`,`Branchname1`,`Branchcode1`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-  const values = [row.employeename, row.employeecode, row.mobilenumber, row.password, row.RegionCode, row.RegionName, row.Branchname1, row.Branchcode1];
+  const insertQuery = "INSERT INTO usermaster (`employeename`,`employeecode`,`mobilenumber`,`password`,`RegionCode`,`RegionName`,`branchname`,`branchcode`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+  const values = [row.employeename, row.employeecode, row.mobilenumber, row.password, row.RegionCode, row.RegionName, row.branchname, row.branchcode];
 
   db.query(insertQuery, values, (err, data) => {
     if (err) return res.status(500).json({ error: err.message });
