@@ -12,7 +12,7 @@ import { CSVLink } from "react-csv";
 import { data } from "../../../constants/admindata";
 import UserInfo from "../../../Components/Admin/user-info/UserInfo";
 
-import "./Branch.css";
+import "./branch.css";
 
 const Branch = () => {
   const [posts, setPosts] = useState([]);
@@ -23,6 +23,8 @@ const Branch = () => {
   const [editDialogVisible, setEditDialogVisible] = useState(false);
   const [filteredRegions, setFilteredRegions] = useState([]);
   const [regions, setRegions] = useState([]);
+  const [showAdditionalbranch, setShowAdditionalbranch] = useState(false);
+
 
   const [err, setErr] = useState(null);
   const [msg, setMsg] = useState(null);
@@ -202,6 +204,16 @@ const Branch = () => {
       >
         Branch
       </p>
+
+      <p
+        type="button"
+        className="Addbuttonbranch"
+        onClick={() => setShowAdditionalbranch(true)}
+      >
+        <i className="fa fa-plus"></i>Click Here to Create Branch{" "}
+      </p>
+
+      <div className={`additional-branch ${showAdditionalbranch ? "show" : ""}`}>
       <div className="form-container-branch">
         <form className="formbranch" onSubmit={handleSubmit}>
           <div>
@@ -281,11 +293,7 @@ const Branch = () => {
           </button>
         </form>
 
-        <input
-          type="file"
-          className="branchfile"
-          onChange={(e) => handleFileUpload(e.target.files[0])}
-        />
+        
 
         {err && (
           <>
@@ -320,6 +328,53 @@ const Branch = () => {
           </>
         )}
       </div>
+
+      <input
+          type="file"
+          className="branchfile"
+          onChange={(e) => handleFileUpload(e.target.files[0])}
+        />
+
+      <div
+          className="flex align-items-end justify-content-end gap-2 exc"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            gap: "2px",
+            marginBottom: "30px",
+            marginTop: "-60px",
+          }}
+        >
+          <Button>
+            <CSVLink
+              data={samplecsv}
+              filename={"samplebranchdata"}
+              target="_blank"
+            >
+              Sample
+            </CSVLink>
+          </Button>
+
+
+          <Button
+            type="button"
+            icon={<img alt="excel icon" src={exc} />}
+            rounded
+            onClick={downloadCSV}
+            style={{
+              marginRight: "20px",
+              backgroundColor: "lightgreen",
+              border: "none",
+            }}
+            title="Download CSV"
+          />
+          
+        </div>
+        </div>
+
+
+
       <div className="flex justify-content-between gap-5 clearred">
         <Button
           type="button"
@@ -338,29 +393,6 @@ const Branch = () => {
             className="searchbar"
           />
         </span>
-        <div className="flex align-items-end justify-content-end gap-2 exc">
-          <Button>
-            <CSVLink
-              data={samplecsv}
-              filename={"samplebranchdata"}
-              target="_blank"
-            >
-              Sample
-            </CSVLink>
-          </Button>
-          <Button
-            type="button"
-            icon={<img alt="excel icon" src={exc} />}
-            rounded
-            onClick={downloadCSV}
-            style={{
-              marginRight: "20px",
-              backgroundColor: "lightgreen",
-              border: "none",
-            }}
-            title="Download CSV"
-          />
-        </div>
       </div>
 
       <DataTable

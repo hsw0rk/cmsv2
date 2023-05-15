@@ -251,10 +251,14 @@ export const branchdata = (req, res) => {
   const q = "SELECT * FROM branchmaster";
 
   db.query(q, (err, data) => {
-    if (err) return res.status(500).json(err);
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "An error occurred while fetching branch data." });
+    }
     return res.status(200).json(data);
   });
 };
+
 
 export const editbranch = (req, res) => {
   const id = req.params.id;

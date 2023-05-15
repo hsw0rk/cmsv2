@@ -94,13 +94,39 @@ const User = () => {
   }, [inputs.regioncode, inputs.branchname, inputs.branchcode, regions, branches]);
   
 
-  const handleChange = (e) => {
-    setInputs((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
+const handleChange = (e) => {
+  const { name, value } = e.target;
 
+  setInputs((prevInputs) => ({
+    ...prevInputs,
+    [name]: value,
+  }));
+
+  if (name === 'regioncode') {
+    const selectedRegion = regions.find(
+      (region) => region.regioncode === value
+    );
+    console.log('selectedRegion:', selectedRegion);
+    setInputs((prevInputs) => ({
+      ...prevInputs,
+      regionname: selectedRegion ? selectedRegion.regionname : '',
+    }));
+  }
+
+  if (name === 'branchname') {
+    const selectedBranch = branches.find(
+      (branch) =>
+        branch.regioncode === inputs.regioncode && branch.branchname === value
+    );
+    console.log('selectedBranch:', selectedBranch);
+    setInputs((prevInputs) => ({
+      ...prevInputs,
+      branchcode: selectedBranch ? selectedBranch.branchcode : '',
+    }));
+  }
+};
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -350,14 +376,13 @@ const User = () => {
               </label>
             </div>
 
-            <div>
+            <div hidden>
               <label>
                 Region Name
                 <select
-                  required
                   className="userinput"
                   id="regionname"
-                  name="regionname" // update name attribute to "regionname"
+                  name="regionname" 
                   value={inputs.regionname || ""}
                   onChange={handleChange}
                 >
@@ -369,6 +394,7 @@ const User = () => {
                 </select>
               </label>
             </div>
+            
             <div>
               <label>
                 Branch Name
@@ -390,11 +416,11 @@ const User = () => {
               </label>
             </div>
 
-            <div>
+            <div hidden>
               <label>
                 Branch Code
                 <select
-                  required
+                  
                   className="userinput"
                   id="branchcode"
                   name="branchcode" // update name attribute to "branchcode"

@@ -20,6 +20,8 @@ const Region = () => {
   const [filters, setFilters] = useState({});
   const [editedPost, setEditedPost] = useState(null);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
+  const [showAdditionalregion, setShowAdditionalregion] = useState(false);
+
 
   const [err, setErr] = useState(null);
   const [msg, setMsg] = useState(null);
@@ -119,7 +121,7 @@ const Region = () => {
   };
 
   const samplecsv = [
-    {id:"", regionname:"", regioncode:"" }
+    { id: "", regionname: "", regioncode: "" }
   ]
 
   const handleFileUpload = (file) => {
@@ -159,7 +161,7 @@ const Region = () => {
   return (
     <div className="form">
       <div className='suser'>
-          <UserInfo user={data.user} />
+        <UserInfo user={data.user} />
       </div>
       <p
         style={{
@@ -168,78 +170,133 @@ const Region = () => {
       >
         Region
       </p>
-      <div className="form-container-region">
-        <form className="formregion" onSubmit={handleSubmit}>
-          <div>
-            <label>
-              Region Name
-              <input
-                autoComplete="off"
-                required
-                className="regioninput"
-                id="regionname"
-                name="regionname"
-                onChange={handleChange}
-              />
-            </label>
-          </div>
 
-          <div>
-            <label>
-              Region Code
-              <input
-                required
-                autoComplete="off"
-                className="regioninput"
-                id="regioncode"
-                name="regioncode"
-                onChange={handleChange}
-              />
-            </label>
-          </div>
+      <p
+        type="button"
+        className="Addbuttonregion"
+        onClick={() => setShowAdditionalregion(true)}
+      >
+        <i className="fa fa-plus"></i>Click Here to Create Region{" "}
+      </p>
 
-          <button type="submit" className="Submitbuttonregion">
-            Submit
-          </button>
-          
-          <input
-            type="file"
-            onChange={(e) => handleFileUpload(e.target.files[0])}
-          />
-        </form>
-        {err && (
-          <>
-            <div className="popup-background"></div>
-            <div className="popup-wrapper">
-              <p className="investmsgp">{err}</p>
-              <div className="investmsg-buttons">
-                <button className="investmsg-yes" onClick={handleSubmit}>
-                  Yes
-                </button>
-                <a href="/admin/regionmaster">
-                  <button className="investmsg-no" onClick={() => setErr(null)}>
-                    No
+      <div className={`additional-region ${showAdditionalregion ? "show" : ""}`}>
+        <div className="form-container-region">
+          <form className="formregion" onSubmit={handleSubmit}>
+            <div>
+              <label>
+                Region Name
+                <input
+                  autoComplete="off"
+                  required
+                  className="regioninput"
+                  id="regionname"
+                  name="regionname"
+                  onChange={handleChange}
+                />
+              </label>
+            </div>
+
+            <div>
+              <label>
+                Region Code
+                <input
+                  required
+                  autoComplete="off"
+                  className="regioninput"
+                  id="regioncode"
+                  name="regioncode"
+                  onChange={handleChange}
+                />
+              </label>
+            </div>
+
+            <button type="submit" className="Submitbuttonregion">
+              Submit
+            </button>
+
+
+          </form>
+          {err && (
+            <>
+              <div className="popup-background"></div>
+              <div className="popup-wrapper">
+                <p className="investmsgp">{err}</p>
+                <div className="investmsg-buttons">
+                  <button className="investmsg-yes" onClick={handleSubmit}>
+                    Yes
                   </button>
+                  <a href="/admin/regionmaster">
+                    <button className="investmsg-no" onClick={() => setErr(null)}>
+                      No
+                    </button>
+                  </a>
+                </div>
+              </div>
+            </>
+          )}
+
+          {msg && (
+            <>
+              <div className="popup-background"></div>
+              <div className="popup-wrapper">
+                <p className="investmsgp">{msg}</p>
+                <a href="/admin/regionmaster">
+                  <p className="investmsgclose" onClick={() => setMsg(null)}>
+                    close
+                  </p>
                 </a>
               </div>
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </div>
 
-        {msg && (
-          <>
-            <div className="popup-background"></div>
-            <div className="popup-wrapper">
-              <p className="investmsgp">{msg}</p>
-              <a href="/admin/regionmaster">
-                <p className="investmsgclose" onClick={() => setMsg(null)}>
-                  close
-                </p>
-              </a>
-            </div>
-          </>
-        )}
+
+        <input
+          type="file"
+          onChange={(e) => handleFileUpload(e.target.files[0])}
+        />
+
+        <div
+          className="flex align-items-end justify-content-end gap-2 exc"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            gap: "2px",
+            marginBottom: "30px",
+            marginTop: "-50px",
+          }}
+        >
+          <Button><CSVLink
+            data={samplecsv}
+            filename={"sampleregiondata"}
+            target="_blank"
+          >Sample</CSVLink></Button>
+
+
+          <Button
+            type="button"
+            icon={<img alt="excel icon" src={exc} />}
+            rounded
+            onClick={downloadCSV}
+            style={{
+              marginRight: "20px",
+              backgroundColor: "lightgreen",
+              border: "none",
+            }}
+            title="Download CSV"
+          />
+
+
+        </div>
       </div>
+
+
+
+
+
+
+
       <div className="flex justify-content-between gap-5 clearred">
         <Button
           type="button"
@@ -258,25 +315,6 @@ const Region = () => {
             className="searchbar"
           />
         </span>
-        <div className="flex align-items-end justify-content-end gap-2 exc">
-            <Button><CSVLink
-            data={samplecsv}
-            filename={"sampleregiondata"}
-            target="_blank"
-            >Sample</CSVLink></Button>
-          <Button
-            type="button"
-            icon={<img alt="excel icon" src={exc} />}
-            rounded
-            onClick={downloadCSV}
-            style={{
-              marginRight: "20px",
-              backgroundColor: "lightgreen",
-              border: "none",
-            }}
-            title="Download CSV"
-          />
-        </div>
       </div>
 
       <DataTable
