@@ -20,7 +20,6 @@ const User = () => {
   const [filters, setFilters] = useState({});
   const [editedPost, setEditedPost] = useState(null);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
-  const [showAdditionalBranches, setShowAdditionalBranches] = useState(false);
 
   const [err, setErr] = useState(null);
   const [msg, setMsg] = useState(null);
@@ -44,14 +43,12 @@ const User = () => {
     Branchcode5: "",
   });
 
-  const handleChange = (e) => {
-    setInputs((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
   const [branches, setBranches] = useState([]);
+  const [regions, setRegions] = useState([]);
+  const [filteredRegions, setFilteredRegions] = useState([]);
+  const [filteredBranches, setFilteredBranches] = useState([]);
+  const [filteredBranchCodes, setFilteredBranchCodes] = useState([]);
+  const [showAdditionalBranches, setShowAdditionalBranches] = useState(false);
 
   useEffect(() => {
     const fetchBranches = async () => {
@@ -60,20 +57,68 @@ const User = () => {
       );
       setBranches(res.data);
     };
-    fetchBranches();
-  }, []);
-
-  const [region, setRegion] = useState([]);
-
-  useEffect(() => {
-    const fetchRegion = async () => {
+    const fetchRegions = async () => {
       const res = await axios.get(
         "http://localhost:8800/api/auth/getregioninuser"
       );
-      setRegion(res.data);
+      setRegions(res.data);
     };
-    fetchRegion();
+    fetchBranches();
+    fetchRegions();
   }, []);
+
+  useEffect(() => {
+    if (inputs.RegionCode) {
+      setFilteredRegions(
+        regions.filter((region) => region.regioncode === inputs.RegionCode)
+      );
+    } else {
+      setFilteredRegions([]);
+    }
+  }, [inputs.RegionCode, regions]);
+
+  useEffect(() => {
+    if (inputs.RegionCode) {
+      setFilteredBranches(
+        branches.filter((branch) => branch.regioncode === inputs.RegionCode)
+      );
+    } else {
+      setFilteredBranches([]);
+    }
+  }, [inputs.RegionCode, branches]);
+
+  useEffect(() => {
+    if (inputs.RegionCode) {
+      const filteredBranches = branches.filter(
+        (branch) => branch.regioncode === inputs.RegionCode
+      );
+      setFilteredBranches(filteredBranches);
+    } else {
+      setFilteredBranches([]);
+    }
+  }, [inputs.RegionCode, branches]);
+
+  useEffect(() => {
+    if (inputs.RegionCode && inputs.Branchname1) {
+      setFilteredBranchCodes(
+        branches.filter(
+          (branch) =>
+            branch.regioncode === inputs.RegionCode &&
+            branch.branchname === inputs.Branchname1 &&
+            branch.branchcode !== inputs.Branchcode1 // exclude the currently selected branch code
+        )
+      );
+    } else {
+      setFilteredBranchCodes([]);
+    }
+  }, [inputs.RegionCode, inputs.Branchname1, inputs.Branchcode1, branches]);
+
+  const handleChange = (e) => {
+    setInputs((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -294,63 +339,65 @@ const User = () => {
           </div>
 
           <div>
-            <label>
-              Region Code
-              <select
-                required
-                className="userinput"
-                id="RegionCode"
-                name="RegionCode"
-                onChange={handleChange}
-              >
-                <option value="">Select Region Code</option>
-                {region.map((Region) => (
-                  <option key={Region.regioncode} value={Region.regioncode}>
-                    {Region.regioncode}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <div>
-            <label>
-              Region Name
-              <select
-                required
-                className="userinput"
-                id="RegionName"
-                name="RegionName"
-                onChange={handleChange}
-              >
-                <option value="">Select Region Name</option>
-                {region.map((Region) => (
-                  <option key={Region.regionname} value={Region.regionname}>
-                    {Region.regionname}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <div>
-            <label>
-              Branch Name
-              <select
-                required
-                className="userinput"
-                id="Branchname1"
-                name="Branchname1"
-                onChange={handleChange}
-              >
-                <option value="">Select Branch Name</option>
-                {branches.map((branch) => (
-                  <option key={branch.branchname} value={branch.branchname}>
-                    {branch.branchname}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <div>
+              <label>
+                Region Code
+                <select
+                  required
+                  className="userinput"
+                  id="RegionCode"
+                  name="RegionCode"
+                  value={inputs.RegionCode || ""}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Region Code</option>
+                  {regions.map((region) => (
+                    <option key={region.regioncode} value={region.regioncode}>
+                      {region.regioncode}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+              <div>
+                <label>
+                  Region Name
+                  <select
+                    required
+                    className="userinput"
+                    id="RegionName"
+                    name="RegionName"
+                    value={inputs.RegionName || ""}
+                    onChange={handleChange}
+                  >
+                    {filteredRegions.map((region) => (
+                      <option key={region.regionname} value={region.regionname}>
+                        {region.regionname}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+              <div>
+                <label>
+                  Branch Name
+                  <select
+                    required
+                    className="userinput"
+                    id="Branchname1"
+                    name="Branchname1"
+                    value={inputs.Branchname1 || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Branch Name</option>
+                    {filteredBranches.map((branch) => (
+                      <option key={branch.branchname} value={branch.branchname}>
+                        {branch.branchname}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
           </div>
 
           <div>
@@ -361,10 +408,10 @@ const User = () => {
                 className="userinput"
                 id="Branchcode1"
                 name="Branchcode1"
+                value={inputs.Branchcode1 || ""}
                 onChange={handleChange}
               >
-                <option value="">Select Branch Code</option>
-                {branches.map((branch) => (
+                {filteredBranchCodes.map((branch) => (
                   <option key={branch.branchcode} value={branch.branchcode}>
                     {branch.branchcode}
                   </option>
@@ -379,8 +426,9 @@ const User = () => {
         </form>
 
         <div
-          className={`additional-branches ${showAdditionalBranches ? "show" : ""
-            }`}
+          className={`additional-branches ${
+            showAdditionalBranches ? "show" : ""
+          }`}
         >
           <div>
             <label>
@@ -782,7 +830,6 @@ const User = () => {
                 />
               </div>
 
-
               <div className="p-field" style={{ paddingBottom: "10px" }}>
                 <label htmlFor="Branchname2">Branch Name 2</label>
                 <InputText
@@ -810,7 +857,6 @@ const User = () => {
                   }
                 />
               </div>
-
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
                 <label htmlFor="Branchname3">Branch Name 3</label>
@@ -868,7 +914,6 @@ const User = () => {
                 />
               </div>
 
-
               <div className="p-field" style={{ paddingBottom: "10px" }}>
                 <label htmlFor="Branchname5">Branch Name 5</label>
                 <InputText
@@ -896,8 +941,6 @@ const User = () => {
                   }
                 />
               </div>
-
-
             </div>
             <Button label="Save" icon="pi pi-check" onClick={saveEditedPost} />
           </div>
