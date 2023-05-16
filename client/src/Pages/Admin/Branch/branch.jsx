@@ -57,19 +57,34 @@ const Branch = () => {
   }, []);
 
   const handleChange = (e) => {
-    setInputs((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
+    const { name, value } = e.target;
+  
+    setInputs((prevInputs) => ({
+      ...prevInputs,
+      [name]: value,
     }));
-  };
+  
+    if (name === 'regioncode') {
+      const selectedRegion = regions.find((region) => region.regioncode === value);
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        regionname: selectedRegion ? selectedRegion.regionname : '',
+      }));
+    }
+  };  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    const selectedRegion = regions.find((region) => region.regioncode === inputs.regioncode);
+  
     try {
       const response = await axios.post(
         "http://localhost:8800/api/auth/adminbranch",
-        { ...inputs }
+        {
+          ...inputs,
+          regionname: selectedRegion ? selectedRegion.regionname : "",
+        }
       );
       setMsg(response.data);
       setErr(null);
@@ -78,6 +93,7 @@ const Branch = () => {
       setMsg(null);
     }
   };
+  
 
   useEffect(() => {
     axios.get("http://localhost:8800/api/auth/branchdata").then((res) => {
@@ -149,7 +165,7 @@ const Branch = () => {
     const encodedURI = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedURI);
-    link.setAttribute("download", "posts.csv");
+    link.setAttribute("download", "branchmaster.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -222,8 +238,8 @@ const Branch = () => {
               <select
                 required
                 className="userinput"
-                id="RegionCode"
-                name="RegionCode"
+                id="regioncode"
+                name="regioncode"
                 value={inputs.regioncode || ""}
                 onChange={(event) =>
                   setInputs({ ...inputs, regioncode: event.target.value })
@@ -245,11 +261,12 @@ const Branch = () => {
               <select
                 required
                 className="userinput"
-                id="RegionName"
-                name="RegionName"
+                id="regionname"
+                name="regionname"
                 value={inputs.regionname || ""}
-                onChange={handleChange}
-                disabled
+                onChange={(event) =>
+                  setInputs({ ...inputs, regionname: event.target.value })
+                }
               >
                 {filteredRegions.map((region) => (
                   <option key={region.regionname} value={region.regionname}>
@@ -281,8 +298,8 @@ const Branch = () => {
                 required
                 autoComplete="off"
                 className="branchinput"
-                id="Branchcode"
-                name="Branchcode"
+                id="branchcode"
+                name="branchcode"
                 onChange={handleChange}
               />
             </label>

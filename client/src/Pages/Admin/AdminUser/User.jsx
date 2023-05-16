@@ -53,7 +53,7 @@ const User = () => {
   useEffect(() => {
     const fetchBranches = async () => {
       const res = await axios.get(
-        "http://localhost:8800/api/auth/getbrancheinuser"
+        "http://localhost:8800/api/auth/getbranchinuser"
       );
       setBranches(res.data);
     };
@@ -218,7 +218,7 @@ const handleChange = (e) => {
     const encodedURI = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedURI);
-    link.setAttribute("download", "posts.csv");
+    link.setAttribute("download", "usermaster.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

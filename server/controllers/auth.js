@@ -278,16 +278,27 @@ export const adminbranch = (req, res) => {
   const branchname = req.body.branchname;
 
   // Check if the data already exists in the database based on multiple fields
-  const checkDuplicateQuery = "SELECT * FROM branchmaster WHERE regionname = ? AND regioncode = ? AND branchcode = ? AND branchname = ?";
-  const values = [regionname, regioncode, branchname, branchcode];
+  const checkDuplicateQuery =
+    "SELECT * FROM branchmaster WHERE regionname = ? AND regioncode = ? AND branchcode = ? AND branchname = ?";
+  const values = [regionname, regioncode, branchcode, branchname];
 
   db.query(checkDuplicateQuery, values, (err, results) => {
     if (err) return res.status(500).json(err);
 
     if (results.length > 0) {
       // If the data already exists, update the existing row
-      const updateQuery = "UPDATE branchmaster SET regionname = ?, regioncode = ?branchname = ?, branchcode = ? WHERE branchname = ? AND branchcode = ?";
-      const updateValues = [regionname, regioncode, branchcode, branchname, regionname, regioncode, branchcode, branchname];
+      const updateQuery =
+        "UPDATE branchmaster SET regionname = ?, regioncode = ?, branchname = ?, branchcode = ? WHERE regionname = ? AND regioncode = ? AND branchname = ? AND branchcode = ?";
+      const updateValues = [
+        regionname,
+        regioncode,
+        branchname,
+        branchcode,
+        regionname,
+        regioncode,
+        branchname,
+        branchcode,
+      ];
 
       db.query(updateQuery, updateValues, (err, data) => {
         if (err) return res.status(500).json(err);
@@ -295,22 +306,24 @@ export const adminbranch = (req, res) => {
       });
     } else {
       // If the data does not exist, insert the data into the database
-      const insertQuery = "INSERT INTO branchmaster (`regionname`,`regioncode`,`branchcode`,`branchname`) VALUES (?)";
+      const insertQuery =
+        "INSERT INTO branchmaster (`regionname`,`regioncode`,`branchcode`,`branchname`) VALUES (?, ?, ?, ?)";
 
       const insertValues = [
         regionname,
         regioncode,
         branchcode,
-        branchname
+        branchname,
       ];
 
-      db.query(insertQuery, [insertValues], (err, data) => {
+      db.query(insertQuery, insertValues, (err, data) => {
         if (err) return res.status(500).json(err);
         return res.status(200).json("Branch data has been created!");
       });
     }
   });
 };
+
 /////////////////////////////////////////////////////////////////////////////////////
 // Usermaster
 export const userdata = (req, res) => {
@@ -383,7 +396,7 @@ export const adminuser = (req, res) => {
 };
 
 
-export const getbrancheinuser = (req, res) => {
+export const getbranchinuser = (req, res) => {
   const q = "SELECT * FROM branchmaster";
   db.query(q, (err, data) => {
     if (err) return res.status(500).json("Internal server error");

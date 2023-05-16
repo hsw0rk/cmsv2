@@ -18,7 +18,7 @@ import {
   userdata,
   edituser,
   adminuser,
-  getbrancheinuser,
+  getbranchinuser,
   verticaldata,
   editVertical,
   adminvertical,
@@ -54,7 +54,7 @@ router.post("/adminbranch", adminbranch);
 router.get("/userdata", userdata);
 router.put("/edituser/:id", edituser);
 router.post("/adminuser", adminuser);
-router.get("/getbrancheinuser", getbrancheinuser);
+router.get("/getbranchinuser", getbranchinuser);
 router.get("/getregioninuser", getregioninuser);
 router.get("/getproductininvestments", getproductininvestments);
 router.get("/getverticalininvestments/", getverticalininvestments);
