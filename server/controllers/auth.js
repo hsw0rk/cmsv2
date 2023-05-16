@@ -445,6 +445,15 @@ export const getverticalininsurance = (req, res) => {
   });
 };
 
+
+export const getbranchadd = (req, res) => {
+  const q = "SELECT * FROM usermaster";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
+  });
+};
+
 // Verticalmaster
 export const verticaldata = (req, res) => {
   const q = "SELECT * FROM verticalmaster";

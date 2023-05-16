@@ -33,7 +33,7 @@ const SummaryBox = ({ item }) => {
     useEffect(() => {
       fetchData()
         .then(counts => {
-          console.log(counts);
+          // console.log(counts);
           if (counts !== undefined) {
             if (item.title === "Investments") {
               setCount(counts[0]);

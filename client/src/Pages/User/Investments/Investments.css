@@ -1,3 +1,15 @@
+.valid-icon::after {
+  content: "\2714";
+  /* Green tick icon */
+  color: green;
+}
+
+.invalid-icon::after {
+  content: "\2718";
+  /* Cross icon */
+  color: red;
+}
+
 .form-container-investments {
   display: flex;
   justify-content: center;
@@ -133,3 +145,4 @@
       display: none;
   }
 }
+

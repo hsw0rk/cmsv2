@@ -34,17 +34,22 @@ const Region = () => {
   const handleChange = (e) => {
     setInputs((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value.toUpperCase(),
     }));
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await axios.post(
         "http://localhost:8800/api/auth/adminregion",
-        { ...inputs }
+        {
+          ...inputs,
+          regionname: inputs.regionname.toUpperCase(),
+          regioncode: inputs.regioncode.toUpperCase(),
+        }
       );
       setMsg(response.data);
       setErr(null);
@@ -53,7 +58,7 @@ const Region = () => {
       setMsg(null);
     }
   };
-
+  
   useEffect(() => {
     axios.get("http://localhost:8800/api/auth/regiondata").then((res) => {
       setPosts(res.data);
@@ -108,17 +113,33 @@ const Region = () => {
   };
 
   const downloadCSV = () => {
+    // Define the headers for the CSV
+    const headers = ["Region Name", "Region Code"];
+  
+    // Create an array of rows to be included in the CSV
+    const rows = posts.map((post) => [
+      post.regionname,
+      post.regioncode,
+    ]);
+  
+    // Combine headers and rows into a single array
+    const csvData = [headers, ...rows];
+  
+    // Convert the array to CSV content
     const csvContent =
       "data:text/csv;charset=utf-8," +
-      posts.map((post) => Object.values(post).join(",")).join("\n");
+      csvData.map((row) => row.join(",")).join("\n");
+  
+    // Create a download link and trigger the download
     const encodedURI = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedURI);
-    link.setAttribute("download", "posts.csv");
+    link.setAttribute("download", "regionmaster.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
+  
 
   const samplecsv = [
     { id: "", regionname: "", regioncode: "" }
@@ -192,6 +213,7 @@ const Region = () => {
                   id="regionname"
                   name="regionname"
                   onChange={handleChange}
+                  style={{ textTransform: "uppercase" }}
                 />
               </label>
             </div>
@@ -206,6 +228,7 @@ const Region = () => {
                   id="regioncode"
                   name="regioncode"
                   onChange={handleChange}
+                  style={{ textTransform: "uppercase" }}
                 />
               </label>
             </div>
@@ -287,15 +310,8 @@ const Region = () => {
             title="Download CSV"
           />
 
-
         </div>
       </div>
-
-
-
-
-
-
 
       <div className="flex justify-content-between gap-5 clearred">
         <Button
@@ -340,7 +356,7 @@ const Region = () => {
         <Column
           body={(rowData) => (
             <Button
-              label="Edit"
+              label="Update"
               icon="pi pi-pencil"
               onClick={() => {
                 setEditedPost(rowData);
@@ -351,7 +367,7 @@ const Region = () => {
         />
       </DataTable>
       <Dialog
-        header="Edit Post"
+        header="Update Region Data"
         visible={editDialogVisible}
         style={{ width: "50vw" }}
         modal
@@ -366,6 +382,7 @@ const Region = () => {
                 <InputText
                   id="regionname"
                   value={editedPost.regionname}
+                  style={{ textTransform: "uppercase" }}
                   onChange={(e) =>
                     setEditedPost({ ...editedPost, regionname: e.target.value })
                   }
@@ -376,6 +393,7 @@ const Region = () => {
                 <InputText
                   id="regioncode"
                   value={editedPost.regioncode}
+                  style={{ textTransform: "uppercase" }}
                   onChange={(e) =>
                     setEditedPost({ ...editedPost, regioncode: e.target.value })
                   }

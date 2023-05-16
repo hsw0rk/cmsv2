@@ -168,6 +168,53 @@
                 margin-top: auto;
                 cursor: pointer;
             }
+
+            &.dropdown {
+                position: relative;
+        
+                &:hover {
+                  .submenu {
+                    display: block;
+                  }
+                }
+        
+                &::after {
+                  content: "";
+                  position: absolute;
+                  top: calc(50% - 4px);
+                  right: 10px;
+                  width: 0;
+                  height: 0;
+                  border-style: solid;
+                  border-width: 5px 5px 0 5px;
+                  border-color: $txtColor transparent transparent transparent;
+                }
+        
+                .submenu {
+                  display: none;
+                  position: absolute;
+                  top: 100%;
+                  left: 100%;
+                  z-index: 10;
+                  width: max-content;
+                  background-color: $mainBg;
+                  border-radius: $borderRadius;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+                  padding: 0.5rem 0;
+                  overflow: hidden;
+        
+                  &__item {
+                    padding: 0.5rem 1rem;
+                    color: $txtColor;
+                    transition: background-color 0.3s ease-in-out;
+        
+                    &:hover {
+                      background-color: $mainColor;
+                      color: $white;
+                    }
+                  }
+                }
+            }
         }
     }
 }

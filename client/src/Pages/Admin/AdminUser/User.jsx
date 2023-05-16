@@ -44,11 +44,26 @@ const User = () => {
   });
 
   const [branches, setBranches] = useState([]);
+  const [branchesadd, setBranchesadd] = useState([]);
   const [regions, setRegions] = useState([]);
   const [filteredRegions, setFilteredRegions] = useState([]);
   const [filteredBranches, setFilteredBranches] = useState([]);
   const [filteredBranchCodes, setFilteredBranchCodes] = useState([]);
   const [showAdditionaluser, setShowAdditionaluser] = useState(false);
+
+
+  useEffect(() => {
+    const fetchBranchesadd = async () => {
+      const res = await axios.get(
+        "http://localhost:8800/api/auth/getbranchadd"
+      );
+      setBranchesadd(res.data);
+    };
+    fetchBranchesadd();
+  }, []);
+
+
+
 
   useEffect(() => {
     const fetchBranches = async () => {
@@ -73,12 +88,12 @@ const User = () => {
         (region) => region.regioncode === inputs.regioncode
       );
       setFilteredRegions(filteredRegions);
-  
+
       const filteredBranches = branches.filter(
         (branch) => branch.regioncode === inputs.regioncode
       );
       setFilteredBranches(filteredBranches);
-  
+
       const filteredBranchCodes = branches.filter(
         (branch) =>
           branch.regioncode === inputs.regioncode &&
@@ -92,41 +107,53 @@ const User = () => {
       setFilteredBranchCodes([]);
     }
   }, [inputs.regioncode, inputs.branchname, inputs.branchcode, regions, branches]);
-  
 
-const handleChange = (e) => {
-  const { name, value } = e.target;
 
-  setInputs((prevInputs) => ({
-    ...prevInputs,
-    [name]: value,
-  }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
 
-  if (name === 'regioncode') {
-    const selectedRegion = regions.find(
-      (region) => region.regioncode === value
-    );
-    console.log('selectedRegion:', selectedRegion);
     setInputs((prevInputs) => ({
       ...prevInputs,
-      regionname: selectedRegion ? selectedRegion.regionname : '',
+      [name]: value,
     }));
-  }
 
-  if (name === 'branchname') {
-    const selectedBranch = branches.find(
-      (branch) =>
-        branch.regioncode === inputs.regioncode && branch.branchname === value
-    );
-    console.log('selectedBranch:', selectedBranch);
-    setInputs((prevInputs) => ({
-      ...prevInputs,
-      branchcode: selectedBranch ? selectedBranch.branchcode : '',
-    }));
-  }
-};
+    if (name === 'regioncode') {
+      const selectedRegion = regions.find(
+        (region) => region.regioncode === value
+      );
+      console.log('selectedRegion:', selectedRegion);
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        regionname: selectedRegion ? selectedRegion.regionname : '',
+      }));
+    }
 
-  
+    if (name === 'branchname') {
+      const selectedBranch = branches.find(
+        (branch) =>
+          branch.regioncode === inputs.regioncode && branch.branchname === value
+      );
+      console.log('selectedBranch:', selectedBranch);
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        branchcode: selectedBranch ? selectedBranch.branchcode : '',
+      }));
+    }
+
+    if (name === 'Branchname2') {
+      const selectedBranch2 = branchesadd.find(
+        (branch) =>
+          branch.regioncode === inputs.regioncode && branch.Branchname2 === value
+      );
+      console.log('selectedBranch2:', selectedBranch2);
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        Branchcode2: selectedBranch2 ? selectedBranch2.Branchcode2 : '',
+      }));
+    }
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -382,7 +409,7 @@ const handleChange = (e) => {
                 <select
                   className="userinput"
                   id="regionname"
-                  name="regionname" 
+                  name="regionname"
                   value={inputs.regionname || ""}
                   onChange={handleChange}
                 >
@@ -394,7 +421,7 @@ const handleChange = (e) => {
                 </select>
               </label>
             </div>
-            
+
             <div>
               <label>
                 Branch Name
@@ -420,7 +447,7 @@ const handleChange = (e) => {
               <label>
                 Branch Code
                 <select
-                  
+
                   className="userinput"
                   id="branchcode"
                   name="branchcode" // update name attribute to "branchcode"
@@ -441,6 +468,55 @@ const handleChange = (e) => {
             </button>
           </form>
         </div>
+
+
+
+        <div>
+          <label>
+            Branch Name 2
+            <select
+              required
+              className="userinput"
+              id="Branchname2"
+              name="Branchname2"
+              value={inputs.Branchname2 || ""}
+              onChange={handleChange}
+            >
+              <option value="">Select Branch Name 2</option>
+              {filteredBranches.map((branch) => (
+                <option key={branch.branchname} value={branch.branchname}>
+                  {branch.branchname}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+
+        <div >
+          <label>
+            Branch Code 2
+            <select
+
+              className="userinput"
+              id="Branchcode2"
+              name="Branchcode2" // update name attribute to "branchcode"
+              value={inputs.Branchcode2 || ""}
+              onChange={handleChange}
+            >
+              {filteredBranchCodes.map((branch) => (
+                <option key={branch.branchcode} value={branch.branchcode}>
+                  {branch.branchcode}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+
+
+
+
 
         <input
           type="file"

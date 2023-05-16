@@ -1,6 +1,6 @@
 export const sidebarNav = [
     {
-        link: '/employee',
+        link: 'dashboard',
         section: 'dashboard',
         icon: <i className='bx bx-desktop'></i>,
         text: 'Dashboard'

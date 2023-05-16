@@ -5,10 +5,27 @@ import { AuthContext } from "../../../context/authContext";
 
 const Investments = () => {
   const { currentUser } = useContext(AuthContext);
-
   const [err, setErr] = useState(null);
   const [msg, setMsg] = useState(null);
   const [ivertical, setivertical] = useState([]);
+
+  const [inputValue, setInputValue] = useState('');
+  const [isValid, setIsValid] = useState(false);
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+    setIsValid(isInputValid(e.target.value));
+  };
+
+  const isInputValid = (value) => {
+    // Your validation logic goes here
+    // Return true or false based on the validation result
+    // For example, check if the input matches the PAN pattern
+    const panRegex = /[a-z]{5}[0-9]{4}[a-z]{1}/i;
+    return panRegex.test(value);
+  };
+
+
 
   useEffect(() => {
     const fetchivertical = async () => {
@@ -71,48 +88,6 @@ const Investments = () => {
     }
   };
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-  //   try {
-  //     const response = await axios.post(
-  //       "http://localhost:8800/api/auth/investments",
-  //       formData
-  //     );
-  //     setMsg(response.data); // set success message here
-  //     setErr(null); // clear error message
-  //   } catch (error) {
-  //     // Check if error message is "Investment already exists!"
-  //     if (error.response.data === "Investment already exists!") {
-  //       const confirmDuplicate = window.confirm(
-  //         "Investment already exists! Do you want to insert duplicate data?"
-  //       );
-  //       if (confirmDuplicate) {
-  //         // User confirmed, update formData and submit duplicate data
-  //         const newFormData = { ...formData };
-  //         try {
-  //           const response = await axios.post(
-  //             "http://localhost:8800/api/auth/investments",
-  //             newFormData
-  //           );
-  //           setMsg(response.data); // set success message here
-  //           setErr(null); // clear error message
-  //         } catch (error) {
-  //           setErr(error.response.data);
-  //           setMsg(null); // clear success message
-  //         }
-  //       } else {
-  //         // User cancelled, do nothing
-  //         setErr("Duplicate data not inserted.");
-  //         setMsg(null); // clear success message
-  //       }
-  //     } else {
-  //       // Error message is not "Investment already exists!", set error message
-  //       setErr(error.response.data);
-  //       setMsg(null); // clear success message
-  //     }
-  //   }
-  // };
-
   const [selectedProduct, setSelectedProduct] = useState("");
   const [showFreshRenewal, setShowFreshRenewal] = useState(true);
   const [showCreditBranch, setShowCreditBranch] = useState(true);
@@ -174,7 +149,7 @@ const Investments = () => {
 
   return (
     <>
-    
+
       <p style={{ fontSize: "20px" }}>{ivertical}</p>
       <div className="form-container-investments">
         <form className="forminvestments" onSubmit={handleSubmit}>
@@ -187,6 +162,8 @@ const Investments = () => {
                 name="product"
                 value={selectedProduct}
                 onChange={handleProductChange}
+                onInvalid={(e) => e.target.setCustomValidity("Select Product")}
+                onInput={(e) => e.target.setCustomValidity("")}
               >
                 <option>Select</option>
                 {iproduct
@@ -211,6 +188,8 @@ const Investments = () => {
                     className="investmentsinput"
                     name="principal"
                     onChange={handleChange}
+                    onInvalid={(e) => e.target.setCustomValidity("Select Principal")}
+                    onInput={(e) => e.target.setCustomValidity("")}
                   >
                     <option value="">select</option>
                     {selectedProduct === "Bonds" && (
@@ -251,6 +230,8 @@ const Investments = () => {
                     name="freshrenewal"
                     onChange={handleChange}
                     required
+                    onInvalid={(e) => e.target.setCustomValidity("Select Fresh / Renewal")}
+                    onInput={(e) => e.target.setCustomValidity("")}
                   >
                     <option value="">Select</option>
                     <option value="JM Financial Services">Fresh</option>
@@ -264,22 +245,54 @@ const Investments = () => {
           </div>
 
           {showPanInput && (
-            <label>
-              PAN<span style={{ color: "red" }}>*</span>
+            <label style={{ position: 'relative' }}>
+              PAN<span style={{ color: 'red' }}>*</span>
               <input
-                className="investmentsinput"
+                className={`investmentsinput ${inputValue && !isValid ? 'invalid-icon' : 'valid-icon'}`}
                 type="text"
                 id="pan"
                 name="pan"
                 maxLength={10}
                 pattern="[a-z]{5}[0-9]{4}[a-z]{1}"
                 required
-                style={{ textTransform: "uppercase" }}
-                title="Enter a valid PAN (eg. ABCDE1234F)"
-                onChange={handleChange}
+                style={{ textTransform: 'uppercase' }}
+                title="Enter a valid PAN (e.g., ABCDE1234F)"
+                value={inputValue}
+                onChange={handleInputChange}
               />
+              {inputValue && !isValid && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    right: '5px',
+                    top: '85%',
+                    transform: 'translateY(-50%)',
+                    fontSize: '12px',
+                    color: 'red',
+                  }}
+                >
+                  &#10060;
+                </span>
+              )}
+              {inputValue && isValid && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    right: '5px',
+                    top: '85%',
+                    transform: 'translateY(-50%)',
+                    fontSize: '15px',
+                    color: 'green',
+                  }}
+                >
+                  &#10004;
+                </span>
+              )}
             </label>
           )}
+
+
+
 
           {showCustomerNameInput && (
             <label>
@@ -291,6 +304,8 @@ const Investments = () => {
                 id="customername"
                 name="customername"
                 onChange={handleChange}
+                onInvalid={(e) => e.target.setCustomValidity("Customer Name Is Missing ")}
+                onInput={(e) => e.target.setCustomValidity("")}
               />
             </label>
           )}
@@ -301,11 +316,14 @@ const Investments = () => {
               <input
                 required
                 className="investmentsinput"
-                type="number"
+                type="test"
                 id="mobileno"
                 name="mobileno"
+                pattern="^(?!.*[A-Za-z])[1-9][0-9]*$"
                 maxLength={10}
                 onChange={handleChange}
+                onInvalid={(e) => e.target.setCustomValidity("Mobile Number Is Missing ")}
+                onInput={(e) => e.target.setCustomValidity("")}
               />
             </label>
           )}
@@ -320,13 +338,15 @@ const Investments = () => {
                   id="creditbranch"
                   name="creditbranch"
                   onChange={handleChange}
+                  onInvalid={(e) => e.target.setCustomValidity("Select Credit Branch")}
+                  onInput={(e) => e.target.setCustomValidity("")}
                 >
                   <option value="">Select</option>
-                  {currentUser.Branchname1 && currentUser.Branchcode1 && (
+                  {currentUser.branchname && currentUser.branchcode && (
                     <option
-                      value={`${currentUser.Branchname1}-${currentUser.Branchcode1}`}
+                      value={`${currentUser.branchname}-${currentUser.branchcode}`}
                     >
-                      {currentUser.Branchname1}-{currentUser.Branchcode1}
+                      {currentUser.branchname}-{currentUser.branchcode}
                     </option>
                   )}
                   {currentUser.Branchname2 && currentUser.Branchcode2 && (
@@ -369,10 +389,13 @@ const Investments = () => {
                 <input
                   required
                   className="investmentsinput"
-                  type="number"
+                  type="text"
+                  pattern="^(?!.*[A-Za-z])[1-9][0-9]*$"
                   id="business"
                   name="business"
                   onChange={handleChange}
+                  onInvalid={(e) => e.target.setCustomValidity("Your Business Amount")}
+                  onInput={(e) => e.target.setCustomValidity("")}
                 />
               </label>
             </div>
@@ -431,7 +454,7 @@ const Investments = () => {
                 <button className="investmsg-yes" onClick={handleSubmit}>
                   Yes
                 </button>
-                <a href="/e/investments">
+                <a href="/employee/investments">
                   <button className="investmsg-no" onClick={() => setErr(null)}>
                     No
                   </button>
@@ -446,7 +469,7 @@ const Investments = () => {
             <div className="popup-background"></div>
             <div className="popup-wrapper">
               <p className="investmsgp">{msg}</p>
-              <a href="/e/investments">
+              <a href="/employee/investments">
                 <p className="investmsgclose" onClick={() => setMsg(null)}>
                   close
                 </p>

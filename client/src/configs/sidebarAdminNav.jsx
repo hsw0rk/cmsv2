@@ -1,6 +1,6 @@
 const sidebarAdminNav = [
     {
-        link: '/admin',
+        link: 'dashboard',
         section: 'dashboard',
         icon: <i className='bx bx-desktop'></i>,
         text: 'Dashboard'
@@ -24,12 +24,6 @@ const sidebarAdminNav = [
         text: 'User Master'
     },
     {
-        link: 'approvalmaster',
-        section: 'approvalmaster',
-        icon: <i className='bx bx-user-pin'></i>,
-        text: 'Approval Master'
-    },
-    {
         link: 'productmaster',
         section: 'productmaster',
         icon: <i className='bx bx-cube'></i>,
@@ -40,6 +34,12 @@ const sidebarAdminNav = [
         section: 'verticalmaster',
         icon: <i className='bx bx-file-find'></i>,
         text: 'Vertical Master'
+    },
+    {
+        link: 'approvalmaster',
+        section: 'approvalmaster',
+        icon: <i className='bx bx-user-pin'></i>,
+        text: 'Approval Master'
     },
     {
         link: 'leads',

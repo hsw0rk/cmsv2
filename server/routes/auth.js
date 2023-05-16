@@ -31,7 +31,8 @@ import {
   adminapproval,
   getregioninuser,
   getverticalinhomeloans,
-  getverticalininsurance
+  getverticalininsurance,
+  getbranchadd
 } from "../controllers/auth.js";
 
 const router = express.Router();
@@ -60,7 +61,7 @@ router.get("/getproductininvestments", getproductininvestments);
 router.get("/getverticalininvestments/", getverticalininvestments);
 router.get("/getverticalinhomeloans/", getverticalinhomeloans);
 router.get("/getverticalininsurance/", getverticalininsurance);
-
+router.get("/getbranchadd/", getbranchadd); 
 
 router.get("/verticaldata", verticaldata);
 router.put("/editvertical/:id", editVertical);

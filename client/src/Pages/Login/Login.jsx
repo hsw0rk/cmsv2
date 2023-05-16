@@ -28,9 +28,9 @@ function LoginRegister() {
     try {
       await login(inputs);
       if (isAdmin()) {
-        navigate("/employee");
+        navigate("/employee/dashboard");
       } else {
-        navigate("/admin");
+        navigate("/admin/dashboard");
       }
     } catch (err) {
       toast.current.show({
@@ -124,7 +124,7 @@ function LoginRegister() {
         <input
           id="employeecode"
           name="employeecode"
-          type="text"
+          type="number"
           placeholder="Employee Code"
           required
           onChange={handleChange}

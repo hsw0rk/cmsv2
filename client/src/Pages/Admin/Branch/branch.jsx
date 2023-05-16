@@ -61,7 +61,7 @@ const Branch = () => {
   
     setInputs((prevInputs) => ({
       ...prevInputs,
-      [name]: value,
+      [name]: name === 'branchname' ? value.toUpperCase() : value,
     }));
   
     if (name === 'regioncode') {
@@ -71,7 +71,8 @@ const Branch = () => {
         regionname: selectedRegion ? selectedRegion.regionname : '',
       }));
     }
-  };  
+  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -159,9 +160,26 @@ const Branch = () => {
   };
 
   const downloadCSV = () => {
+    // Define the headers for the CSV
+    const headers = ["Region Name", "Region Code", "Branch Name", "Branch Code"];
+  
+    // Create an array of rows to be included in the CSV
+    const rows = posts.map((post) => [
+      post.regionname,
+      post.regioncode,
+      post.branchname,
+      post.branchcode,
+    ]);
+  
+    // Combine headers and rows into a single array
+    const csvData = [headers, ...rows];
+  
+    // Convert the array to CSV content
     const csvContent =
       "data:text/csv;charset=utf-8," +
-      posts.map((post) => Object.values(post).join(",")).join("\n");
+      csvData.map((row) => row.join(",")).join("\n");
+  
+    // Create a download link and trigger the download
     const encodedURI = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedURI);
@@ -170,6 +188,7 @@ const Branch = () => {
     link.click();
     document.body.removeChild(link);
   };
+  
 
   const samplecsv = [
     { id: "", regionname: "", regioncode: "", branchname: "", branchcode: "" },
@@ -287,6 +306,7 @@ const Branch = () => {
                 id="branchname"
                 name="branchname"
                 onChange={handleChange}
+                style={{ textTransform: "uppercase" }}
               />
             </label>
           </div>
@@ -301,6 +321,7 @@ const Branch = () => {
                 id="branchcode"
                 name="branchcode"
                 onChange={handleChange}
+                type="number"
               />
             </label>
           </div>
@@ -437,7 +458,7 @@ const Branch = () => {
         <Column
           body={(rowData) => (
             <Button
-              label="Edit"
+              label="Update"
               icon="pi pi-pencil"
               onClick={() => {
                 setEditedPost(rowData);
@@ -448,7 +469,7 @@ const Branch = () => {
         />
       </DataTable>
       <Dialog
-        header="Edit Post"
+        header="Update Branch Data"
         visible={editDialogVisible}
         style={{ width: "50vw" }}
         modal
@@ -505,8 +526,9 @@ const Branch = () => {
                   required
                   id="branchname"
                   value={editedPost.branchname}
+                  style={{ textTransform: "uppercase" }}
                   onChange={(e) =>
-                    setEditedPost({ ...editedPost, branchcode: e.target.value })
+                    setEditedPost({ ...editedPost, branchname: e.target.value })
                   }
                 />
               </div>
@@ -516,6 +538,7 @@ const Branch = () => {
                   required
                   id="branchcode"
                   value={editedPost.branchcode}
+                  type="number"
                   onChange={(e) =>
                     setEditedPost({ ...editedPost, branchcode: e.target.value })
                   }

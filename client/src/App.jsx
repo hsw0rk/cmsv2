@@ -28,7 +28,7 @@ function App() {
             <Routes>
                 <Route path="/login" element={<Login />}/>
                 <Route path="/employee" element={<MainLayout />}>
-                    <Route index element={<Dashboard />} />
+                    <Route path="dashboard" index element={<Dashboard />} />
                     <Route path="investments" element={<Investments />} />
                     <Route path="homeloans" element={<Homeloans />} />
                     <Route path="insurance" element={<Insurance />} />
@@ -36,15 +36,14 @@ function App() {
                     <Route path="leads" element={<Leads />} />
                 </Route>
                 <Route path="/admin" element={<AdminLayout />}>
-                    <Route index element={<AdminDashboard />} />
+                    <Route path="dashboard" index element={<AdminDashboard />} />
                     <Route path="regionmaster" index element={<Region />} />
                     <Route path="branchmaster" element={<Branch />} />
                     <Route path="usermaster" element={<User />} />
-                    <Route path="approvalmaster" element={<Approval />} />
                     <Route path="productmaster" element={<Product />} />
                     <Route path="verticalmaster" element={<Vertical />} />
+                    <Route path="approvalmaster" element={<Approval />} />
                     <Route path="leads" element={<Leads />} />
-
                 </Route>
             </Routes>
         </BrowserRouter>
