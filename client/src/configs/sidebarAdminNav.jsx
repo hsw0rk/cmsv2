@@ -18,10 +18,10 @@ const sidebarAdminNav = [
         text: 'Branch Master'
     },
     {
-        link: 'usermaster',
-        section: 'usermaster',
+        link: 'employeemaster',
+        section: 'employeemaster',
         icon: <i className='bx bx-user'></i>,
-        text: 'User Master'
+        text: 'Employee Master'
     },
     {
         link: 'productmaster',

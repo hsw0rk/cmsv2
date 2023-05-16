@@ -124,7 +124,7 @@ function LoginRegister() {
         <input
           id="employeecode"
           name="employeecode"
-          type="number"
+          type="text"
           placeholder="Employee Code"
           required
           onChange={handleChange}

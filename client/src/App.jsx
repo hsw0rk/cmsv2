@@ -39,7 +39,7 @@ function App() {
                     <Route path="dashboard" index element={<AdminDashboard />} />
                     <Route path="regionmaster" index element={<Region />} />
                     <Route path="branchmaster" element={<Branch />} />
-                    <Route path="usermaster" element={<User />} />
+                    <Route path="employeemaster" element={<User />} />
                     <Route path="productmaster" element={<Product />} />
                     <Route path="verticalmaster" element={<Vertical />} />
                     <Route path="approvalmaster" element={<Approval />} />

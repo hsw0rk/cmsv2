@@ -15,40 +15,6 @@ const Approval = () => {
     const [editedPost, setEditedPost] = useState(null);
     const [editDialogVisible, setEditDialogVisible] = useState(false);
 
-    const handleApproval = (rowData) => {
-        // Populate the form with the row data
-        const form = document.getElementById("approval-form");
-        form.elements.employeename.value = rowData.employeename;
-        form.elements.employeecode.value = rowData.employeecode;
-        form.elements.mobilenumber.value = rowData.mobilenumber;
-        form.elements.password.value = rowData.password;
-        form.elements.RegionCode.value = rowData.RegionCode;
-        form.elements.RegionName.value = rowData.RegionName;
-        form.elements.Branchname1.value = rowData.Branchname1;
-        form.elements.Branchcode1.value = rowData.Branchcode1;
-
-        // Submit the form to insert the row into the usermaster table
-        fetch('http://localhost:8800/api/auth/adminapproval', {
-            method: 'POST',
-            body: new FormData(form)
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Show an alert message
-                alert('User data has been submitted successfully!');
-            })
-            .catch(error => {
-                // Handle the error
-                console.error(error);
-            });
-
-        // Submit the form
-        form.submit();
-    };
-
-
-
-
     useEffect(() => {
         axios.get("http://localhost:8800/api/auth/approvaldata").then((res) => {
             setPosts(res.data);
@@ -115,22 +81,17 @@ const Approval = () => {
                 <Column field="Branchcode1" sortable header="Branch Code 1"></Column>
                 <Column
                     body={(rowData) => (
-                        <>
+        
                             <Button
                             style={{margin:'15px'}}
-                                label="Edit"
+                                label="Approve"
                                 icon="pi pi-pencil"
                                 onClick={() => {
                                     setEditedPost(rowData);
                                     setEditDialogVisible(true);
                                 }}
                             />
-                            <Button
-                                label="Approve"
-                                icon="pi pi-check"
-                                onClick={() => handleApproval(rowData)}
-                            />
-                        </>
+                    
                     )}
                 />
             </DataTable>
@@ -224,21 +185,10 @@ const Approval = () => {
                                 />
                             </div>
                         </div>
-                        <Button label="Save" icon="pi pi-check" onClick={saveEditedPost} />
+                        <Button label="Approve" icon="pi pi-check" onClick={saveEditedPost} />
                     </div>
                 )}
             </Dialog>
-            <form id="approval-form" onSubmit={(e) => e.preventDefault()}>
-                <input type="text" id="employeename-input" name="employeename" />
-                <input type="text" id="employeecode-input" name="employeecode" />
-                <input type="text" id="mobilenumber-input" name="mobilenumber" />
-                <input type="text" id="password-input" name="password" />
-                <input type="text" id="RegionCode-input" name="RegionCode" />
-                <input type="text" id="RegionName-input" name="RegionName" />
-                <input type="text" id="Branchname1-input" name="Branchname1" />
-                <input type="text" id="Branchcode1-input" name="Branchcode1" />
-            </form>
-
 
         </div>
 
