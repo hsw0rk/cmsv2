@@ -1,7 +1,7 @@
 import images from "./images";
 import axios from "axios";
 
-const data = {
+export const data = {
   user: {
     name: "Tuatta",
     img: images.avt,

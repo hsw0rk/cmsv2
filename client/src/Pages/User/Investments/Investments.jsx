@@ -1,7 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import "./Investments.css";
+import "./investments.css";
 import { AuthContext } from "../../../context/authContext";
+import { data } from '../../../constants/data'
+import UserInfo from '../../../Components/User/user-info/UserInfo'
 
 const Investments = () => {
   const { currentUser } = useContext(AuthContext);
@@ -149,8 +151,10 @@ const Investments = () => {
 
   return (
     <>
-
       <p style={{ fontSize: "20px" }}>{ivertical}</p>
+      <div className='suser'>
+        <UserInfo user={data.user} />
+      </div>
       <div className="form-container-investments">
         <form className="forminvestments" onSubmit={handleSubmit}>
           <div>

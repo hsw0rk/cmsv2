@@ -9,6 +9,8 @@ import { FilterMatchMode, FilterOperator } from "primereact/api";
 import exc from "../../../Assets/exc.svg";
 import axios from "axios";
 import "./orderbook.css";
+import { data } from '../../../constants/data'
+import UserInfo from '../../../Components/User/user-info/UserInfo'
 
 const OrderBook = () => {
   const { currentUser } = useContext(AuthContext);
@@ -97,7 +99,10 @@ const OrderBook = () => {
 
   return (
     <div className="form">
-      <div className="flex justify-content-between gap-5 clearred">
+      <div className='suser'>
+        <UserInfo user={data.user} />
+      </div>
+      <div className="flex justify-content-start gap-5 clearred">
         <Button
           type="button"
           icon="pi pi-filter-slash"

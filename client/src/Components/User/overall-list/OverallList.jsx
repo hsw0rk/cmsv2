@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import './overall-list.scss'
 import { data } from '../../../constants'
+import { AuthContext } from "../../../context/authContext";
 
 const icons = [
     <i className='bx bx-receipt'></i>,
@@ -9,26 +10,40 @@ const icons = [
     <i className='bx bx-dollar'></i>
 ]
 
-const OverallList = () => {
+const overall = (currentUser) => [
+    {
+      value: currentUser.employeecode,
+      title: "Region Code",
+    },
+    {
+      value: currentUser.branchname,
+      title: "Region Name",
+    }
+  ];
+  
+  const OverallList = () => {
+    const { currentUser } = useContext(AuthContext);
+    const overallData = overall(currentUser);
+  
     return (
-        <ul className='overall-list'>
-            {
-                data.overall.map((item, index) => (
-                    <li className="overall-list__item" key={`overall-${index}`}>
-                        <div className="overall-list__item__icon">
-                            {icons[index]}
-                        </div>
-                        <div className="overall-list__item__info">
-                            <div className="title">
-                                {item.value}
-                            </div>
-                            <span>{item.title}</span>
-                        </div>
-                    </li>
-                ))
-            }
-        </ul>
-    )
-}
+      <ul className="overall-list">
+        {overallData.map((item, index) => (
+          <li className="overall-list__item" key={`overall-${index}`}>
+            <div className="overall-list__item__icon">
+              {icons[index]}
+            </div>
+            <div className="overall-list__item__info">
+              <div className="title">
+                {item.value}
+              </div>
+              <span>{item.title}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    );
+  };
+  
+export default OverallList;
+  
 
-export default OverallList
