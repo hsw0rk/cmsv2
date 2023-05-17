@@ -1,32 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./sidebar.scss";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { images } from "../../../constants";
-import sidebarAdminNav from "../../../configs/sidebarAdminNav";
-import sidebarAdminNavs from "../../../configs/sidebarAdminNavs";
 import {
   Accordion,
   AccordionBody,
   AccordionHeader,
   AccordionItem,
 } from "react-headless-accordion";
-// import {Chevron} from "../components"
+import ArrowIcon from "../../../Assets/arrowicon";
 
 const Sidebar = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const location = useLocation();
+  const [open, setOpen] = useState(false);
+  const [activeItem, setActiveItem] = useState("");
 
   useEffect(() => {
-    const curPath = window.location.pathname.split("/admin/")[1];
-    const activeItem = sidebarAdminNav.findIndex(
-      (item) => item.section === curPath
-    );
+    setActiveItem("dashboard");
+  }, []);
 
-    if (activeItem >= 0) {
-      setActiveIndex(activeItem);
-    }
-  }, [location]);
-
+  const handleAccordionClick = () => {
+    setOpen(!open);
+  };
 
   const closeSidebar = () => {
     document.querySelector(".main__content").style.transform =
@@ -47,25 +41,23 @@ const Sidebar = () => {
         </div>
       </div>
       <div className="sidebar__menu">
-        {sidebarAdminNav.map((nav, index) => (
-          <Link
-            to={nav.link}
-            key={`nav-${index}`}
-            className={`sidebar__menu__item ${
-              activeIndex === index && "active"
-            }`}
-            onClick={closeSidebar}
-          >
-            <div className="sidebar__menu__item__icon">{nav.icon}</div>
-            <div className="sidebar__menu__item__txt">{nav.text}</div>
-          </Link>
-        ))}
         <div>
-        {sidebarAdminNav.map((nav, index) => (
-          <Link to="/admin/dashboard" key={`nav-${index}`} className={`sidebar__menu__item ${
-              activeIndex === index && "active"
-            }`}>Dashboard</Link>
-        ))}
+          <Link
+            to="/admin/dashboard"
+            className={`sidebar__menu__item ${
+              activeItem === "dashboard" ? "active" : ""
+            }`}
+            onClick={() => {
+              setActiveItem("dashboard");
+              closeSidebar();
+            }}
+          >
+            <i
+              className="bx bx-desktop pr-5 sidebar__menu__item__icon"
+              style={{ fontSize: "25px" }}
+            ></i>
+            Dashboard
+          </Link>
         </div>
         <Accordion
           transition={{
@@ -73,69 +65,152 @@ const Sidebar = () => {
             timingFunction: "cubic-bezier(0, 0, 0.2, 1)",
           }}
         >
-          <AccordionItem className="font-sans">
-            {({ open }) => (
-              <>
-                <AccordionHeader className="flex bg-transparent justify-center items-center border-none text-gray-900 p-3">
-                  <span
-                  style={{marginLeft:"100px"}}>Master</span>
-                  <svg
-                    class={`w-1 h-1 ${!open ? "" : "rotate-90"}`}
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                    style={{justifyContent:"flex-end",marginLeft:"70px",marginTop:"-3px"}}
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </AccordionHeader>
-
-                <AccordionBody>
-                  <div className="p-2 font-dark text-right pr-7"><i className='bx bx-current-location '></i>Region Master</div>
-                  <div className="p-2 font-dark text-right pr-7">Branch Master</div>
-                  <div className="p-2 font-dark text-right pr-7">Employee Master</div>
-                  <div className="p-2 font-dark text-right pr-7">Product Master</div>
-                  <div className="p-2 font-dark text-right pr-7">Vertical Master</div>
-                </AccordionBody>
-              </>
-            )}
+          <AccordionItem>
+            <>
+              <AccordionHeader
+                className="flex sidebar__menu__item bg-transparent 
+                justify-center items-center border-none text-gray-900 pt-1"
+                onClick={handleAccordionClick}
+              >
+                <i
+                  className="bx bx-hdd pr-5 sidebar__menu__item__icon"
+                  style={{ fontSize: "25px"}}
+                ></i>
+                <span className="flex sidebar__menu__item"
+                  style={{
+                    fontFamily: "'Roboto', sans-serif",
+                    fontSize: "14px",
+                    marginLeft:"-1.6rem", cursor:"pointer"
+                  }}
+                >
+                  Master
+                </span>
+                <ArrowIcon rotate={open} style={{fontSize:"12px"}}/>
+              </AccordionHeader>
+              <AccordionBody className="list">
+                <Link
+                  to="/admin/regionmaster"
+                  className={`pt-pl-1 sidebar__menu__item font-dark text-right ${
+                    activeItem === "regionmaster" ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setActiveItem("regionmaster");
+                    closeSidebar();
+                  }}
+                >
+                  <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
+                    <i
+                      className="sidebar__menu__item__icon bx bx-current-location pl-2"
+                      style={{ fontSize: "25px", marginRight: "25px" }}
+                    ></i>
+                    Region Master
+                  </div>
+                </Link>
+                <Link to="/admin/branchmaster" className={`pt-pl-1 sidebar__menu__item font-dark text-right ${
+                    activeItem === "branchmaster" ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setActiveItem("branchmaster");
+                    closeSidebar();
+                  }}>
+                  <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
+                    <i
+                      className="sidebar__menu__item__icon bx bx-map-pin pl-2"
+                      style={{ fontSize: "25px", marginRight: "25px" }}
+                    ></i>
+                    Branch Master
+                  </div>
+                </Link>
+                <Link to="/admin/employeemaster"  className={`pt-pl-1 sidebar__menu__item font-dark text-right ${
+                    activeItem === "employeemaster" ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setActiveItem("employeemaster");
+                    closeSidebar();
+                  }}>
+                  <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
+                    <i
+                      className="sidebar__menu__item__icon bx bx-user pl-2"
+                      style={{ fontSize: "25px", marginRight: "25px" }}
+                    ></i>
+                    Employee Master
+                  </div>
+                </Link>
+                <Link to="/admin/productmaster"  className={`pt-pl-1 sidebar__menu__item font-dark text-right ${
+                    activeItem === "productmaster" ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setActiveItem("productmaster");
+                    closeSidebar();
+                  }}>
+                  <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
+                    <i
+                      className="sidebar__menu__item__icon bx bx-cube pl-2"
+                      style={{ fontSize: "25px", marginRight: "25px" }}
+                    ></i>
+                    Product Master
+                  </div>
+                </Link>
+                <Link to="/admin/verticalmaster"  className={`pt-pl-1 sidebar__menu__item font-dark text-right ${
+                    activeItem === "verticalmaster" ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setActiveItem("verticalmaster");
+                    closeSidebar();
+                  }}>
+                  <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
+                    <i
+                      className="sidebar__menu__item__icon bx bx-file-find pl-2"
+                      style={{ fontSize: "25px", marginRight: "25px" }}
+                    ></i>
+                    Vertical Master
+                  </div>
+                </Link>
+                <hr 
+                style={{marginBottom:"8px",  borderWidth: "1px",
+                borderStyle: "solid",  
+                borderImage: "linear-gradient(to right, rgba(128, 128, 128, 0), rgba(128, 128, 128, 1), rgba(128, 128, 128, 0)) 1",
+                }}/>
+              </AccordionBody>
+            </>
           </AccordionItem>
         </Accordion>
-        {sidebarAdminNavs.map((nav, index) => (
-          <><Link
-            to={nav.link}
-            key={`nav-${index}`}
-            className={`sidebar__menu__item ${
-              activeIndex === index && "active"
-            }`}
-            onClick={closeSidebar}
-          >
-            Approval Master
-          </Link>
-          <Link
-          to={nav.link}
-          key={`nav-${index}`}
-          className={`sidebar__menu__item ${
-            activeIndex === index && "active"
-          }`}
-          onClick={closeSidebar}
-        >
-          Leads
-        </Link></>
-        ))}
-        <div className="sidebar__menu__item">
-          {/* <div className="sidebar__menu__item__icon">
-                        <i className='bx bx-log-out'></i>
-                    </div> */}
-          {/* <div className="sidebar__menu__item__txt">
-                        <button onClick={handleLogout} >
-                            Log out
-                        </button>
-                    </div> */}
+
+        <div>
+          <>
+            <Link
+              to="/admin/approvalmaster"
+              className={`sidebar__menu__item ${
+                activeItem === "approvalmaster" ? "active" : ""
+              }`}
+              onClick={() => {
+                setActiveItem("approvalmaster");
+                closeSidebar();
+              }}
+            >
+              <i
+                className="bx bx-user-pin pr-5 sidebar__menu__item__icon"
+                style={{ fontSize: "25px" }}
+              ></i>
+              Approval Master
+            </Link>
+            <Link
+              to="/admin/leads"
+              className={`sidebar__menu__item ${
+                activeItem === "leads" ? "active" : ""
+              }`}
+              onClick={() => {
+                setActiveItem("leads");
+                closeSidebar();
+              }}
+            >
+              <i
+                className="bx bx-receipt pr-5 sidebar__menu__item__icon"
+                style={{ fontSize: "25px" }}
+              ></i>
+              Leads
+            </Link>
+          </>
         </div>
       </div>
     </div>

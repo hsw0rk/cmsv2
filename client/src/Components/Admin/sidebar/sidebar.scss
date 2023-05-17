@@ -1,5 +1,5 @@
-@use '../../../scss/abstracts/' as *;
-@use 'sass:math';
+@use "../../../scss/abstracts/" as *;
+@use "sass:math";
 
 .sidebar {
   @include flex(stretch, flex-start);
@@ -11,7 +11,11 @@
   position: fixed;
   top: 0;
   z-index: 100;
-  background: linear-gradient(135deg, rgba(115, 140, 194, 0.324), rgba(38, 89, 126, 0.151));
+  background: linear-gradient(
+    135deg,
+    rgba(115, 140, 194, 0.324),
+    rgba(38, 89, 126, 0.151)
+  );
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   box-shadow: 0 0px 32px 0 rgba(0, 0, 0, 0.37);
@@ -24,7 +28,11 @@
     background-color: $mainColor;
     color: $black;
     z-index: 1;
-    background: linear-gradient(135deg, rgba(115, 140, 194, 0.324), rgba(38, 89, 126, 0.151));
+    background: linear-gradient(
+      135deg,
+      rgba(115, 140, 194, 0.324),
+      rgba(38, 89, 126, 0.151)
+    );
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     box-shadow: 0 0px 32px 0 rgba(0, 0, 0, 0.37);
@@ -96,127 +104,73 @@
     &__item {
       @include flex(center, flex-start);
       position: relative;
-      margin-bottom: 1rem;
+      margin-bottom: .5rem;
       padding-left: 10%;
       transition: color 0.3s ease-in-out;
 
-      button {
-        width: 100%;
-        background-color: #4CAF50;
-        color: white;
-        padding: 14px 2px;
-        margin: 8px 25px;
-        margin-bottom: 70px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        }
+      @include tablet {
+        padding-left: 1.8rem;
+      }
+
+    .list {
+        @include tablet {
+            margin-left: -3rem;
+          }
+    }  
+
+      &:hover {
+        color: $mainColor;
 
         @include tablet {
-            padding-left: .5rem;
-          }
-        
-          &:hover {
-            color: $mainColor;
-        
-            @include tablet {
-              color: $orange;
-            }
-          }
-        
-          &.active {
-            font-weight: 700;
-            color: $mainColor;
-        
-            @include tablet {
-              color: $orange;
-            }
-        
-            &::before {
-              content: '';
-              position: absolute;
-              height: 100%;
-              width: 5px;
-              left: 0;
-              top: 0;
-              background-color: $mainColor;
-              border-top-right-radius: 20px;
-              border-bottom-right-radius: 20px;
-        
-              @include tablet {
-                background-color: $orange;
-              }
-            }
-          }
-        
-          &__icon {
-            --size: 40px;
-            width: var(--size);
-            height: var(--size);
-            margin-right: 3rem;
-            @include flex(center, center);
-        
-            @include tablet {
-              margin-right: 1rem;
-            }
-        
-            i {
-              font-size: 1.9rem;
-            }
-          }
-        
-          &:last-child {
-            margin-top: auto;
-            cursor: pointer;
-          }
-        
-          &.dropdown {
-            position: relative;
-        
-            &:hover {
-              .submenu {
-                display: block;
-              }
-            }
-        
-            &::after {
-              content: "";
-              position: absolute;
-              top: calc(50% - 4px);
-              right: 10px;
-              width: 0;
-              height: 0;
-              border-style: solid;
-              border-width: 5px 5px 0 5px;
-              border-color: $txtColor transparent transparent transparent;
-            }
-        
-            .submenu {
-              display: none;
-              position: absolute;
-              top: 100%;
-              left: 100%;
-              z-index: 10;
-              width: max-content;
-              background-color: $mainBg;
-              border-radius: $borderRadius;
-              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-              padding: 0.5rem 0;
-              overflow: hidden;
-        
-              &__item {
-                padding: 0.5rem 1rem;
-                color: $txtColor;
-                transition: background-color 0.3s ease-in-out;
-        
-                &:hover {
-                  background-color: $mainColor;
-                  color: $white;
-                }
-              }
-            }
+          color: $mainColor;
+        }
+      }
+
+      &.active {
+        font-weight: 700;
+        color: $mainColor;
+
+        @include tablet {
+          color: $mainColor;
+        }
+
+        &::before {
+          content: "";
+          position: absolute;
+          height: 100%;
+          width: 5px;
+          left: 0;
+          top: 0;
+          background-color: $mainColor;
+          border-top-right-radius: 20px;
+          border-bottom-right-radius: 20px;
+
+          @include tablet {
+            background-color: $mainColor;
           }
         }
-    }
-}  
+      }
 
+      &__icon {
+        --size: 30px;
+        width: var(--size);
+        height: var(--size);
+        margin-right: 1rem;
+        @include flex(center, center);
+
+        @include tablet {
+          margin-right: 1rem;
+        }
+
+        i {
+          font-size: 1.9rem;
+        }
+      }
+
+      &:last-child {
+        margin-top: auto;
+        cursor: pointer;
+      }
+    }
+  }
+}
