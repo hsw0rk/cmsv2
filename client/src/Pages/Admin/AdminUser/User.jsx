@@ -223,7 +223,6 @@ const User = () => {
       mobilenumber: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       // password: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       regionCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      regionName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       branchName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       branchCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       branchName2: { value: null, matchMode: FilterMatchMode.STARTS_WITH },

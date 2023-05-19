@@ -34,7 +34,8 @@ import {
   getbranchadd,
   adminproduct,
   getverticalinbranch,
-  getprincipalininsurance
+  getprincipalininsurance,
+  getprincipalininvestments
 } from "../controllers/auth.js";
 
 const router = express.Router();
@@ -62,6 +63,7 @@ router.get("/getregioninuser", getregioninuser);
 router.get("/getverticalinbranch", getverticalinbranch);
 router.get("/getproductininvestments", getproductininvestments);
 router.get("/getprincipalininsurance", getprincipalininsurance);
+router.get("/getprincipalininvestments", getprincipalininvestments);
 router.get("/getverticalName", getverticalName);
 router.get("/getverticalCode/", getverticalCode);
 router.get("/getbranchadd/", getbranchadd); 

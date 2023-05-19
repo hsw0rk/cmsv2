@@ -146,7 +146,7 @@ export const cmsverticalformdata = (req, res) => {
   });
 };
 
-
+//dashboard counts
 export const investmentsCount = (req, res) => {
   const sql = "SELECT COUNT(id) as investments FROM cmsverticalform WHERE vertical = 'investments'";
   db.query(sql, (err, result) => {
@@ -436,7 +436,15 @@ export const getproductininvestments = (req, res) => {
 };
 
 export const getprincipalininsurance = (req, res) => {
-  const q = "SELECT productName, GROUP_CONCAT(principal) AS principals FROM principalmaster GROUP BY productName";
+  const q = "SELECT productName, GROUP_CONCAT(principal) AS principals FROM principalmaster WHERE verticalName = 'Asset Insurance' GROUP BY productName";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
+  });
+};
+
+export const getprincipalininvestments = (req, res) => {
+  const q = "SELECT productName, GROUP_CONCAT(principal) AS principals FROM principalmaster WHERE verticalName = 'Investments' GROUP BY productName";
   db.query(q, (err, data) => {
     if (err) return res.status(500).json("Internal server error");
     return res.status(200).json(data);

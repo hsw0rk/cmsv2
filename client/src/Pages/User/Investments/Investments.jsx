@@ -52,6 +52,7 @@ const Investments = () => {
   });
 
   const [iproduct, setiproduct] = useState([]);
+  const [iprincipal, setiprincipal] = useState([]);
 
   useEffect(() => {
     const fetchiproduct = async () => {
@@ -61,6 +62,16 @@ const Investments = () => {
       setiproduct(res.data);
     };
     fetchiproduct();
+  }, []);
+
+  useEffect(() => {
+    const fetchiprincipal = async () => {
+      const res = await axios.get(
+        "http://localhost:8800/api/auth/getprincipalininvestments"
+      );
+      setiprincipal(res.data);
+    };
+    fetchiprincipal();
   }, []);
 
   const handleChange = (e) => {
@@ -116,7 +127,10 @@ const Investments = () => {
       setShowBusinessAmountInput(false);
       // add an alert when Mutual Funds is selected
       alert("Entry Only New PAN Cases");
-    } else if (productName === "PMS" || productName === "AIF") {
+    } else if (
+      productName === "Portfolio Management Services" ||
+      productName === "Alternative Investment Funds"
+    ) {
       setShowPrincipalDropdown(false);
       setShowFreshRenewal(false);
       setShowCreditBranch(false);
@@ -195,29 +209,22 @@ const Investments = () => {
                     onInput={(e) => e.target.setCustomValidity("")}
                   >
                     <option value="">select</option>
-                    {selectedProduct === "Bonds" && (
-                      <>
-                        <option value="JM Financial Services">
-                          JM Financial Services
-                        </option>
-                        <option value="Edelweiss Financial Services">
-                          Edelweiss Financial Services
-                        </option>
-                      </>
-                    )}
-                    {selectedProduct !== "Bonds" && (
-                      <>
-                        <option value="SFL">SFL</option>
-                        <option value="SHFL">SHFL</option>
-                        <option value="HDFC">HDFC</option>
-                        <option value="JM Financial Services">
-                          JM Financial Services
-                        </option>
-                        <option value="Edelweiss Financial Services">
-                          Edelweiss Financial Services
-                        </option>
-                      </>
-                    )}
+                    {iprincipal
+                      .filter(
+                        (principal) => principal.productName === selectedProduct
+                      )
+                      .map((principal) =>
+                        principal.principals
+                          .split(",")
+                          .map((singlePrincipal) => (
+                            <option
+                              key={singlePrincipal}
+                              value={singlePrincipal}
+                            >
+                              {singlePrincipal}
+                            </option>
+                          ))
+                      )}
                   </select>
                 </label>
               </div>

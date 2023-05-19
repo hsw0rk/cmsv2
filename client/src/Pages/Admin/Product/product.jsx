@@ -25,7 +25,7 @@ const Product = () => {
 
   const [inputs, setInputs] = useState({
     verticalName: "",
-    verticalName: "",
+    verticalCode: "",
     productName: "",
     productCode: "",
   });

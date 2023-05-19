@@ -1,4 +1,4 @@
-import React,{ useEffect, useState }  from 'react'
+import React,{ useEffect, useState, useContext }  from 'react'
 import './summary-box.scss'
 import Box from '../box/Box'
 import { buildStyles, CircularProgressbarWithChildren } from 'react-circular-progressbar'
@@ -26,6 +26,7 @@ ChartJS.register(
 )
 import 'react-circular-progressbar/dist/styles.css';
 import { fetchData } from '../../../constants/data';
+import { AuthContext } from '../../../context/authContext';
 
 const SummaryBox = ({ item }) => {
   const [count, setCount] = useState(null);
@@ -36,16 +37,16 @@ const SummaryBox = ({ item }) => {
         if (counts !== undefined) {
           if (item.title === "Investments") {
             setCount(counts[0]);
-            item.percent = ((counts[0] / 24) * 100).toFixed(1); // Calculate percentage for Investments and format to one decimal place
+            item.percent = Math.min(((counts[0] / counts[3]) * 100).toFixed(1), 100); // Calculate percentage for Investments relative to Order book and limit to 100%
           } else if (item.title === "Home Loans") {
             setCount(counts[1]);
-            item.percent = ((counts[1] / 24) * 100).toFixed(1); // Calculate percentage for Investments and format to one decimal place
+            item.percent = Math.min(((counts[1] / counts[3]) * 100).toFixed(1), 100); // Calculate percentage for Home Loans relative to Order book and limit to 100%
           } else if (item.title === "Insurance") {
             setCount(counts[2]);
-            item.percent = ((counts[2] / 24) * 100).toFixed(1); // Calculate percentage for Investments and format to one decimal place
+            item.percent = Math.min(((counts[2] / counts[3]) * 100).toFixed(1), 100); // Calculate percentage for Insurance relative to Order book and limit to 100%
           } else if (item.title === "Order book") {
             setCount(counts[3]);
-            item.percent = ((counts[3] / 24) * 100).toFixed(1); // Calculate percentage for Investments and format to one decimal place
+            item.percent = 100; // Set the percentage for Order book to 100%
           }
         }
       })
