@@ -40,8 +40,8 @@ function App() {
                     <Route path="regionmaster" index element={<Region />} />
                     <Route path="branchmaster" element={<Branch />} />
                     <Route path="employeemaster" element={<User />} />
-                    <Route path="productmaster" element={<Product />} />
                     <Route path="verticalmaster" element={<Vertical />} />
+                    <Route path="productmaster" element={<Product />} />
                     <Route path="approvalmaster" element={<Approval />} />
                     <Route path="leads" element={<Leads />} />
                 </Route>

@@ -25,14 +25,16 @@ import {
   productdata,
   editProduct,
   getproductininvestments,
-  getverticalininvestments,
+  getverticalName,
   approvaldata,
   editapproval,
   adminapproval,
   getregioninuser,
-  getverticalinhomeloans,
-  getverticalininsurance,
-  getbranchadd
+  getverticalCode,
+  getbranchadd,
+  adminproduct,
+  getverticalinbranch,
+  getprincipalininsurance
 } from "../controllers/auth.js";
 
 const router = express.Router();
@@ -57,17 +59,18 @@ router.put("/edituser/:id", edituser);
 router.post("/adminuser", adminuser);
 router.get("/getbranchinuser", getbranchinuser);
 router.get("/getregioninuser", getregioninuser);
+router.get("/getverticalinbranch", getverticalinbranch);
 router.get("/getproductininvestments", getproductininvestments);
-router.get("/getverticalininvestments/", getverticalininvestments);
-router.get("/getverticalinhomeloans/", getverticalinhomeloans);
-router.get("/getverticalininsurance/", getverticalininsurance);
+router.get("/getprincipalininsurance", getprincipalininsurance);
+router.get("/getverticalName", getverticalName);
+router.get("/getverticalCode/", getverticalCode);
 router.get("/getbranchadd/", getbranchadd); 
-
 router.get("/verticaldata", verticaldata);
 router.put("/editvertical/:id", editVertical);
 router.post("/adminvertical", adminvertical);
 router.get("/productdata", productdata);
 router.put("/editproduct/:id", editProduct);
+router.post("/adminproduct", adminproduct);
 router.get("/approvaldata", approvaldata);
 router.put("/editapproval/:id", editapproval);
 router.put("/adminapproval", adminapproval);

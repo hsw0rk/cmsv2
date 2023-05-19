@@ -10,7 +10,7 @@ const Homeloans = () => {
   useEffect(() => {
     const fetchhvertical = async () => {
       const res = await axios.get(
-        "http://localhost:8800/api/auth/getverticalinhomeloans"
+        "http://localhost:8800/api/auth/getverticalName"
       );
       sethvertical(res.data);
     };

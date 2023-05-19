@@ -11,12 +11,12 @@ export const sidebarNav = [
         icon: <i className='bx bx-line-chart' ></i>,
         text: 'Investments'
     },
-    {
-        link: 'homeloans',
-        section: 'homeloans',
-        icon: <i className='bx bx-home-alt'></i>,
-        text: 'Home loans'
-    },
+    // {
+    //     link: 'homeloans',
+    //     section: 'homeloans',
+    //     icon: <i className='bx bx-home-alt'></i>,
+    //     text: 'Home loans'
+    // },
     {
         link: 'insurance',
         section: 'insurance',

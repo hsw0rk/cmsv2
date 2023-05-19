@@ -30,21 +30,21 @@ const Branch = () => {
   const [msg, setMsg] = useState(null);
 
   const [inputs, setInputs] = useState({
-    regionname: "",
-    regioncode: "",
-    branchcode: "",
-    branchname: "",
+    regionName: "",
+    regionCode: "",
+    branchCode: "",
+    branchName: "",
   });
 
   useEffect(() => {
-    if (inputs.regioncode) {
+    if (inputs.regionCode) {
       setFilteredRegions(
-        regions.filter((region) => region.regioncode === inputs.regioncode)
+        regions.filter((region) => region.regionCode === inputs.regionCode)
       );
     } else {
       setFilteredRegions([]);
     }
-  }, [inputs.regioncode, regions]);
+  }, [inputs.regionCode, regions]);
 
   useEffect(() => {
     const fetchRegions = async () => {
@@ -61,14 +61,14 @@ const Branch = () => {
   
     setInputs((prevInputs) => ({
       ...prevInputs,
-      [name]: name === 'branchname' ? value.toUpperCase() : value,
+      [name]: name === 'branchName' ? value.toUpperCase() : value,
     }));
   
-    if (name === 'regioncode') {
-      const selectedRegion = regions.find((region) => region.regioncode === value);
+    if (name === 'regionCode') {
+      const selectedRegion = regions.find((region) => region.regionCode === value);
       setInputs((prevInputs) => ({
         ...prevInputs,
-        regionname: selectedRegion ? selectedRegion.regionname : '',
+        regionName: selectedRegion ? selectedRegion.regionName : '',
       }));
     }
   };
@@ -77,14 +77,14 @@ const Branch = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    const selectedRegion = regions.find((region) => region.regioncode === inputs.regioncode);
+    const selectedRegion = regions.find((region) => region.regionCode === inputs.regionCode);
   
     try {
       const response = await axios.post(
         "http://localhost:8800/api/auth/adminbranch",
         {
           ...inputs,
-          regionname: selectedRegion ? selectedRegion.regionname : "",
+          regionName: selectedRegion ? selectedRegion.regionName : "",
         }
       );
       setMsg(response.data);
@@ -120,9 +120,9 @@ const Branch = () => {
   };
 
   useEffect(() => {
-    if (editedPost && editedPost.regioncode && regions.length > 0) {
+    if (editedPost && editedPost.regionCode && regions.length > 0) {
       setFilteredRegions(
-        regions.filter((region) => region.regioncode === editedPost.regioncode)
+        regions.filter((region) => region.regionCode === editedPost.regionCode)
       );
     }
   }, [editedPost, regions]);
@@ -148,13 +148,13 @@ const Branch = () => {
   const initFilters = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      regionname: {
+      regionName: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
-      regioncode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchcode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchname: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      regionCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      branchCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      branchName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     });
     setGlobalFilterValue("");
   };
@@ -165,10 +165,10 @@ const Branch = () => {
   
     // Create an array of rows to be included in the CSV
     const rows = posts.map((post) => [
-      post.regionname,
-      post.regioncode,
-      post.branchname,
-      post.branchcode,
+      post.regionName,
+      post.regionCode,
+      post.branchName,
+      post.branchCode,
     ]);
   
     // Combine headers and rows into a single array
@@ -191,7 +191,7 @@ const Branch = () => {
   
 
   const samplecsv = [
-    { id: "", regionname: "", regioncode: "", branchname: "", branchcode: "" },
+    { id: "", regionName: "", regionCode: "", branchName: "", branchCode: "" },
   ];
 
   const handleFileUpload = (file) => {
@@ -257,17 +257,17 @@ const Branch = () => {
               <select
                 required
                 className="userinput"
-                id="regioncode"
-                name="regioncode"
-                value={inputs.regioncode || ""}
+                id="regionCode"
+                name="regionCode"
+                value={inputs.regionCode || ""}
                 onChange={(event) =>
-                  setInputs({ ...inputs, regioncode: event.target.value })
+                  setInputs({ ...inputs, regionCode: event.target.value })
                 }
               >
                 <option value="">Select Region Code</option>
                 {regions.map((region) => (
-                  <option key={region.regioncode} value={region.regioncode}>
-                    {region.regioncode}
+                  <option key={region.regionCode} value={region.regionCode}>
+                    {region.regionCode}
                   </option>
                 ))}
               </select>
@@ -280,16 +280,16 @@ const Branch = () => {
               <select
                 required
                 className="userinput"
-                id="regionname"
-                name="regionname"
-                value={inputs.regionname || ""}
+                id="regionName"
+                name="regionName"
+                value={inputs.regionName || ""}
                 onChange={(event) =>
-                  setInputs({ ...inputs, regionname: event.target.value })
+                  setInputs({ ...inputs, regionName: event.target.value })
                 }
               >
                 {filteredRegions.map((region) => (
-                  <option key={region.regionname} value={region.regionname}>
-                    {region.regionname}
+                  <option key={region.regionName} value={region.regionName}>
+                    {region.regionName}
                   </option>
                 ))}
               </select>
@@ -303,8 +303,8 @@ const Branch = () => {
                 required
                 autoComplete="off"
                 className="branchinput"
-                id="branchname"
-                name="branchname"
+                id="branchName"
+                name="branchName"
                 onChange={handleChange}
                 style={{ textTransform: "uppercase" }}
               />
@@ -318,8 +318,8 @@ const Branch = () => {
                 required
                 autoComplete="off"
                 className="branchinput"
-                id="branchcode"
-                name="branchcode"
+                id="branchCode"
+                name="branchCode"
                 onChange={handleChange}
                 type="number"
               />
@@ -451,10 +451,10 @@ const Branch = () => {
         onRowSelect={(e) => setSelectedPost(e.data)}
         onRowUnselect={() => setSelectedPost(null)}
       >
-        <Column field="regionname" sortable header="Region Name"></Column>
-        <Column field="regioncode" sortable header="Region Code"></Column>
-        <Column field="branchname" sortable header="Branch Name"></Column>
-        <Column field="branchcode" sortable header="Branch Code"></Column>
+        <Column field="branchName" sortable header="Branch Name"></Column>
+        <Column field="branchCode" sortable header="Branch Code"></Column>
+        <Column field="regionName" sortable header="Region Name"></Column>
+        <Column field="regionCode" sortable header="Region Code"></Column>
         <Column
           body={(rowData) => (
             <Button
@@ -479,70 +479,71 @@ const Branch = () => {
         {editedPost && (
           <div>
             <div className="p-fluid">
+              
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="regionname">Region Name</label>
-                <select
+                <label htmlFor="branchName">Branch Name</label>
+                <InputText
                   required
-                  id="regionname"
-                  name="regionname"
-                  value={editedPost.regionname || ""}
+                  id="branchName"
+                  value={editedPost.branchName}
+                  style={{ textTransform: "uppercase" }}
                   onChange={(e) =>
-                    setEditedPost({ ...editedPost, regionname: e.target.value })
+                    setEditedPost({ ...editedPost, branchName: e.target.value })
                   }
-                  disabled={!editedPost}
-                  className="userinput"
-                >
-                  {filteredRegions.map((region) => (
-                    <option key={region.regionname} value={region.regionname}>
-                      {region.regionname}
-                    </option>
-                  ))}
-                </select>
+                />
               </div>
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="regioncode">Region Code</label>
+                <label htmlFor="branchCode">Branch Code</label>
+                <InputText
+                  required
+                  id="branchCode"
+                  value={editedPost.branchCode}
+                  type="number"
+                  onChange={(e) =>
+                    setEditedPost({ ...editedPost, branchCode: e.target.value })
+                  }
+                />
+              </div>
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="regionCode">Region Code</label>
                 <select
                   required
-                  id="regioncode"
-                  name="regioncode"
-                  value={editedPost.regioncode || ""}
+                  id="regionCode"
+                  name="regionCode"
+                  value={editedPost.regionCode || ""}
                   onChange={(e) =>
-                    setEditedPost({ ...editedPost, regioncode: e.target.value })
+                    setEditedPost({ ...editedPost, regionCode: e.target.value })
                   }
                   disabled={!editedPost}
                   className="userinput"
                 >
                   <option value="">Select Region Code</option>
                   {regions.map((region) => (
-                    <option key={region.regioncode} value={region.regioncode}>
-                      {region.regioncode}
+                    <option key={region.regionCode} value={region.regionCode}>
+                      {region.regionCode}
                     </option>
                   ))}
                 </select>
               </div>
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchname">Branch Name</label>
-                <InputText
+                <label htmlFor="regionName">Region Name</label>
+                <select
                   required
-                  id="branchname"
-                  value={editedPost.branchname}
-                  style={{ textTransform: "uppercase" }}
+                  id="regionName"
+                  name="regionName"
+                  value={editedPost.regionName || ""}
                   onChange={(e) =>
-                    setEditedPost({ ...editedPost, branchname: e.target.value })
+                    setEditedPost({ ...editedPost, regionName: e.target.value })
                   }
-                />
-              </div>
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchcode">Branch Code</label>
-                <InputText
-                  required
-                  id="branchcode"
-                  value={editedPost.branchcode}
-                  type="number"
-                  onChange={(e) =>
-                    setEditedPost({ ...editedPost, branchcode: e.target.value })
-                  }
-                />
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  {filteredRegions.map((region) => (
+                    <option key={region.regionName} value={region.regionName}>
+                      {region.regionName}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
             <Button label="Save" icon="pi pi-check" onClick={saveEditedPost} />

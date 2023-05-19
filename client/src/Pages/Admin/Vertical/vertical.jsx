@@ -14,10 +14,48 @@ const Vertical = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [editedPost, setEditedPost] = useState(null);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
-  const [addColumnDialogVisible, setAddColumnDialogVisible] = useState(false);
-  const [newColumnName, setNewColumnName] = useState("");
-  const [newVerticalName, setNewVerticalName] = useState("");
+  // const [addColumnDialogVisible, setAddColumnDialogVisible] = useState(false);
+  // const [newColumnName, setNewColumnName] = useState("");
+  // const [newVerticalName, setNewVerticalName] = useState("");
+  const [showAdditionalregion, setShowAdditionalregion] = useState(false);
 
+
+  const [err, setErr] = useState(null);
+  const [msg, setMsg] = useState(null);
+
+  const [inputs, setInputs] = useState({
+    verticalName: "",
+    verticalCode: "",
+  });
+
+  const handleChange = (e) => {
+    setInputs((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value.toUpperCase(),
+    }));
+  };
+  
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const response = await axios.post(
+        "http://localhost:8800/api/auth/adminvertical",
+        {
+          ...inputs,
+          verticalName: inputs.verticalName.toUpperCase(),
+          verticalCode: inputs.verticalCode.toUpperCase(),
+        }
+      );
+      setMsg(response.data);
+      setErr(null);
+    } catch (err) {
+      setErr(err.response.data);
+      setMsg(null);
+    }
+  };
+  
   useEffect(() => {
     axios.get("http://localhost:8800/api/auth/verticaldata").then((res) => {
       setPosts(res.data);
@@ -41,21 +79,21 @@ const Vertical = () => {
       .catch((error) => console.log(error));
   };
 
-  const addNewColumn = () => {
-    // Call the API endpoint to add a new column
-    axios
-      .post("http://localhost:8800/api/auth/adminvertical", {
-        columnname: newColumnName,
-        verticalname: newVerticalName,
-      })
-      .then((res) => {
-        setAddColumnDialogVisible(false);
-        setNewColumnName("");
-        setNewVerticalName("");
-        alert("You have added a new column.");
-      })
-      .catch((error) => console.log(error));
-  };
+  // const addNewColumn = () => {
+  //   // Call the API endpoint to add a new column
+  //   axios
+  //     .post("http://localhost:8800/api/auth/adminvertical", {
+  //       columnname: newColumnName,
+  //       verticalname: newVerticalName,
+  //     })
+  //     .then((res) => {
+  //       setAddColumnDialogVisible(false);
+  //       setNewColumnName("");
+  //       setNewVerticalName("");
+  //       alert("You have added a new column.");
+  //     })
+  //     .catch((error) => console.log(error));
+  // };
 
   return (
     <div className="form">
@@ -70,6 +108,89 @@ const Vertical = () => {
       >
         VERTICAL
       </p>
+
+      <p
+        type="button"
+        className="Addbuttonregion"
+        onClick={() => setShowAdditionalregion(true)}
+      >
+        <i className="fa fa-plus"></i>Click Here to Create Region{" "}
+      </p>
+
+      <div className={`additional-region ${showAdditionalregion ? "show" : ""}`}>
+        <div className="form-container-region">
+          <form className="formregion" onSubmit={handleSubmit}>
+            <div>
+              <label>
+                Vertical Name
+                <input
+                  autoComplete="off"
+                  required
+                  className="regioninput"
+                  id="verticalName"
+                  name="verticalName"
+                  onChange={handleChange}
+                  style={{ textTransform: "uppercase" }}
+                />
+              </label>
+            </div>
+
+            <div>
+              <label>
+                Vertical Code
+                <input
+                  required
+                  autoComplete="off"
+                  className="regioninput"
+                  id="verticalCode"
+                  name="verticalCode"
+                  onChange={handleChange}
+                  style={{ textTransform: "uppercase" }}
+                />
+              </label>
+            </div>
+
+            <button type="submit" className="Submitbuttonregion">
+              Submit
+            </button>
+
+
+          </form>
+          {err && (
+            <>
+              <div className="popup-background"></div>
+              <div className="popup-wrapper">
+                <p className="investmsgp">{err}</p>
+                <div className="investmsg-buttons">
+                  <button className="investmsg-yes" onClick={handleSubmit}>
+                    Yes
+                  </button>
+                  <a href="/admin/verticalmaster">
+                    <button className="investmsg-no" onClick={() => setErr(null)}>
+                      No
+                    </button>
+                  </a>
+                </div>
+              </div>
+            </>
+          )}
+
+          {msg && (
+            <>
+              <div className="popup-background"></div>
+              <div className="popup-wrapper">
+                <p className="investmsgp">{msg}</p>
+                <a href="/admin/verticalmaster">
+                  <p className="investmsgclose" onClick={() => setMsg(null)}>
+                    close
+                  </p>
+                </a>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
       <DataTable
         value={posts}
         responsiveLayout="scroll"
@@ -87,13 +208,12 @@ const Vertical = () => {
         onRowSelect={(e) => setSelectedPost(e.data)}
         onRowUnselect={() => setSelectedPost(null)}
       >
-        <Column field="investmentsvt" sortable header="Investments"></Column>
-        <Column field="homeloansvt" sortable header="Home loans"></Column>
-        <Column field="insurancevt" sortable header="Insurance"></Column>
+        <Column field="verticalName" sortable header="Vertical Name"></Column>
+        <Column field="verticalCode" sortable header="Vertical Code"></Column>
         <Column
           body={(rowData) => (
               <Button
-                label="Edit"
+                label="Update"
                 icon="pi pi-pencil"
                 onClick={() => {
                   setEditedPost(rowData);
@@ -102,7 +222,7 @@ const Vertical = () => {
               />
           )}
         />
-        <Column
+        {/* <Column
           body={(rowData) => (
         <Button
                 label="Add Column"
@@ -110,10 +230,10 @@ const Vertical = () => {
                 onClick={() => setAddColumnDialogVisible(true)}
               />
             )}
-        />
+        /> */}
       </DataTable>
       <Dialog
-        header="Edit Post"
+        header="Update Vertical Data"
         visible={editDialogVisible}
         style={{ width: "50vw" }}
         modal
@@ -124,40 +244,27 @@ const Vertical = () => {
           <div>
             <div className="p-fluid">
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="investmentsvt">Investments</label>
+                <label htmlFor="verticalName">Vertical Name</label>
                 <InputText
-                  id="investmentsvt"
-                  value={editedPost.investmentsvt}
+                  id="verticalName"
+                  value={editedPost.verticalName}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      investmentsvt: e.target.value,
+                      verticalName: e.target.value,
                     })
                   }
                 />
               </div>
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="homeloansvt">Home loans</label>
+                <label htmlFor="verticalCode">Vertical Code</label>
                 <InputText
-                  id="homeloansvt"
-                  value={editedPost.homeloansvt}
+                  id="verticalCode"
+                  value={editedPost.verticalCode}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      homeloansvt: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="insurancevt">Insurance</label>
-                <InputText
-                  id="insurancevt"
-                  value={editedPost.insurancevt}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      insurancevt: e.target.value,
+                      verticalCode: e.target.value,
                     })
                   }
                 />
@@ -167,7 +274,7 @@ const Vertical = () => {
           </div>
         )}
       </Dialog>
-      <Dialog
+      {/* <Dialog
         header="Add Column"
         visible={addColumnDialogVisible}
         style={{ width: "50vw" }}
@@ -202,7 +309,7 @@ const Vertical = () => {
           icon="pi pi-check"
           onClick={addNewColumn}
         />
-      </Dialog>
+      </Dialog> */}
     </div>
   );
 };

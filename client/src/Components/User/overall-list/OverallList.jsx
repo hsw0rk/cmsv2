@@ -1,22 +1,25 @@
 import React, {useContext} from 'react'
 import './overall-list.scss'
-import { data } from '../../../constants'
 import { AuthContext } from "../../../context/authContext";
 
 const icons = [
-    <i className='bx bx-receipt'></i>,
     <i className='bx bx-user'></i>,
+    <i className='bx bx-receipt'></i>,
     <i className='bx bx-cube'></i>,
     <i className='bx bx-dollar'></i>
 ]
 
 const overall = (currentUser) => [
     {
-      value: currentUser.employeecode,
+        value: currentUser.employeecode,
+        title: "Employee Code",
+      },
+    {
+      value: currentUser.regioncode,
       title: "Region Code",
     },
     {
-      value: currentUser.branchname,
+      value: currentUser.regionname,
       title: "Region Name",
     }
   ];

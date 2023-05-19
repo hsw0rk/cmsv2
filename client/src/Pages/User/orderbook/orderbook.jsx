@@ -5,6 +5,7 @@ import { Column } from "primereact/column";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
+import { Calendar } from "primereact/calendar";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import exc from "../../../Assets/exc.svg";
 import axios from "axios";
@@ -18,6 +19,8 @@ const OrderBook = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [dialogVisible, setDialogVisible] = useState(false);
   const [globalFilterValue, setGlobalFilterValue] = useState("");
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
   const [filters, setFilters] = useState({});
 
   const dialogFooterTemplate = () => {
@@ -30,21 +33,62 @@ const OrderBook = () => {
     );
   };
 
+  const clearFilter = () => {
+    setFilters({
+      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      product: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },
+      principal: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      date: {
+        operator: FilterOperator.AND,
+        constraints: [
+          { value: null, matchMode: FilterMatchMode.GTE },
+          { value: null, matchMode: FilterMatchMode.LTE },
+        ],
+      },
+      freshrenewal: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },
+      customername: {
+        operator: FilterOperator.OR,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },
+    });
+    setGlobalFilterValue("");
+    setFromDate(null);
+    setToDate(null);
+  };
+
   useEffect(() => {
-    axios
-      .get("http://localhost:8800/api/auth/cmsverticalformdata")
-      .then((res) => {
-        // Filter the posts array based on the currentUser email
-        const filteredPosts = res.data.filter(
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8800/api/auth/cmsverticalformdata",
+          {
+            params: {
+              from: fromDate ? fromDate.toISOString().slice(0, 10) : null,
+              to: toDate ? toDate.toISOString().slice(0, 10) : null,
+            },
+          }
+        );
+        const filteredPosts = response.data.filter(
           (post) => post.employeecode === currentUser.employeecode
         );
         setPosts(filteredPosts);
-      });
-  }, [currentUser]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-  const clearFilter = () => {
-    initFilters();
-  };
+    fetchData();
+  }, [currentUser, fromDate, toDate]);
+
+  // const clearFilter = () => {
+  //   initFilters();
+  // };
 
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
@@ -63,14 +107,17 @@ const OrderBook = () => {
   const initFilters = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      product: {
+      productName: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
       principal: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       date: {
         operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
+        constraints: [
+          { value: null, matchMode: FilterMatchMode.GTE },
+          { value: null, matchMode: FilterMatchMode.LTE },
+        ],
       },
       freshrenewal: {
         operator: FilterOperator.AND,
@@ -82,6 +129,8 @@ const OrderBook = () => {
       },
     });
     setGlobalFilterValue("");
+    setFromDate(null);
+    setToDate(null);
   };
 
   const downloadCSV = () => {
@@ -91,7 +140,7 @@ const OrderBook = () => {
     const encodedURI = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedURI);
-    link.setAttribute("download", "posts.csv");
+    link.setAttribute("download", "orderbook.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -102,7 +151,7 @@ const OrderBook = () => {
       <div className='suser'>
         <UserInfo user={data.user} />
       </div>
-      <div className="flex justify-content-start gap-5 clearred">
+      <div className="flex justify-content-start gap-5 clearred" style={{marginTop:'10px' , marginBottom:'10px'}}>
         <Button
           type="button"
           icon="pi pi-filter-slash"
@@ -120,7 +169,37 @@ const OrderBook = () => {
             className="searchbar"
           />
         </span>
-        <div className="flex align-items-end justify-content-end gap-2 exc">
+
+        
+      </div>
+
+      <div className="flex justify-content-start gap-5 clearred" style={{marginTop:'30px' , marginBottom:'10px' , marginLeft:'20px'}}>
+        <div>
+          <span className="p-float-label">
+            <Calendar
+              id="fromDate"
+              value={fromDate}
+              onChange={(e) => setFromDate(e.value)}
+              placeholder="From"
+              dateFormat="yy-mm-dd"
+            />
+            <label htmlFor="fromDate">From</label>
+          </span>
+        </div>
+        <div>
+          <span className="p-float-label">
+            <Calendar
+              id="toDate"
+              value={toDate}
+              onChange={(e) => setToDate(e.value)}
+              placeholder="To"
+              dateFormat="yy-mm-dd"
+            />
+            <label htmlFor="toDate">To</label>
+          </span>
+        </div>
+
+        <div className="flex align-items-end justify-content-start gap-2 exc">
           <Button
             type="button"
             icon={<img alt="excel icon" src={exc} />}
@@ -134,6 +213,7 @@ const OrderBook = () => {
             title="Download CSV"
           />
         </div>
+        
       </div>
 
       <DataTable
@@ -153,9 +233,9 @@ const OrderBook = () => {
       >
         <Column field="vertical" sortable header="Vertical"></Column>
         <Column field="principal" sortable header="Principal"></Column>
-        <Column field="product" sortable header="Product"></Column>
+        <Column field="productName" sortable header="Product"></Column>
         <Column field="pan" sortable header="PAN"></Column>
-        <Column field="business" sortable header="Credit Branch"></Column>
+        <Column field="creditbranch" sortable header="Credit Branch"></Column>
         <Column field="mobileno" sortable header="Mobile Number"></Column>
         <Column
           body={(rowData) => (
@@ -190,7 +270,7 @@ const OrderBook = () => {
             </p>
             <p>
               <span className="my-dialog-title">Product:</span>
-              <span className="my-dialog-value">{selectedPost.product}</span>
+              <span className="my-dialog-value">{selectedPost.productName}</span>
             </p>
             <p>
               <span className="my-dialog-title">Principal:</span>
@@ -212,6 +292,10 @@ const OrderBook = () => {
             </p>
             <p>
               <span className="my-dialog-title">Credit Branch:</span>
+              <span className="my-dialog-value">{selectedPost.creditbranch}</span>
+            </p>
+            <p>
+              <span className="my-dialog-title">Business:</span>
               <span className="my-dialog-value">{selectedPost.business}</span>
             </p>
             <p>

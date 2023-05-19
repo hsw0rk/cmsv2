@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import "./investments.css";
+import "./Investments.css";
 import { AuthContext } from "../../../context/authContext";
-import { data } from '../../../constants/data'
-import UserInfo from '../../../Components/User/user-info/UserInfo'
+import { data } from "../../../constants/data";
+import UserInfo from "../../../Components/User/user-info/UserInfo";
 
 const Investments = () => {
   const { currentUser } = useContext(AuthContext);
@@ -11,7 +11,7 @@ const Investments = () => {
   const [msg, setMsg] = useState(null);
   const [ivertical, setivertical] = useState([]);
 
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [isValid, setIsValid] = useState(false);
 
   const handleInputChange = (e) => {
@@ -27,12 +27,10 @@ const Investments = () => {
     return panRegex.test(value);
   };
 
-
-
   useEffect(() => {
     const fetchivertical = async () => {
       const res = await axios.get(
-        "http://localhost:8800/api/auth/getverticalininvestments"
+        "http://localhost:8800/api/auth/getverticalName"
       );
       setivertical(res.data);
     };
@@ -41,7 +39,7 @@ const Investments = () => {
 
   const [inputs, setInputs] = useState({
     principal: "",
-    product: "",
+    productName: "",
     freshrenewal: "",
     pan: "",
     mobileno: "",
@@ -52,7 +50,6 @@ const Investments = () => {
     employeename: currentUser.employeename,
     employeecode: currentUser.employeecode,
   });
-
 
   const [iproduct, setiproduct] = useState([]);
 
@@ -100,16 +97,16 @@ const Investments = () => {
   const [showPrincipalDropdown, setShowPrincipalDropdown] = useState(false);
 
   const handleProductChange = (event) => {
-    const product = event.target.value;
-    setSelectedProduct(product);
+    const productName = event.target.value;
+    setSelectedProduct(productName);
     setShowPrincipalDropdown(event.target.value === "Bonds");
 
     setInputs((prev) => ({
       ...prev,
-      product: product,
+      productName: productName,
     }));
 
-    if (product === "Mutual Funds") {
+    if (productName === "Mutual Funds") {
       setShowPrincipalDropdown(false);
       setShowFreshRenewal(false);
       setShowCreditBranch(false);
@@ -119,7 +116,7 @@ const Investments = () => {
       setShowBusinessAmountInput(false);
       // add an alert when Mutual Funds is selected
       alert("Entry Only New PAN Cases");
-    } else if (product === "PMS" || product === "AIF") {
+    } else if (productName === "PMS" || productName === "AIF") {
       setShowPrincipalDropdown(false);
       setShowFreshRenewal(false);
       setShowCreditBranch(false);
@@ -128,7 +125,7 @@ const Investments = () => {
       setShowMobileNumberInput(false);
       setShowBusinessAmountInput(false);
       alert("Entry Only New PAN Cases");
-    } else if (product === "Bonds") {
+    } else if (productName === "Bonds") {
       setShowPrincipalDropdown(true);
       setShowFreshRenewal(false);
       setShowCreditBranch(true);
@@ -152,7 +149,7 @@ const Investments = () => {
   return (
     <>
       <p style={{ fontSize: "20px" }}>{ivertical}</p>
-      <div className='suser'>
+      <div className="suser">
         <UserInfo user={data.user} />
       </div>
       <div className="form-container-investments">
@@ -171,13 +168,13 @@ const Investments = () => {
               >
                 <option>Select</option>
                 {iproduct
-                  .filter((product) => product.productininvestments)
-                  .map((product) => (
+                  .filter((productName) => productName.productName)
+                  .map((productName) => (
                     <option
-                      key={product.productininvestments}
-                      value={product.productininvestments}
+                      key={productName.productName}
+                      value={productName.productName}
                     >
-                      {product.productininvestments}
+                      {productName.productName}
                     </option>
                   ))}
               </select>
@@ -192,7 +189,9 @@ const Investments = () => {
                     className="investmentsinput"
                     name="principal"
                     onChange={handleChange}
-                    onInvalid={(e) => e.target.setCustomValidity("Select Principal")}
+                    onInvalid={(e) =>
+                      e.target.setCustomValidity("Select Principal")
+                    }
                     onInput={(e) => e.target.setCustomValidity("")}
                   >
                     <option value="">select</option>
@@ -234,21 +233,21 @@ const Investments = () => {
                     name="freshrenewal"
                     onChange={handleChange}
                     required
-                    onInvalid={(e) => e.target.setCustomValidity("Select Fresh / Renewal")}
+                    onInvalid={(e) =>
+                      e.target.setCustomValidity("Select Fresh / Renewal")
+                    }
                     onInput={(e) => e.target.setCustomValidity("")}
                   >
                     <option value="">Select</option>
-                    <option value="JM Financial Services">Fresh</option>
-                    <option value="Edelweiss Financial Services">
-                      Renewal
-                    </option>
+                    <option value="Fresh">Fresh</option>
+                    <option value="Renewal">Renewal</option>
                   </select>
                 </label>
               </div>
             )}
           </div>
 
-          {showPanInput && (
+          {/* {showPanInput && (
             <label style={{ position: 'relative' }}>
               PAN<span style={{ color: 'red' }}>*</span>
               <input
@@ -293,10 +292,25 @@ const Investments = () => {
                 </span>
               )}
             </label>
+          )} */}
+
+          {showPanInput && (
+            <label>
+              PAN<span style={{ color: "red" }}>*</span>
+              <input
+                className="investmentsinput"
+                type="text"
+                id="pan"
+                name="pan"
+                maxLength={10}
+                pattern="[a-z]{5}[0-9]{4}[a-z]{1}"
+                required
+                style={{ textTransform: "uppercase" }}
+                title="Enter a valid PAN (eg. ABCDE1234F)"
+                onChange={handleChange}
+              />
+            </label>
           )}
-
-
-
 
           {showCustomerNameInput && (
             <label>
@@ -308,7 +322,9 @@ const Investments = () => {
                 id="customername"
                 name="customername"
                 onChange={handleChange}
-                onInvalid={(e) => e.target.setCustomValidity("Customer Name Is Missing ")}
+                onInvalid={(e) =>
+                  e.target.setCustomValidity("Customer Name Is Missing ")
+                }
                 onInput={(e) => e.target.setCustomValidity("")}
               />
             </label>
@@ -326,7 +342,9 @@ const Investments = () => {
                 pattern="^(?!.*[A-Za-z])[1-9][0-9]*$"
                 maxLength={10}
                 onChange={handleChange}
-                onInvalid={(e) => e.target.setCustomValidity("Mobile Number Is Missing ")}
+                onInvalid={(e) =>
+                  e.target.setCustomValidity("Mobile Number Is Missing ")
+                }
                 onInput={(e) => e.target.setCustomValidity("")}
               />
             </label>
@@ -342,7 +360,9 @@ const Investments = () => {
                   id="creditbranch"
                   name="creditbranch"
                   onChange={handleChange}
-                  onInvalid={(e) => e.target.setCustomValidity("Select Credit Branch")}
+                  onInvalid={(e) =>
+                    e.target.setCustomValidity("Select Credit Branch")
+                  }
                   onInput={(e) => e.target.setCustomValidity("")}
                 >
                   <option value="">Select</option>
@@ -398,7 +418,9 @@ const Investments = () => {
                   id="business"
                   name="business"
                   onChange={handleChange}
-                  onInvalid={(e) => e.target.setCustomValidity("Your Business Amount")}
+                  onInvalid={(e) =>
+                    e.target.setCustomValidity("Your Business Amount")
+                  }
                   onInput={(e) => e.target.setCustomValidity("")}
                 />
               </label>

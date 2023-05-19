@@ -27,8 +27,8 @@ const Region = () => {
   const [msg, setMsg] = useState(null);
 
   const [inputs, setInputs] = useState({
-    regionname: "",
-    regioncode: "",
+    regionName: "",
+    regionCode: "",
   });
 
   const handleChange = (e) => {
@@ -47,8 +47,8 @@ const Region = () => {
         "http://localhost:8800/api/auth/adminregion",
         {
           ...inputs,
-          regionname: inputs.regionname.toUpperCase(),
-          regioncode: inputs.regioncode.toUpperCase(),
+          regionName: inputs.regionName.toUpperCase(),
+          regionCode: inputs.regionCode.toUpperCase(),
         }
       );
       setMsg(response.data);
@@ -103,11 +103,11 @@ const Region = () => {
   const initFilters = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      regionname: {
+      regionName: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
-      regioncode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      regionCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     });
     setGlobalFilterValue("");
   };
@@ -118,8 +118,8 @@ const Region = () => {
   
     // Create an array of rows to be included in the CSV
     const rows = posts.map((post) => [
-      post.regionname,
-      post.regioncode,
+      post.regionName,
+      post.regionCode,
     ]);
   
     // Combine headers and rows into a single array
@@ -142,7 +142,7 @@ const Region = () => {
   
 
   const samplecsv = [
-    { id: "", regionname: "", regioncode: "" }
+    { id: "", regionName: "", regionCode: "" }
   ]
 
   const handleFileUpload = (file) => {
@@ -210,8 +210,8 @@ const Region = () => {
                   autoComplete="off"
                   required
                   className="regioninput"
-                  id="regionname"
-                  name="regionname"
+                  id="regionName"
+                  name="regionName"
                   onChange={handleChange}
                   style={{ textTransform: "uppercase" }}
                 />
@@ -225,8 +225,8 @@ const Region = () => {
                   required
                   autoComplete="off"
                   className="regioninput"
-                  id="regioncode"
-                  name="regioncode"
+                  id="regionCode"
+                  name="regionCode"
                   onChange={handleChange}
                   style={{ textTransform: "uppercase" }}
                 />
@@ -351,8 +351,8 @@ const Region = () => {
         onRowSelect={(e) => setSelectedPost(e.data)}
         onRowUnselect={() => setSelectedPost(null)}
       >
-        <Column field="regionname" sortable header="Region Name"></Column>
-        <Column field="regioncode" sortable header="Region Code"></Column>
+        <Column field="regionName" sortable header="Region Name"></Column>
+        <Column field="regionCode" sortable header="Region Code"></Column>
         <Column
           body={(rowData) => (
             <Button
@@ -378,24 +378,24 @@ const Region = () => {
           <div>
             <div className="p-fluid">
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="regionname">Region Name</label>
+                <label htmlFor="regionName">Region Name</label>
                 <InputText
-                  id="regionname"
-                  value={editedPost.regionname}
+                  id="regionName"
+                  value={editedPost.regionName}
                   style={{ textTransform: "uppercase" }}
                   onChange={(e) =>
-                    setEditedPost({ ...editedPost, regionname: e.target.value })
+                    setEditedPost({ ...editedPost, regionName: e.target.value })
                   }
                 />
               </div>
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="regioncode">Region Code</label>
+                <label htmlFor="regionCode">Region Code</label>
                 <InputText
-                  id="regioncode"
-                  value={editedPost.regioncode}
+                  id="regionCode"
+                  value={editedPost.regionCode}
                   style={{ textTransform: "uppercase" }}
                   onChange={(e) =>
-                    setEditedPost({ ...editedPost, regioncode: e.target.value })
+                    setEditedPost({ ...editedPost, regionCode: e.target.value })
                   }
                 />
               </div>

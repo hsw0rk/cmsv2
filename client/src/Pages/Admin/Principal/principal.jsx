@@ -13,7 +13,7 @@ import "./User.css";
 import { data } from "../../../constants/admindata";
 import UserInfo from "../../../Components/Admin/user-info/UserInfo";
 
-const User = () => {
+const Principal = () => {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [globalFilterValue, setGlobalFilterValue] = useState("");
@@ -881,4 +881,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Principal;

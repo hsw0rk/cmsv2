@@ -44,24 +44,6 @@ export const data = {
       data: [300, 300, 280, 380, 200, 300, 280, 350],
     },
   },
-  overall: [
-    {
-      value: "300K",
-      title: "Orders",
-    },
-    {
-      value: "9.876K",
-      title: "Customers",
-    },
-    {
-      value: "1.234K",
-      title: "Products",
-    },
-    {
-      value: "$5678",
-      title: "Revenue",
-    },
-  ],
   revenueByChannel: [
     {
       title: "Direct",
@@ -100,28 +82,29 @@ export const data = {
 };
 
 export const fetchData = async (token) => {
-    const endpoints = ['/investmentscount', '/homeloanscount', '/insurancecount', '/orderbookcount'];
-  
-    try {
-      const results = await Promise.all(
-        endpoints.map(endpoint => axios.get(`http://localhost:8800/api/auth${endpoint}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }))
-      );
-  
-      const counts = results.map(result => {
-        const count = result.data[0][Object.keys(result.data[0])[0]];
-        return count;
-      });
-  
-      return counts;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  };
+  const endpoints = ['/investmentscount', '/homeloanscount', '/insurancecount', '/orderbookcount'];
+
+  try {
+    const results = await Promise.all(
+      endpoints.map(endpoint => axios.get(`http://localhost:8800/api/auth${endpoint}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }))
+    );
+
+    const counts = results.map(result => {
+      const count = result.data[0][Object.keys(result.data[0])[0]];
+      return count;
+    });
+
+    return counts;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
   
 
 export default data;

@@ -29,7 +29,6 @@ const UserInfo = ({ user }) => {
             </div>
             <div className="user-info__menu" >
                 <div className="user-info__menu__icon">
-                <Link to="/settings"><i className='bx bx-cog settings' title="settings"></i></Link>
                 <i className='bx bx-log-out logout' title="logout" onClick={handleLogout}></i>
                 </div>
             </div>
