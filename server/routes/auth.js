@@ -29,7 +29,13 @@ import {
   businessheaddata,editbusinesshead,
   // adminbusinesshead,
   // regionheaddata,
-  // editregionhead
+  // editregionhead,
+
+  regionheaddata,editregionhead,
+
+  verticalheaddata,editverticalhead,
+
+  coheaddata,editcoheadmaster,
 
 } from "../controllers/auth.js";
 
@@ -103,6 +109,18 @@ router.put("/editbusinesshead/:id", editbusinesshead);
 // router.post("/adminbusinesshead", adminbusinesshead);
 // router.get("/getverticalinprincipal", getverticalinprincipal);
 // router.get("/getproductinprincipal", getproductinprincipal);
+
+//regionheadmaster
+router.get("/regionheaddata", regionheaddata);
+router.put("/editregionhead/:id", editregionhead);
+
+//verticalheadmaster
+router.get("/verticalheaddata", verticalheaddata);
+router.put("/editverticalhead/:id", editverticalhead);
+
+//coheadmaster
+router.get("/coheaddata", coheaddata);
+router.put("/editcoheadmaster/:id", editcoheadmaster);
 
 //approvalmaster
 router.get("/approvaldata", approvaldata);

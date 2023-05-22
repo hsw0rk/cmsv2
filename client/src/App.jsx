@@ -23,6 +23,9 @@ import Product from './Pages/Admin/Product/product';
 import Approval from './Pages/Admin/Approval/approval';
 import Principal from './Pages/Admin/Principal/principal';
 import Businesshead from './Pages/Admin/BusinessHead/businesshead';
+import Regionhead from './Pages/Admin/RegionHead/regionhead';
+import Verticalhead from './Pages/Admin/VerticalHead/verticalhead';
+import CO from './Pages/Admin/CO/co';
 
 function App() {
     return (
@@ -45,11 +48,10 @@ function App() {
                     <Route path="productmaster" element={<Product />} />
                     <Route path="principalmaster" element={<Principal />} />
                     <Route path="businessheadmaster" element={<Businesshead />} />
-                    <Route path="regionheadmaster" element={<Product />} />
-                    <Route path="verticalheadmaster" element={<Product />} />
-
+                    <Route path="regionheadmaster" element={<Regionhead />} />
+                    <Route path="verticalheadmaster" element={<Verticalhead />} />
                     <Route path="employeemaster" element={<User />} />
-                    <Route path="comaster" element={<Product />} />
+                    <Route path="comaster" element={<CO />} />
                     
                     <Route path="approvalmaster" element={<Approval />} />
                     <Route path="leads" element={<Leads />} />

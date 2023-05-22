@@ -799,3 +799,68 @@ export const editbusinesshead = (req, res) => {
 //     return res.status(200).json(data);
 //   });
 // };
+
+
+//regionheadmaster
+export const regionheaddata = (req, res) => {
+  const q = "SELECT * FROM  regionheadmaster";
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const editregionhead = (req, res) => {
+  const id = req.params.id;
+  const { regionHeadCode, regionHeadName, regionCode , regionName } = req.body;
+  const q = `UPDATE  regionheadmaster SET regionHeadCode='${regionHeadCode}', regionHeadName='${regionHeadName}', regionCode='${regionCode}', regionName='${regionName}' WHERE id=${id}`;
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+
+//verticalheadmaster
+export const verticalheaddata = (req, res) => {
+  const q = "SELECT * FROM  verticalheadmaster";
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const editverticalhead = (req, res) => {
+  const id = req.params.id;
+  const { verticalHeadCode, verticalHeadName, verticalCode, verticalName, businessHeadCode, businessHeadName, regionCode, regionName, regionHeadCode, regionHeadName } = req.body;
+  const q = `UPDATE  verticalheadmaster SET verticalHeadCode='${verticalHeadCode}', verticalHeadName='${verticalHeadName}', verticalCode='${verticalCode}', verticalName='${verticalName}', businessHeadCode='${businessHeadCode}', businessHeadName='${businessHeadName}', regionCode='${regionCode}', regionName='${regionName}', regionHeadCode='${regionHeadCode}', regionHeadName='${regionHeadName}' WHERE id=${id}`;
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+//comaster
+export const coheaddata = (req, res) => {
+  const q = "SELECT * FROM   coheadmaster";
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const editcoheadmaster = (req, res) => {
+  const id = req.params.id;
+  const { coHeadCode,  coHeadName } = req.body;
+  const q = `UPDATE   coheadmaster SET coHeadCode='${coHeadCode}',  coHeadName  ='${  coHeadName  }' WHERE id=${id}`;
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
