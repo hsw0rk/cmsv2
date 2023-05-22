@@ -20,6 +20,12 @@ const Principal = () => {
   const [filters, setFilters] = useState({});
   const [editedPost, setEditedPost] = useState(null);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
+  const [verticals, setVerticals] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredEditProducts, setFilteredEditProducts] = useState([]);
+
+  const [showAdditionaluser, setShowAdditionaluser] = useState(false);
 
   const [err, setErr] = useState(null);
   const [msg, setMsg] = useState(null);
@@ -27,91 +33,101 @@ const Principal = () => {
   const [inputs, setInputs] = useState({
     verticalName: "",
     productName: "",
-    principal: "",
+    principal: ""
   });
-
-  const [vertical, setVertical] = useState([]);
-  const [product, setProduct] = useState([]);
-  const [filteredVerticals, setFilteredVerticals] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [showAdditionaluser, setShowAdditionaluser] = useState(false);
-
-  useEffect(() => {
-    const fetchVertical = async () => {
-      const res = await axios.get(
-        "http://localhost:8800/api/auth/getverticalinprincipal"
-      );
-      setVertical(res.data);
-    };
-    const fetchProduct = async () => {
-      const res = await axios.get(
-        "http://localhost:8800/api/auth/getproductinprincipal"
-      );
-      setProduct(res.data);
-    };
-    fetchVertical();
-    fetchProduct();
-  }, []);
 
   useEffect(() => {
     if (inputs.verticalName) {
-      const filteredVerticals = vertical.filter(
-        (verticals) => verticals.verticalName === inputs.verticalName
+      const selectedVertical = verticals.find(
+        (vertical) => vertical.verticalName === inputs.verticalName
       );
-      setFilteredVerticals(filteredVerticals);
 
-      const filteredProducts = product.filter(
-        (products) => products.verticalName === inputs.verticalName
-      );
-      setFilteredProducts(filteredProducts);
+      if (selectedVertical) {
+        const filteredProducts = products.filter(
+          (product) => product.verticalName === selectedVertical.verticalName
+        );
+        setFilteredProducts(filteredProducts);
+      } else {
+        setFilteredProducts([]);
+      }
     } else {
-      setFilteredVerticals([]);
       setFilteredProducts([]);
     }
-  }, [inputs.verticalName, vertical, product]);
+  }, [inputs.verticalName, verticals, products]);
+
+  useEffect(() => {
+    if (editedPost && editedPost.verticalName) {
+      const selectedVertical = verticals.find(
+        (vertical) => vertical.verticalName === editedPost.verticalName
+      );
+
+      if (selectedVertical) {
+        const filteredProducts = products.filter(
+          (product) => product.verticalName === selectedVertical.verticalName
+        );
+        setFilteredEditProducts(filteredProducts);
+      } else {
+        setFilteredEditProducts([]);
+      }
+    } else {
+      setFilteredEditProducts([]);
+    }
+  }, [editedPost, verticals, products]);
+
+  useEffect(() => {
+    const fetchVerticals = async () => {
+      const res = await axios.get(
+        "http://localhost:8800/api/auth/getverticalinprincipal"
+      );
+      setVerticals(res.data);
+    };
+    const fetchProducts = async () => {
+      const res = await axios.get(
+        "http://localhost:8800/api/auth/getproductinprincipal"
+      );
+      setProducts(res.data);
+    };
+    fetchVerticals();
+    fetchProducts();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
   
-    setInputs((prevInputs) => ({
-      ...prevInputs,
-      [name]: value,
-    }));
-  
     if (name === "verticalName") {
-      const selectedVertical = vertical.find(
-        (verticals) => verticals.verticalName === value
+      const selectedVertical = verticals.find(
+        (vertical) => vertical.verticalName === value
       );
-      console.log("selectedVertical:", selectedVertical);
+  
       setInputs((prevInputs) => ({
         ...prevInputs,
-        verticalName: value,
-        productName: "", // Reset the productName when changing the verticalName
+        verticalName: selectedVertical ? selectedVertical.verticalName : "",
+        productName: "", 
+        principal: "", 
       }));
-  
-      // Update filteredProducts based on selected verticalName
-      const filteredProducts = product.filter(
-        (products) => products.verticalName === value
-      );
-      setFilteredProducts(filteredProducts);
-    }
-  
-    if (name === "productName") {
+    } else {
       setInputs((prevInputs) => ({
         ...prevInputs,
-        productName: value,
+        [name]: value,
       }));
     }
-  };
+  };  
   
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const selectedVertical = verticals.find(
+      (vertical) => vertical.verticalName === inputs.verticalName
+    );
+
     try {
       const response = await axios.post(
         "http://localhost:8800/api/auth/adminprincipal",
-        { ...inputs }
+        {
+          ...inputs,
+          verticalName: selectedVertical ? selectedVertical.verticalName : "",
+        }
       );
       setMsg(response.data);
       setErr(null);
@@ -179,7 +195,7 @@ const Principal = () => {
     const encodedURI = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedURI);
-    link.setAttribute("download", "usermaster.csv");
+    link.setAttribute("download", "principalmaster.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -206,7 +222,7 @@ const Principal = () => {
         for (let i = 0; i < filteredData.length; i++) {
           const row = filteredData[i];
           try {
-            await axios.post("http://localhost:8800/api/auth/adminuser", row);
+            await axios.post("http://localhost:8800/api/auth/adminprincipal", row);
             console.log(`Inserted row ${i + 1}: ${JSON.stringify(row)}`);
           } catch (err) {
             console.error(
@@ -263,12 +279,12 @@ const Principal = () => {
                   onChange={handleChange}
                 >
                   <option value="">Select Vertical Name</option>
-                  {vertical.map((verticals) => (
+                  {verticals.map((vertical) => (
                     <option
-                      key={verticals.verticalName}
-                      value={verticals.verticalName}
+                      key={vertical.verticalName}
+                      value={vertical.verticalName}
                     >
-                      {verticals.verticalName}
+                      {vertical.verticalName}
                     </option>
                   ))}
                 </select>
@@ -285,8 +301,8 @@ const Principal = () => {
                   value={inputs.productName || ""}
                   onChange={handleChange}
                 >
-                  {/* <option value="">Select Product Name</option> */}
-                  {filteredVerticals.map((product) => (
+                  <option value="">Select Product Name</option>
+                  {filteredProducts.map((product) => (
                     <option
                       key={product.productName}
                       value={product.productName}
@@ -455,33 +471,6 @@ const Principal = () => {
         {editedPost && (
           <div>
             <div className="p-fluid">
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="verticalName">Vertical Name</label>
-                <InputText
-                  id="verticalName"
-                  value={editedPost.verticalName}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      verticalName: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="productName">Product Name</label>
-                <InputText
-                  id="productName"
-                  value={editedPost.productName}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      productName: e.target.value,
-                    })
-                  }
-                />
-              </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
                 <label htmlFor="principal">Principal</label>
@@ -496,6 +485,51 @@ const Principal = () => {
                   }
                 />
               </div>
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="verticalName">Vertical Name</label>
+                <select
+                  required
+                  id="verticalName"
+                  name="verticalName"
+                  value={editedPost.verticalName || ""}
+                  onChange={(e) =>
+                    setEditedPost({ ...editedPost, verticalName: e.target.value })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  <option value="">Select Vertical Name</option>
+                  {verticals.map((vertical) => (
+                    <option key={vertical.verticalName} value={vertical.verticalName}>
+                      {vertical.verticalName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+            <label htmlFor="productName">Product Name</label>
+            <select
+              required
+              id="productName"
+              name="productName"
+              value={editedPost.productName || ""}
+              onChange={(e) =>
+                setEditedPost({ ...editedPost, productName: e.target.value })
+              }
+              disabled={!editedPost}
+              className="userinput"
+            >
+              <option value="">Select Product Name</option>
+              {filteredEditProducts.map((product) => (
+                <option key={product.productName} value={product.productName}>
+                  {product.productName}
+                </option>
+              ))}
+            </select>
+          </div>
+
             </div>
             <Button label="Save" icon="pi pi-check" onClick={saveEditedPost} />
           </div>

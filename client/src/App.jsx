@@ -22,6 +22,7 @@ import Vertical from './Pages/Admin/Vertical/vertical';
 import Product from './Pages/Admin/Product/product';
 import Approval from './Pages/Admin/Approval/approval';
 import Principal from './Pages/Admin/Principal/principal';
+import Businesshead from './Pages/Admin/BusinessHead/businesshead';
 
 function App() {
     return (
@@ -43,7 +44,7 @@ function App() {
                     <Route path="verticalmaster" element={<Vertical />} />
                     <Route path="productmaster" element={<Product />} />
                     <Route path="principalmaster" element={<Principal />} />
-                    <Route path="businessheadmaster" element={<Product />} />
+                    <Route path="businessheadmaster" element={<Businesshead />} />
                     <Route path="regionheadmaster" element={<Product />} />
                     <Route path="verticalheadmaster" element={<Product />} />
 

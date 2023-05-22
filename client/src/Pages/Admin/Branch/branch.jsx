@@ -451,7 +451,7 @@ const Branch = () => {
         onRowSelect={(e) => setSelectedPost(e.data)}
         onRowUnselect={() => setSelectedPost(null)}
       >
-        <Column field="branchName" sortable header="Branch Name"></Column>
+        <Column field="branchName" sortable  header="Branch Name"></Column>
         <Column field="branchCode" sortable header="Branch Code"></Column>
         <Column field="regionName" sortable header="Region Name"></Column>
         <Column field="regionCode" sortable header="Region Code"></Column>
