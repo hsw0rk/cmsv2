@@ -21,6 +21,7 @@ import User from './Pages/Admin/AdminUser/User';
 import Vertical from './Pages/Admin/Vertical/vertical';
 import Product from './Pages/Admin/Product/product';
 import Approval from './Pages/Admin/Approval/approval';
+import Principal from './Pages/Admin/Principal/principal';
 
 function App() {
     return (
@@ -39,9 +40,16 @@ function App() {
                     <Route path="dashboard" index element={<AdminDashboard />} />
                     <Route path="regionmaster" index element={<Region />} />
                     <Route path="branchmaster" element={<Branch />} />
-                    <Route path="employeemaster" element={<User />} />
                     <Route path="verticalmaster" element={<Vertical />} />
                     <Route path="productmaster" element={<Product />} />
+                    <Route path="principalmaster" element={<Principal />} />
+                    <Route path="businessheadmaster" element={<Product />} />
+                    <Route path="regionheadmaster" element={<Product />} />
+                    <Route path="verticalheadmaster" element={<Product />} />
+
+                    <Route path="employeemaster" element={<User />} />
+                    <Route path="comaster" element={<Product />} />
+                    
                     <Route path="approvalmaster" element={<Approval />} />
                     <Route path="leads" element={<Leads />} />
                 </Route>

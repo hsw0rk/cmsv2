@@ -9,7 +9,7 @@ import exc from "../../../Assets/exc.svg";
 import axios from "axios";
 import Papa from "papaparse";
 import { CSVLink } from "react-csv";
-import "./User.css";
+import "./principal.css";
 import { data } from "../../../constants/admindata";
 import UserInfo from "../../../Components/Admin/user-info/UserInfo";
 
@@ -25,141 +25,92 @@ const Principal = () => {
   const [msg, setMsg] = useState(null);
 
   const [inputs, setInputs] = useState({
-    employeename: "",
-    employeecode: "",
-    mobilenumber: "",
-    // password: "",
-    regionCode: "",
-    regionName: "",
-    branchName: "",
-    branchCode: "",
-    branchName2: "",
-    branchCode2: "",
-    branchName3: "",
-    branchCode3: "",
-    branchName4: "",
-    branchCode4: "",
-    branchName5: "",
-    branchCode5: "",
+    verticalName: "",
+    productName: "",
+    principal: "",
   });
 
-  const [branches, setBranches] = useState([]);
-  const [branchesadd, setBranchesadd] = useState([]);
-  const [regions, setRegions] = useState([]);
-  const [filteredRegions, setFilteredRegions] = useState([]);
-  const [filteredBranches, setFilteredBranches] = useState([]);
-  const [filteredbranchCodes, setFilteredbranchCodes] = useState([]);
+  const [vertical, setVertical] = useState([]);
+  const [product, setProduct] = useState([]);
+  const [filteredVerticals, setFilteredVerticals] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [showAdditionaluser, setShowAdditionaluser] = useState(false);
 
-
   useEffect(() => {
-    const fetchBranchesadd = async () => {
+    const fetchVertical = async () => {
       const res = await axios.get(
-        "http://localhost:8800/api/auth/getbranchadd"
+        "http://localhost:8800/api/auth/getverticalinprincipal"
       );
-      setBranchesadd(res.data);
+      setVertical(res.data);
     };
-    fetchBranchesadd();
-  }, []);
-
-
-
-
-  useEffect(() => {
-    const fetchBranches = async () => {
+    const fetchProduct = async () => {
       const res = await axios.get(
-        "http://localhost:8800/api/auth/getbranchinuser"
+        "http://localhost:8800/api/auth/getproductinprincipal"
       );
-      setBranches(res.data);
+      setProduct(res.data);
     };
-    const fetchRegions = async () => {
-      const res = await axios.get(
-        "http://localhost:8800/api/auth/getregioninuser"
-      );
-      setRegions(res.data);
-    };
-    fetchBranches();
-    fetchRegions();
+    fetchVertical();
+    fetchProduct();
   }, []);
 
   useEffect(() => {
-    if (inputs.regionCode) {
-      const filteredRegions = regions.filter(
-        (region) => region.regionCode === inputs.regionCode
+    if (inputs.verticalName) {
+      const filteredVerticals = vertical.filter(
+        (verticals) => verticals.verticalName === inputs.verticalName
       );
-      setFilteredRegions(filteredRegions);
+      setFilteredVerticals(filteredVerticals);
 
-      const filteredBranches = branches.filter(
-        (branch) => branch.regionCode === inputs.regionCode
+      const filteredProducts = product.filter(
+        (products) => products.verticalName === inputs.verticalName
       );
-      setFilteredBranches(filteredBranches);
-
-      const filteredbranchCodes = branches.filter(
-        (branch) =>
-          branch.regionCode === inputs.regionCode &&
-          branch.branchName === inputs.branchName &&
-          branch.branchCode !== inputs.branchCode
-      );
-      setFilteredbranchCodes(filteredbranchCodes);
+      setFilteredProducts(filteredProducts);
     } else {
-      setFilteredRegions([]);
-      setFilteredBranches([]);
-      setFilteredbranchCodes([]);
+      setFilteredVerticals([]);
+      setFilteredProducts([]);
     }
-  }, [inputs.regionCode, inputs.branchName, inputs.branchCode, regions, branches]);
-
+  }, [inputs.verticalName, vertical, product]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
+  
     setInputs((prevInputs) => ({
       ...prevInputs,
       [name]: value,
     }));
-
-    if (name === 'regionCode') {
-      const selectedRegion = regions.find(
-        (region) => region.regionCode === value
+  
+    if (name === "verticalName") {
+      const selectedVertical = vertical.find(
+        (verticals) => verticals.verticalName === value
       );
-      console.log('selectedRegion:', selectedRegion);
+      console.log("selectedVertical:", selectedVertical);
       setInputs((prevInputs) => ({
         ...prevInputs,
-        regionName: selectedRegion ? selectedRegion.regionName : '',
+        verticalName: value,
+        productName: "", // Reset the productName when changing the verticalName
       }));
-    }
-
-    if (name === 'branchName') {
-      const selectedBranch = branches.find(
-        (branch) =>
-          branch.regionCode === inputs.regionCode && branch.branchName === value
+  
+      // Update filteredProducts based on selected verticalName
+      const filteredProducts = product.filter(
+        (products) => products.verticalName === value
       );
-      console.log('selectedBranch:', selectedBranch);
+      setFilteredProducts(filteredProducts);
+    }
+  
+    if (name === "productName") {
       setInputs((prevInputs) => ({
         ...prevInputs,
-        branchCode: selectedBranch ? selectedBranch.branchCode : '',
-      }));
-    }
-
-    if (name === 'branchName2') {
-      const selectedBranch2 = branchesadd.find(
-        (branch) =>
-          branch.regionCode === inputs.regionCode && branch.branchName2 === value
-      );
-      console.log('selectedBranch2:', selectedBranch2);
-      setInputs((prevInputs) => ({
-        ...prevInputs,
-        branchCode2: selectedBranch2 ? selectedBranch2.branchCode2 : '',
+        productName: value,
       }));
     }
   };
-
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const response = await axios.post(
-        "http://localhost:8800/api/auth/adminuser",
+        "http://localhost:8800/api/auth/adminprincipal",
         { ...inputs }
       );
       setMsg(response.data);
@@ -171,7 +122,7 @@ const Principal = () => {
   };
 
   useEffect(() => {
-    axios.get("http://localhost:8800/api/auth/userdata").then((res) => {
+    axios.get("http://localhost:8800/api/auth/principaldata").then((res) => {
       setPosts(res.data);
     });
   }, []);
@@ -179,7 +130,7 @@ const Principal = () => {
   const saveEditedPost = () => {
     axios
       .put(
-        `http://localhost:8800/api/auth/edituser/${editedPost.id}`,
+        `http://localhost:8800/api/auth/editprincipal/${editedPost.id}`,
         editedPost
       )
       .then((res) => {
@@ -214,26 +165,9 @@ const Principal = () => {
   const initFilters = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      regionName: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-      },
-      employeename: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      employeecode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      mobilenumber: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      // password: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      regionCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      regionName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName2: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchCode2: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName3: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchCode3: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName4: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchCode4: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName5: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchCode5: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      verticalName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      productName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      principal: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     });
     setGlobalFilterValue("");
   };
@@ -254,22 +188,9 @@ const Principal = () => {
   const samplecsv = [
     {
       id: "",
-      employeename: "",
-      employeecode: "",
-      mobilenumber: "",
-      // password: "",
-      regionCode: "",
-      regionName: "",
-      branchName: "",
-      branchCode: "",
-      branchName2: "",
-      branchCode2: "",
-      branchName3: "",
-      branchCode3: "",
-      branchName4: "",
-      branchCode4: "",
-      branchName5: "",
-      branchCode5: "",
+      verticalName: "",
+      productName: "",
+      principal: "",
     },
   ];
 
@@ -316,7 +237,7 @@ const Principal = () => {
           fontSize: "20px",
         }}
       >
-        User
+        Principal
       </p>
 
       <p
@@ -324,7 +245,7 @@ const Principal = () => {
         className="Addbuttonuser"
         onClick={() => setShowAdditionaluser(true)}
       >
-        <i className="fa fa-plus"></i>Click Here to Create User{" "}
+        <i className="fa fa-plus"></i>Click Here to Create Principal{" "}
       </p>
 
       <div className={`additional-user ${showAdditionaluser ? "show" : ""}`}>
@@ -332,90 +253,22 @@ const Principal = () => {
           <form className="formuser" onSubmit={handleSubmit}>
             <div>
               <label>
-                Employee Name
-                <input
-                  required
-                  className="userinput"
-                  id="employeename"
-                  name="employeename"
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
-
-            <div>
-              <label>
-                Employee Code
-                <input
-                  required
-                  className="userinput"
-                  id="employeecode"
-                  name="employeecode"
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
-
-            <div>
-              <label>
-                Mobile Number
-                <input
-                  required
-                  className="userinput"
-                  id="mobilenumber"
-                  name="mobilenumber"
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
-
-            {/* <div hidden>
-              <label>
-                password
-                <input
-                  required
-                  className="userinput"
-                  id="password"
-                  name="password"
-                  onChange={handleChange}
-                />
-              </label>
-            </div> */}
-
-            <div>
-              <label>
-                Region Code
+                Vertical Name
                 <select
                   required
                   className="userinput"
-                  id="regionCode"
-                  name="regionCode"
-                  value={inputs.regionCode || ""}
+                  id="verticalName"
+                  name="verticalName"
+                  value={inputs.verticalName || ""}
                   onChange={handleChange}
                 >
-                  <option value="">Select Region Code</option>
-                  {regions.map((region) => (
-                    <option key={region.regionCode} value={region.regionCode}>
-                      {region.regionCode}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-
-            <div hidden>
-              <label>
-                Region Name
-                <select
-                  className="userinput"
-                  id="regionName"
-                  name="regionName"
-                  value={inputs.regionName || ""}
-                  onChange={handleChange}
-                >
-                  {filteredRegions.map((region) => (
-                    <option key={region.regionName} value={region.regionName}>
-                      {region.regionName}
+                  <option value="">Select Vertical Name</option>
+                  {vertical.map((verticals) => (
+                    <option
+                      key={verticals.verticalName}
+                      value={verticals.verticalName}
+                    >
+                      {verticals.verticalName}
                     </option>
                   ))}
                 </select>
@@ -424,42 +277,37 @@ const Principal = () => {
 
             <div>
               <label>
-                Branch Name
+                Product Name
                 <select
-                  required
                   className="userinput"
-                  id="branchName"
-                  name="branchName"
-                  value={inputs.branchName || ""}
+                  id="productName"
+                  name="productName"
+                  value={inputs.productName || ""}
                   onChange={handleChange}
                 >
-                  <option value="">Select Branch Name</option>
-                  {filteredBranches.map((branch) => (
-                    <option key={branch.branchName} value={branch.branchName}>
-                      {branch.branchName}
+                  {/* <option value="">Select Product Name</option> */}
+                  {filteredVerticals.map((product) => (
+                    <option
+                      key={product.productName}
+                      value={product.productName}
+                    >
+                      {product.productName}
                     </option>
                   ))}
                 </select>
               </label>
             </div>
 
-            <div hidden>
+            <div>
               <label>
-                Branch Code
-                <select
-
+                Principal
+                <input
+                  required
                   className="userinput"
-                  id="branchCode"
-                  name="branchCode" // update name attribute to "branchCode"
-                  value={inputs.branchCode || ""}
+                  id="principal"
+                  name="principal"
                   onChange={handleChange}
-                >
-                  {filteredbranchCodes.map((branch) => (
-                    <option key={branch.branchCode} value={branch.branchCode}>
-                      {branch.branchCode}
-                    </option>
-                  ))}
-                </select>
+                />
               </label>
             </div>
 
@@ -468,55 +316,6 @@ const Principal = () => {
             </button>
           </form>
         </div>
-
-
-
-        <div>
-          <label>
-            Branch Name 2
-            <select
-              required
-              className="userinput"
-              id="branchName2"
-              name="branchName2"
-              value={inputs.branchName2 || ""}
-              onChange={handleChange}
-            >
-              <option value="">Select Branch Name 2</option>
-              {filteredBranches.map((branch) => (
-                <option key={branch.branchName} value={branch.branchName}>
-                  {branch.branchName}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-
-
-        <div >
-          <label>
-            Branch Code 2
-            <select
-
-              className="userinput"
-              id="branchCode2"
-              name="branchCode2" // update name attribute to "branchCode"
-              value={inputs.branchCode2 || ""}
-              onChange={handleChange}
-            >
-              {filteredbranchCodes.map((branch) => (
-                <option key={branch.branchCode} value={branch.branchCode}>
-                  {branch.branchCode}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-
-
-
-
-
 
         <input
           type="file"
@@ -567,7 +366,7 @@ const Principal = () => {
             <div className="popup-wrapper">
               <p className="investmsgp">{err}</p>
               <div className="investmsg-buttons">
-                <a href="/admin/usermaster">
+                <a href="/admin/principalmaster">
                   <button className="investmsg-no" onClick={() => setErr(null)}>
                     Close
                   </button>
@@ -582,7 +381,7 @@ const Principal = () => {
             <div className="popup-background"></div>
             <div className="popup-wrapper">
               <p className="investmsgp">{msg}</p>
-              <a href="/admin/usermaster">
+              <a href="/admin/principalmaster">
                 <p className="investmsgclose" onClick={() => setMsg(null)}>
                   close
                 </p>
@@ -629,26 +428,13 @@ const Principal = () => {
         onRowSelect={(e) => setSelectedPost(e.data)}
         onRowUnselect={() => setSelectedPost(null)}
       >
-        <Column field="employeename" sortable header="Employee Name"></Column>
-        <Column field="employeecode" sortable header="Employee Code"></Column>
-        <Column field="mobilenumber" sortable header="Mobile Number"></Column>
-        <Column field="regionName" sortable header="Region Name"></Column>
-        <Column field="regionCode" sortable header="Region Code"></Column>
-        <Column field="branchName" sortable header="Branch Name 1"></Column>
-        <Column field="branchCode" sortable header="Branch Code 1"></Column>
-        <Column field="branchCode2" sortable header="Branch Name 2"></Column>
-        <Column field="branchCode2" sortable header="Branch Code 2"></Column>
-        <Column field="branchCode3" sortable header="Branch Name 3"></Column>
-        <Column field="branchCode3" sortable header="Branch Code 3"></Column>
-        <Column field="branchCode4" sortable header="Branch Name 4"></Column>
-        <Column field="branchCode4" sortable header="Branch Code 4"></Column>
-        <Column field="branchCode5" sortable header="Branch Name 5"></Column>
-        <Column field="branchCode5" sortable header="Branch Code 5"></Column>
-
+        <Column field="principal" sortable header="Principal"></Column>
+        <Column field="verticalName" sortable header="Vertical Name"></Column>
+        <Column field="productName" sortable header="Product Name"></Column>
         <Column
           body={(rowData) => (
             <Button
-              label="Edit"
+              label="Update"
               icon="pi pi-pencil"
               onClick={() => {
                 setEditedPost(rowData);
@@ -659,7 +445,7 @@ const Principal = () => {
         />
       </DataTable>
       <Dialog
-        header="Edit Post"
+        header="Edit Principal Data"
         visible={editDialogVisible}
         style={{ width: "50vw" }}
         modal
@@ -670,204 +456,42 @@ const Principal = () => {
           <div>
             <div className="p-fluid">
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="employeename">Employee Name</label>
+                <label htmlFor="verticalName">Vertical Name</label>
                 <InputText
-                  id="employeename"
-                  value={editedPost.employeename}
+                  id="verticalName"
+                  value={editedPost.verticalName}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      employeename: e.target.value,
+                      verticalName: e.target.value,
                     })
                   }
                 />
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="employeecode">Employee Code</label>
+                <label htmlFor="productName">Product Name</label>
                 <InputText
-                  id="employeecode"
-                  value={editedPost.employeecode}
+                  id="productName"
+                  value={editedPost.productName}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      employeecode: e.target.value,
+                      productName: e.target.value,
                     })
                   }
                 />
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="mobilenumber">Mobile Number</label>
+                <label htmlFor="principal">Principal</label>
                 <InputText
-                  id="mobilenumber"
-                  value={editedPost.mobilenumber}
+                  id="principal"
+                  value={editedPost.principal}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      mobilenumber: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="regionCode">Region Code</label>
-                <InputText
-                  id="regionCode"
-                  value={editedPost.regionCode}
-                  onChange={(e) =>
-                    setEditedPost({ ...editedPost, regionCode: e.target.value })
-                  }
-                />
-              </div>
-
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="regionName">Region Name</label>
-                <InputText
-                  id="regionName"
-                  value={editedPost.regionName}
-                  onChange={(e) =>
-                    setEditedPost({ ...editedPost, regionName: e.target.value })
-                  }
-                />
-              </div>
-
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchName">Branch Name 1</label>
-                <InputText
-                  id="branchName"
-                  value={editedPost.branchName}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      branchName: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchCode">Branch Code 1</label>
-                <InputText
-                  id="branchCode"
-                  value={editedPost.branchCode}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      branchCode: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchName2">Branch Name 2</label>
-                <InputText
-                  id="branchName2"
-                  value={editedPost.branchName2}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      branchName2: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchCode2">Branch Code 2</label>
-                <InputText
-                  id="branchCode2"
-                  value={editedPost.branchCode2}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      branchCode2: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchName3">Branch Name 3</label>
-                <InputText
-                  id="branchName3"
-                  value={editedPost.branchName3}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      branchName3: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchCode3">Branch Code 3</label>
-                <InputText
-                  id="branchCode3"
-                  value={editedPost.branchCode3}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      branchCode3: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchName4">Branch Name 4</label>
-                <InputText
-                  id="branchName4"
-                  value={editedPost.branchName4}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      branchName4: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchCode4">Branch Code 4</label>
-                <InputText
-                  id="branchCode4"
-                  value={editedPost.branchCode4}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      branchCode4: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchName5">Branch Name 5</label>
-                <InputText
-                  id="branchName5"
-                  value={editedPost.branchName5}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      branchName5: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchCode5">Branch Code 5</label>
-                <InputText
-                  id="branchCode5"
-                  value={editedPost.branchCode5}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      branchCode5: e.target.value,
+                      principal: e.target.value,
                     })
                   }
                 />

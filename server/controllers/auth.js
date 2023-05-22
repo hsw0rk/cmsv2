@@ -419,6 +419,7 @@ export const getregioninuser = (req, res) => {
   });
 };
 
+//
 export const getverticalinbranch = (req, res) => {
   const q = "SELECT * FROM verticalmaster";
   db.query(q, (err, data) => {
@@ -610,6 +611,82 @@ export const adminproduct = (req, res) => {
   });
 };
 
+//Principalmaster
+export const principaldata = (req, res) => {
+  const q = "SELECT * FROM principalmaster";
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const editprincipal = (req, res) => {
+  const id = req.params.id;
+  const { verticalName, productName, principal } = req.body;
+  const q = `UPDATE principalmaster SET verticalName='${verticalName}', productName='${productName}', principal='${principal}' WHERE id=${id}`;
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const adminprincipal = (req, res) => {
+  const verticalName = req.body.verticalName;
+  const productName = req.body.productName;
+  const principal = req.body.principal;
+
+  // Check if the data already exists in the database based on multiple fields
+  const checkDuplicateQuery = "SELECT * FROM principalmaster WHERE verticalName = ? AND productName = ? AND principal = ?";
+  const values = [verticalName, productName, principal ];
+
+  db.query(checkDuplicateQuery, values, (err, results) => {
+    if (err) return res.status(500).json(err);
+
+    if (results.length > 0) {
+      // If the data already exists, update the existing row
+      const updateQuery = "UPDATE principalmaster SET verticalName = ? AND productName = ? AND principal = ?";
+      const updateValues = [verticalName, productName, principal];
+
+      db.query(updateQuery, updateValues, (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("Principal data has been updated!");
+      });
+    } else {
+      // If the data does not exist, insert the data into the database
+      const insertQuery = "INSERT INTO principalmaster (`verticalName`,`productName`,`principal`) VALUES (?)";
+
+      const insertValues = [
+        verticalName,
+        productName,
+        principal,
+      ];
+
+      db.query(insertQuery, [insertValues], (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("Principal data has been created!");
+      });
+    }
+  });
+};
+
+
+export const getverticalinprincipal = (req, res) => {
+  const q = "SELECT * FROM verticalmaster";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
+  });
+};
+
+export const getproductinprincipal = (req, res) => {
+  const q = "SELECT * FROM productmaster";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
+  });
+};
 
 // Approvalmaster
 export const approvaldata = (req, res) => {

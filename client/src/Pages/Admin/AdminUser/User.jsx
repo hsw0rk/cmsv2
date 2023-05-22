@@ -63,8 +63,6 @@ const User = () => {
   }, []);
 
 
-
-
   useEffect(() => {
     const fetchBranches = async () => {
       const res = await axios.get(
@@ -329,6 +327,18 @@ const User = () => {
       <div className={`additional-user ${showAdditionaluser ? "show" : ""}`}>
         <div className="form-container-user">
           <form className="formuser" onSubmit={handleSubmit}>
+          <div>
+              <label>
+                Employee Code
+                <input
+                  required
+                  className="userinput"
+                  id="employeecode"
+                  name="employeecode"
+                  onChange={handleChange}
+                />
+              </label>
+            </div>
             <div>
               <label>
                 Employee Name
@@ -342,18 +352,7 @@ const User = () => {
               </label>
             </div>
 
-            <div>
-              <label>
-                Employee Code
-                <input
-                  required
-                  className="userinput"
-                  id="employeecode"
-                  name="employeecode"
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+            
 
             <div>
               <label>
@@ -456,6 +455,111 @@ const User = () => {
                   {filteredbranchCodes.map((branch) => (
                     <option key={branch.branchCode} value={branch.branchCode}>
                       {branch.branchCode}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div>
+              <label>
+                Vertical
+                <select
+                  required
+                  className="userinput"
+                  id="branchName"
+                  name="branchName"
+                  value={inputs.branchName || ""}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Vertical Name</option>
+                  {filteredBranches.map((branch) => (
+                    <option key={branch.branchName} value={branch.branchName}>
+                      {branch.branchName}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div>
+              <label>
+                Vertical Head 
+                <select
+                  required
+                  className="userinput"
+                  id="branchName"
+                  name="branchName"
+                  value={inputs.branchName || ""}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Verticcal Name</option>
+                  {filteredBranches.map((branch) => (
+                    <option key={branch.branchName} value={branch.branchName}>
+                      {branch.branchName}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div hidden>
+              <label>
+                Vertical Head Code 
+                <select
+                  required
+                  className="userinput"
+                  id="branchName"
+                  name="branchName"
+                  value={inputs.branchName || ""}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Verticcal Name</option>
+                  {filteredBranches.map((branch) => (
+                    <option key={branch.branchName} value={branch.branchName}>
+                      {branch.branchName}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div>
+              <label>
+                Region Head
+                <select
+                  required
+                  className="userinput"
+                  id="branchName"
+                  name="branchName"
+                  value={inputs.branchName || ""}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Region Head</option>
+                  {filteredBranches.map((branch) => (
+                    <option key={branch.branchName} value={branch.branchName}>
+                      {branch.branchName}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div hidden>
+              <label>
+                Region Head Code 
+                <select
+                  required
+                  className="userinput"
+                  id="branchName"
+                  name="branchName"
+                  value={inputs.branchName || ""}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Region Code</option>
+                  {filteredBranches.map((branch) => (
+                    <option key={branch.branchName} value={branch.branchName}>
+                      {branch.branchName}
                     </option>
                   ))}
                 </select>

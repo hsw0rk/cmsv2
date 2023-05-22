@@ -121,19 +121,19 @@ const Sidebar = () => {
                     Branch Master
                   </div>
                 </Link>
-                <Link to="/admin/employeemaster"  className={`pt-pl-1 sidebar__menu__item font-dark text-right ${
-                    activeItem === "employeemaster" ? "active" : ""
+                <Link to="/admin/verticalmaster"  className={`pt-pl-1 sidebar__menu__item font-dark text-right ${
+                    activeItem === "verticalmaster" ? "active" : ""
                   }`}
                   onClick={() => {
-                    setActiveItem("employeemaster");
+                    setActiveItem("verticalmaster");
                     closeSidebar();
                   }}>
                   <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
                     <i
-                      className="sidebar__menu__item__icon bx bx-user pl-2"
+                      className="sidebar__menu__item__icon bx bx-file-find pl-2"
                       style={{ fontSize: "25px", marginRight: "25px" }}
                     ></i>
-                    Employee Master
+                    Vertical Master
                   </div>
                 </Link>
                 <Link to="/admin/productmaster"  className={`pt-pl-1 sidebar__menu__item font-dark text-right ${
@@ -151,21 +151,98 @@ const Sidebar = () => {
                     Product Master
                   </div>
                 </Link>
-                <Link to="/admin/verticalmaster"  className={`pt-pl-1 sidebar__menu__item font-dark text-right ${
-                    activeItem === "verticalmaster" ? "active" : ""
+                <Link to="/admin/principalmaster"  className={`pt-pl-1 sidebar__menu__item font-dark text-right ${
+                    activeItem === "principalmaster" ? "active" : ""
                   }`}
                   onClick={() => {
-                    setActiveItem("verticalmaster");
+                    setActiveItem("principalmaster");
                     closeSidebar();
                   }}>
                   <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
                     <i
-                      className="sidebar__menu__item__icon bx bx-file-find pl-2"
+                      className="sidebar__menu__item__icon bx bx-cube pl-2"
                       style={{ fontSize: "25px", marginRight: "25px" }}
                     ></i>
-                    Vertical Master
+                    Principal Master
                   </div>
                 </Link>
+                <Link to="/admin/businessheadmaster"  className={`pt-pl-1 sidebar__menu__item font-dark text-right ${
+                    activeItem === "businessheadmaster" ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setActiveItem("businessheadmaster");
+                    closeSidebar();
+                  }}>
+                  <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
+                    <i
+                      className="sidebar__menu__item__icon bx bx-cube pl-2"
+                      style={{ fontSize: "25px", marginRight: "25px" }}
+                    ></i>
+                    Business Head Master
+                  </div>
+                </Link>
+                <Link to="/admin/regionheadmaster"  className={`pt-pl-1 sidebar__menu__item font-dark text-right ${
+                    activeItem === "regionheadmaster" ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setActiveItem("regionheadmaster");
+                    closeSidebar();
+                  }}>
+                  <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
+                    <i
+                      className="sidebar__menu__item__icon bx bx-cube pl-2"
+                      style={{ fontSize: "25px", marginRight: "25px" }}
+                    ></i>
+                    Region Head Master
+                  </div>
+                </Link>
+                <Link to="/admin/verticalheadmaster"  className={`pt-pl-1 sidebar__menu__item font-dark text-right ${
+                    activeItem === "verticalheadmaster" ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setActiveItem("verticalheadmaster");
+                    closeSidebar();
+                  }}>
+                  <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
+                    <i
+                      className="sidebar__menu__item__icon bx bx-cube pl-2"
+                      style={{ fontSize: "25px", marginRight: "25px" }}
+                    ></i>
+                    Vertical Head Master
+                  </div>
+                </Link>
+                <Link to="/admin/employeemaster"  className={`pt-pl-1 sidebar__menu__item font-dark text-right ${
+                    activeItem === "employeemaster" ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setActiveItem("employeemaster");
+                    closeSidebar();
+                  }}>
+                  <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
+                    <i
+                      className="sidebar__menu__item__icon bx bx-user pl-2"
+                      style={{ fontSize: "25px", marginRight: "25px" }}
+                    ></i>
+                    Employee Master
+                  </div>
+                </Link>
+                <Link to="/admin/comaster"  className={`pt-pl-1 sidebar__menu__item font-dark text-right ${
+                    activeItem === "comaster" ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setActiveItem("comaster");
+                    closeSidebar();
+                  }}>
+                  <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
+                    <i
+                      className="sidebar__menu__item__icon bx bx-cube pl-2"
+                      style={{ fontSize: "25px", marginRight: "25px" }}
+                    ></i>
+                    CO Master
+                  </div>
+                </Link>
+                
+                
                 <hr 
                 style={{marginBottom:"8px",  borderWidth: "1px",
                 borderStyle: "solid",  
