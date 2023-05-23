@@ -112,20 +112,26 @@ const Businesshead = () => {
   }, []);
 
   const saveEditedPost = () => {
-    axios
-      .put(
-        `http://localhost:8800/api/auth/editbusinesshead/${editedPost.id}`,
-        editedPost
-      )
-      .then((res) => {
-        setPosts(
-          posts.map((post) => (post.id === editedPost.id ? editedPost : post))
-        );
-        setEditedPost(null);
-        setEditDialogVisible(false);
-        alert("You have edited the data.");
-      })
-      .catch((error) => console.log(error));
+    const selectedVertical = verticals.find(
+      (vertical) => vertical.verticalCode === editedPost.verticalCode
+    );
+    if (selectedVertical) {
+      const updatedPost = { ...editedPost, verticalName: selectedVertical.verticalName };
+      axios
+        .put(
+          `http://localhost:8800/api/auth/editbusinesshead/${editedPost.id}`,
+          updatedPost
+        )
+        .then((res) => {
+          setPosts(
+            posts.map((post) => (post.id === editedPost.id ? updatedPost : post))
+          );
+          setEditedPost(null);
+          setEditDialogVisible(false);
+          alert("You have edited the data.");
+        })
+        .catch((error) => console.log(error));
+    }
   };
 
   useEffect(() => {

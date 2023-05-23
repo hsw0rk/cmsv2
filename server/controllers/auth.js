@@ -957,3 +957,38 @@ export const adminco = (req, res) => {
     }
   });
 };
+
+
+//verticalheadmaster
+export const getverticalinverticalhead = (req, res) => {
+  const q = "SELECT * FROM verticalmaster";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
+  });
+};
+
+
+export const getbusinessinverticalhead = (req, res) => {
+  const q = "SELECT * FROM businessheadmaster";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
+  });
+};
+
+export const getregioninverticalhead = (req, res) => {
+  const q = "SELECT * FROM regionmaster";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
+  });
+};
+
+export const getregionheadinverticalhead = (req, res) => {
+  const q = "SELECT * FROM regionheadmaster";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
+  });
+};

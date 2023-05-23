@@ -28,7 +28,6 @@ const User = () => {
     employeename: "",
     employeecode: "",
     mobilenumber: "",
-    // password: "",
     regionCode: "",
     regionName: "",
     branchName: "",
@@ -219,7 +218,6 @@ const User = () => {
       employeename: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       employeecode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       mobilenumber: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      // password: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       regionCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       branchName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       branchCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
@@ -254,7 +252,6 @@ const User = () => {
       employeename: "",
       employeecode: "",
       mobilenumber: "",
-      // password: "",
       regionCode: "",
       regionName: "",
       branchName: "",
@@ -367,18 +364,6 @@ const User = () => {
               </label>
             </div>
 
-            {/* <div hidden>
-              <label>
-                password
-                <input
-                  required
-                  className="userinput"
-                  id="password"
-                  name="password"
-                  onChange={handleChange}
-                />
-              </label>
-            </div> */}
 
             <div>
               <label>

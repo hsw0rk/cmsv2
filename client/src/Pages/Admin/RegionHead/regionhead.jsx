@@ -111,21 +111,28 @@ const Regionhead = () => {
     });
   }, []);
 
+
   const saveEditedPost = () => {
-    axios
-      .put(
-        `http://localhost:8800/api/auth/editregionhead/${editedPost.id}`,
-        editedPost
-      )
-      .then((res) => {
-        setPosts(
-          posts.map((post) => (post.id === editedPost.id ? editedPost : post))
-        );
-        setEditedPost(null);
-        setEditDialogVisible(false);
-        alert("You have edited the data.");
-      })
-      .catch((error) => console.log(error));
+    const selectedRegion = regions.find(
+      (region) => region.regionCode === editedPost.regionCode
+    );
+    if (selectedRegion) {
+      const updatedPost = { ...editedPost, regionName: selectedRegion.regionName };
+      axios
+        .put(
+          `http://localhost:8800/api/auth/editregionhead/${editedPost.id}`,
+          updatedPost
+        )
+        .then((res) => {
+          setPosts(
+            posts.map((post) => (post.id === editedPost.id ? updatedPost : post))
+          );
+          setEditedPost(null);
+          setEditDialogVisible(false);
+          alert("You have edited the data.");
+        })
+        .catch((error) => console.log(error));
+    }
   };
 
   useEffect(() => {

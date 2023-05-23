@@ -104,21 +104,28 @@ const Product = () => {
   }, []);
 
   const saveEditedPost = () => {
-    axios
-      .put(
-        `http://localhost:8800/api/auth/editproduct/${editedPost.id}`,
-        editedPost
-      )
-      .then((res) => {
-        setPosts(
-          posts.map((post) => (post.id === editedPost.id ? editedPost : post))
-        );
-        setEditedPost(null);
-        setEditDialogVisible(false);
-        alert("You have edited the data.");
-      })
-      .catch((error) => console.log(error));
+    const selectedVertical = verticals.find(
+      (vertical) => vertical.verticalName === editedPost.verticalName
+    );
+    if (selectedVertical) {
+      const updatedPost = { ...editedPost, verticalCode: selectedVertical.verticalCode };
+      axios
+        .put(
+          `http://localhost:8800/api/auth/editproduct/${editedPost.id}`,
+          updatedPost
+        )
+        .then((res) => {
+          setPosts(
+            posts.map((post) => (post.id === editedPost.id ? updatedPost : post))
+          );
+          setEditedPost(null);
+          setEditDialogVisible(false);
+          alert("You have edited the data.");
+        })
+        .catch((error) => console.log(error));
+    }
   };
+  
 
   useEffect(() => {
     if (editedPost && editedPost.verticalName && verticals.length > 0) {
@@ -392,7 +399,7 @@ const Product = () => {
             </>
           )}
         </div>
-      </div>
+
       <input
           type="file"
           className="branchfile"
@@ -433,7 +440,7 @@ const Product = () => {
             title="Download CSV"
           />
         </div>
-
+        </div>
       <div className="flex justify-content-between gap-5 clearred">
         <Button
           type="button"
