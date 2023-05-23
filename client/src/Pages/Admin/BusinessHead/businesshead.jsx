@@ -9,270 +9,308 @@ import exc from "../../../Assets/exc.svg";
 import axios from "axios";
 import Papa from "papaparse";
 import { CSVLink } from "react-csv";
-import "./businesshead.css";
+import "./Businesshead.css";
 import { data } from "../../../constants/admindata";
 import UserInfo from "../../../Components/Admin/user-info/UserInfo";
 
 const Businesshead = () => {
-    const [posts, setPosts] = useState([]);
-    const [selectedPost, setSelectedPost] = useState(null);
-    const [globalFilterValue, setGlobalFilterValue] = useState("");
-    const [filters, setFilters] = useState({});
-    const [editedPost, setEditedPost] = useState(null);
-    const [editDialogVisible, setEditDialogVisible] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [globalFilterValue, setGlobalFilterValue] = useState("");
+  const [filters, setFilters] = useState({});
+  const [editedPost, setEditedPost] = useState(null);
+  const [editDialogVisible, setEditDialogVisible] = useState(false);
+  const [filteredverticals, setFilteredVerticals] = useState([]);
+  const [verticals, setverticals] = useState([]);
+  const [showAdditionalbranch, setShowAdditionalbranch] = useState(false);
 
-    const [err, setErr] = useState(null);
-    const [msg, setMsg] = useState(null);
+  const [err, setErr] = useState(null);
+  const [msg, setMsg] = useState(null);
 
-    const [inputs, setInputs] = useState({
-        verticalName: "",
-        productName: "",
-        principal: "",
-    });
+  const [inputs, setInputs] = useState({
+    verticalName: "",
+    verticalCode: "",
+    businessHeadCode: "",
+    businessHeadName: "",
+  });
 
-    const [vertical, setVertical] = useState([]);
-    const [product, setProduct] = useState([]);
-    const [filteredVerticals, setFilteredVerticals] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState([]);
-    const [showAdditionaluser, setShowAdditionaluser] = useState(false);
+  useEffect(() => {
+    if (inputs.verticalCode) {
+      setFilteredVerticals(
+        verticals.filter((vertical) => vertical.verticalCode === inputs.verticalCode)
+      );
+    } else {
+      setFilteredVerticals([]);
+    }
+  }, [inputs.verticalCode, verticals]);
 
-    useEffect(() => {
-        const fetchVertical = async () => {
-            const res = await axios.get(
-                "http://localhost:8800/api/auth/getverticalinprincipal"
-            );
-            setVertical(res.data);
-        };
-        const fetchProduct = async () => {
-            const res = await axios.get(
-                "http://localhost:8800/api/auth/getproductinprincipal"
-            );
-            setProduct(res.data);
-        };
-        fetchVertical();
-        fetchProduct();
-    }, []);
-
-    useEffect(() => {
-        if (inputs.verticalName) {
-            const filteredVerticals = vertical.filter(
-                (verticals) => verticals.verticalName === inputs.verticalName
-            );
-            setFilteredVerticals(filteredVerticals);
-
-            const filteredProducts = product.filter(
-                (products) => products.verticalName === inputs.verticalName
-            );
-            setFilteredProducts(filteredProducts);
-        } else {
-            setFilteredVerticals([]);
-            setFilteredProducts([]);
-        }
-    }, [inputs.verticalName, vertical, product]);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-
-        setInputs((prevInputs) => ({
-            ...prevInputs,
-            [name]: value,
-        }));
-
-        if (name === "verticalName") {
-            const selectedVertical = vertical.find(
-                (verticals) => verticals.verticalName === value
-            );
-            console.log("selectedVertical:", selectedVertical);
-            setInputs((prevInputs) => ({
-                ...prevInputs,
-                verticalName: value,
-                productName: "", // Reset the productName when changing the verticalName
-            }));
-
-            // Update filteredProducts based on selected verticalName
-            const filteredProducts = product.filter(
-                (products) => products.verticalName === value
-            );
-            setFilteredProducts(filteredProducts);
-        }
-
-        if (name === "productName") {
-            setInputs((prevInputs) => ({
-                ...prevInputs,
-                productName: value,
-            }));
-        }
+  useEffect(() => {
+    const fetchverticals = async () => {
+      const res = await axios.get(
+        "http://localhost:8800/api/auth/getverticalinbusinesshead"
+      );
+      setverticals(res.data);
     };
+    fetchverticals();
+  }, []);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+  
+    if (name === "verticalCode") {
+      const selectedvertical = verticals.find(
+        (vertical) => vertical.verticalCode === value
+      );
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        verticalName: selectedvertical ? selectedvertical.verticalName : "",
+      }));
+    } else if (name === "businessHeadCode") { // Add this block to update businessHeadCode
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        businessHeadCode: value,
+      }));
+    } else if (name === "businessHeadName") { // Add this block to update businessHeadName
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        businessHeadName: value,
+      }));
+    }
+  };
+  
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        try {
-            const response = await axios.post(
-                "http://localhost:8800/api/auth/adminbusinesshead",
-                { ...inputs }
-            );
-            setMsg(response.data);
-            setErr(null);
-        } catch (err) {
-            setErr(err.response.data);
-            setMsg(null);
-        }
-    };
-
-    useEffect(() => {
-        axios.get("http://localhost:8800/api/auth/businessheaddata").then((res) => {
-            setPosts(res.data);
-        });
-    }, []);
-
-    const saveEditedPost = () => {
-        axios
-            .put(
-                `http://localhost:8800/api/auth/editbusinesshead/${editedPost.id}`,
-                editedPost
-            )
-            .then((res) => {
-                setPosts(
-                    posts.map((post) => (post.id === editedPost.id ? editedPost : post))
-                );
-                setEditedPost(null);
-                setEditDialogVisible(false);
-                alert("You have edited the data.");
-            })
-            .catch((error) => console.log(error));
-    };
-
-    const clearFilter = () => {
-        initFilters();
-    };
-
-    const onGlobalFilterChange = (e) => {
-        const value = e.target.value;
-        let _filters = { ...filters };
-
-        if (_filters.global) {
-            _filters.global.value = value;
-        } else {
-            _filters.global = { value, matchMode: FilterMatchMode.CONTAINS };
-        }
-
-        setFilters(_filters);
-        setGlobalFilterValue(value);
-    };
-
-    const initFilters = () => {
-        setFilters({
-            global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-            businessHeadCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-            businessHeadName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-            verticalCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-            verticalName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        });
-        setGlobalFilterValue("");
-    };
-
-    const downloadCSV = () => {
-        const csvContent =
-            "data:text/csv;charset=utf-8," +
-            posts.map((post) => Object.values(post).join(",")).join("\n");
-        const encodedURI = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedURI);
-        link.setAttribute("download", "businessheadmaster.csv");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    const samplecsv = [
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    const selectedvertical = verticals.find(
+      (vertical) => vertical.verticalCode === inputs.verticalCode
+    );
+  
+    try {
+      const response = await axios.post(
+        "http://localhost:8800/api/auth/adminbusinesshead",
         {
-            id: "",
-            businessHeadCode: "",
-            businessHeadName: "",
-            verticalCode: "",
-            verticalName: "",
-        },
+          ...inputs,
+          verticalName: selectedvertical ? selectedvertical.verticalName : "",
+          businessHeadCode: inputs.businessHeadCode, // Include businessHeadCode
+          businessHeadName: inputs.businessHeadName, // Include businessHeadName
+        }
+      );
+      setMsg(response.data);
+      setErr(null);
+    } catch (err) {
+      setErr(err.response.data);
+      setMsg(null);
+    }
+  };
+  
+
+  useEffect(() => {
+    axios.get("http://localhost:8800/api/auth/businessheaddata").then((res) => {
+      setPosts(res.data);
+    });
+  }, []);
+
+  const saveEditedPost = () => {
+    axios
+      .put(
+        `http://localhost:8800/api/auth/editbusinesshead/${editedPost.id}`,
+        editedPost
+      )
+      .then((res) => {
+        setPosts(
+          posts.map((post) => (post.id === editedPost.id ? editedPost : post))
+        );
+        setEditedPost(null);
+        setEditDialogVisible(false);
+        alert("You have edited the data.");
+      })
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    if (editedPost && editedPost.verticalCode && verticals.length > 0) {
+      setFilteredVerticals(
+        verticals.filter((vertical) => vertical.verticalCode === editedPost.verticalCode)
+      );
+    }
+  }, [editedPost, verticals]);
+
+  const clearFilter = () => {
+    initFilters();
+  };
+
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    let _filters = { ...filters };
+
+    if (_filters.global) {
+      _filters.global.value = value;
+    } else {
+      _filters.global = { value, matchMode: FilterMatchMode.CONTAINS };
+    }
+
+    setFilters(_filters);
+    setGlobalFilterValue(value);
+  };
+
+  const initFilters = () => {
+    setFilters({
+      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      verticalName: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },
+      verticalCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      businessHeadCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      businessHeadName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    });
+    setGlobalFilterValue("");
+  };
+
+  const downloadCSV = () => {
+    // Define the headers for the CSV
+    const headers = [
+      "vertical Name",
+      "vertical Code",
+      "vertical Head Name",
+      "vertical Head Code",
     ];
 
-    const handleFileUpload = (file) => {
-        Papa.parse(file, {
-            header: true,
-            complete: async (results) => {
-                const { data } = results;
-                const filteredData = data.filter((row) => {
-                    // Check if all values in the row are empty or not
-                    return Object.values(row).some((value) => value.trim() !== "");
-                });
-                for (let i = 0; i < filteredData.length; i++) {
-                    const row = filteredData[i];
-                    try {
-                        await axios.post("http://localhost:8800/api/auth/adminbusinesshead", row);
-                        console.log(`Inserted row ${i + 1}: ${JSON.stringify(row)}`);
-                    } catch (err) {
-                        console.error(
-                            `Error inserting row ${i + 1}: ${JSON.stringify(row)}`
-                        );
-                        console.error(err);
-                        alert("Error occurred while uploading data. Please try again.");
-                        return;
-                    }
-                }
-                setPosts(filteredData);
-                alert("Data has been uploaded successfully.");
-            },
-            error: (error) => {
-                console.error(error);
-                alert("Error occurred while uploading data. Please try again.");
-            },
+    // Create an array of rows to be included in the CSV
+    const rows = posts.map((post) => [
+      post.verticalName,
+      post.verticalCode,
+      post.businessHeadName,
+      post.businessHeadCode,
+    ]);
+
+    // Combine headers and rows into a single array
+    const csvData = [headers, ...rows];
+
+    // Convert the array to CSV content
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      csvData.map((row) => row.join(",")).join("\n");
+
+    // Create a download link and trigger the download
+    const encodedURI = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedURI);
+    link.setAttribute("download", "verticalheadmaster.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const samplecsv = [
+    {
+      id: "",
+      verticalName: "",
+      verticalCode: "",
+      businessHeadName: "",
+      businessHeadCode: "",
+    },
+  ];
+
+  const handleFileUpload = (file) => {
+    Papa.parse(file, {
+      header: true,
+      complete: async (results) => {
+        const { data } = results;
+        const filteredData = data.filter((row) => {
+          // Check if all values in the row are empty or not
+          return Object.values(row).some((value) => value.trim() !== "");
         });
-    };
+        for (let i = 0; i < filteredData.length; i++) {
+          const row = filteredData[i];
+          try {
+            await axios.post("http://localhost:8800/api/auth/adminbusinesshead", row);
+            console.log(`Inserted row ${i + 1}: ${JSON.stringify(row)}`);
+          } catch (err) {
+            console.error(
+              `Error inserting row ${i + 1}: ${JSON.stringify(row)}`
+            );
+            console.error(err);
+            alert("Error occurred while uploading data. Please try again.");
+            return;
+          }
+        }
+        setPosts(filteredData);
+        alert("Data has been uploaded successfully.");
+      },
+      error: (error) => {
+        console.error(error);
+        alert("Error occurred while uploading data. Please try again.");
+      },
+    });
+  };
 
-    return (
-        <div className="form">
-
-            <div className="suser">
-                <UserInfo user={data.user} />
-            </div>
-            <p
-                style={{
-                    fontSize: "20px",
-                }}
-            >
-                Business Head
-            </p>
-
-            {/* <div>
+  return (
+    <div className="form">
+      <div className="suser">
+        <UserInfo user={data.user} />
+      </div>
       <p
-        type="button"
-        className="Addbuttonuser"
-        onClick={() => setShowAdditionaluser(true)}
+        style={{
+          fontSize: "20px",
+        }}
       >
-        <i className="fa fa-plus"></i>Click Here to Create Principal{" "}
+        Business Head
       </p>
 
-      <div className={`additional-user ${showAdditionaluser ? "show" : ""}`}>
-        <div className="form-container-user">
-          <form className="formuser" onSubmit={handleSubmit}>
+      <p
+        type="button"
+        className="Addbuttonbranch"
+        onClick={() => setShowAdditionalbranch(true)}
+      >
+        <i className="fa fa-plus"></i>Click Here to Create Business Head{" "}
+      </p>
+
+      <div
+        className={`additional-branch ${showAdditionalbranch ? "show" : ""}`}
+      >
+        <div className="form-container-branch">
+          <form className="formbranch" onSubmit={handleSubmit}>
             <div>
               <label>
-                Vertical Name
+                vertical Code
+                <select
+                  required
+                  className="userinput"
+                  id="verticalCode"
+                  name="verticalCode"
+                  value={inputs.verticalCode || ""}
+                  onChange={(event) =>
+                    setInputs({ ...inputs, verticalCode: event.target.value })
+                  }
+                >
+                  <option value="">Select vertical Code</option>
+                  {verticals.map((vertical) => (
+                    <option key={vertical.verticalCode} value={vertical.verticalCode}>
+                      {vertical.verticalCode}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div>
+              <label>
+                vertical Name
                 <select
                   required
                   className="userinput"
                   id="verticalName"
                   name="verticalName"
                   value={inputs.verticalName || ""}
-                  onChange={handleChange}
+                  onChange={(event) =>
+                    setInputs({ ...inputs, verticalName: event.target.value })
+                  }
                 >
-                  <option value="">Select Vertical Name</option>
-                  {vertical.map((verticals) => (
-                    <option
-                      key={verticals.verticalName}
-                      value={verticals.verticalName}
-                    >
-                      {verticals.verticalName}
+                  {filteredverticals.map((vertical) => (
+                    <option key={vertical.verticalName} value={vertical.verticalName}>
+                      {vertical.verticalName}
                     </option>
                   ))}
                 </select>
@@ -281,50 +319,79 @@ const Businesshead = () => {
 
             <div>
               <label>
-                Product Name
-                <select
-                  className="userinput"
-                  id="productName"
-                  name="productName"
-                  value={inputs.productName || ""}
-                  onChange={handleChange}
-                >
-                  {filteredVerticals.map((product) => (
-                    <option
-                      key={product.productName}
-                      value={product.productName}
-                    >
-                      {product.productName}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-
-            <div>
-              <label>
-                Principal
+              Business Head Name
                 <input
                   required
-                  className="userinput"
-                  id="principal"
-                  name="principal"
+                  autoComplete="off"
+                  className="branchinput"
+                  id="businessHeadName"
+                  name="businessHeadName"
                   onChange={handleChange}
                 />
               </label>
             </div>
 
-            <button type="submit" className="Submitbuttonuser">
+            <div>
+              <label>
+                Business Head Code
+                <input
+                  required
+                  autoComplete="off"
+                  className="branchinput"
+                  id="businessHeadCode"
+                  name="businessHeadCode"
+                  onChange={handleChange}
+                  type="number"
+                />
+              </label>
+            </div>
+
+            <button type="submit" className="Submitbuttonbranch">
               Submit
             </button>
           </form>
+
+          {err && (
+            <>
+              <div className="popup-background"></div>
+              <div className="popup-wrapper">
+                <p className="investmsgp">{err}</p>
+                <div className="investmsg-buttons">
+                  <button className="investmsg-yes" onClick={handleSubmit}>
+                    Yes
+                  </button>
+                  <a href="/admin/businessheadmaster">
+                    <button
+                      className="investmsg-no"
+                      onClick={() => setErr(null)}
+                    >
+                      No
+                    </button>
+                  </a>
+                </div>
+              </div>
+            </>
+          )}
+
+          {msg && (
+            <>
+              <div className="popup-background"></div>
+              <div className="popup-wrapper">
+                <p className="investmsgp">{msg}</p>
+                <a href="/admin/businessheadmaster">
+                  <p className="investmsgclose" onClick={() => setMsg(null)}>
+                    close
+                  </p>
+                </a>
+              </div>
+            </>
+          )}
         </div>
 
         <input
           type="file"
-          className="userfile"
+          className="branchfile"
           onChange={(e) => handleFileUpload(e.target.files[0])}
-          style={{ flex: "" }}
         />
 
         <div
@@ -338,10 +405,10 @@ const Businesshead = () => {
             marginTop: "-60px",
           }}
         >
-          <Button style={{ flex: "" }}>
+          <Button>
             <CSVLink
               data={samplecsv}
-              filename={"samplebranchdata"}
+              filename={"sampleverticalheaddata"}
               target="_blank"
             >
               Sample
@@ -354,44 +421,13 @@ const Businesshead = () => {
             rounded
             onClick={downloadCSV}
             style={{
-              flex: "",
-              marginRight: "0px",
+              marginRight: "20px",
               backgroundColor: "lightgreen",
               border: "none",
             }}
             title="Download CSV"
           />
         </div>
-
-        {err && (
-          <>
-            <div className="popup-background"></div>
-            <div className="popup-wrapper">
-              <p className="investmsgp">{err}</p>
-              <div className="investmsg-buttons">
-                <a href="/admin/principalmaster">
-                  <button className="investmsg-no" onClick={() => setErr(null)}>
-                    Close
-                  </button>
-                </a>
-              </div>
-            </div>
-          </>
-        )}
-
-        {msg && (
-          <>
-            <div className="popup-background"></div>
-            <div className="popup-wrapper">
-              <p className="investmsgp">{msg}</p>
-              <a href="/admin/principalmaster">
-                <p className="investmsgclose" onClick={() => setMsg(null)}>
-                  close
-                </p>
-              </a>
-            </div>
-          </>
-        )}
       </div>
       <div className="flex justify-content-between gap-5 clearred">
         <Button
@@ -412,116 +448,128 @@ const Businesshead = () => {
           />
         </span>
       </div>
-      </div> */}
-
-            <DataTable
-                value={posts}
-                filters={filters}
-                responsiveLayout="scroll"
-                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                dataKey="id"
-                paginator
-                emptyMessage="No data found."
-                className="datatable-responsive"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} posts"
-                rows={5}
-                showGridlines
-                removableSort
-                rowsPerPageOptions={[5, 10, 25, 50]}
-                selection={selectedPost}
-                onRowSelect={(e) => setSelectedPost(e.data)}
-                onRowUnselect={() => setSelectedPost(null)}
-            >
-                <Column field="businessHeadCode" sortable header="Business Head Code"></Column>
-                <Column field="businessHeadName" sortable header="Business Head Name"></Column>
-                <Column field="verticalCode" sortable header="Vertical Code"></Column>
-                <Column field="verticalName" sortable header="Vertical Name"></Column>
-                <Column
-                    body={(rowData) => (
-                        <Button
-                            label="Update"
-                            icon="pi pi-pencil"
-                            onClick={() => {
-                                setEditedPost(rowData);
-                                setEditDialogVisible(true);
-                            }}
-                        />
-                    )}
+      <DataTable
+        value={posts}
+        filters={filters}
+        responsiveLayout="scroll"
+        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+        dataKey="id"
+        paginator
+        emptyMessage="No data found."
+        className="datatable-responsive"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} posts"
+        rows={5}
+        showGridlines
+        removableSort
+        rowsPerPageOptions={[5, 10, 25, 50]}
+        selection={selectedPost}
+        onRowSelect={(e) => setSelectedPost(e.data)}
+        onRowUnselect={() => setSelectedPost(null)}
+      >
+        <Column field="businessHeadCode" sortable header="Business Head Code"></Column>
+        <Column field="businessHeadName" sortable header="Business Head Name"></Column>
+        <Column field="verticalCode" sortable header="Vertical Code"></Column>
+        <Column field="verticalName" sortable header="Vertical Name"></Column>
+        <Column
+          body={(rowData) => (
+            <Button
+              label="Update"
+              icon="pi pi-pencil"
+              onClick={() => {
+                setEditedPost(rowData);
+                setEditDialogVisible(true);
+              }}
+            />
+          )}
+        />
+      </DataTable>
+      <Dialog
+        header="Edit Business Head Data"
+        visible={editDialogVisible}
+        style={{ width: "50vw" }}
+        modal
+        onHide={() => setEditDialogVisible(false)}
+        className="my-dialog"
+      >
+        {editedPost && (
+          <div>
+            <div className="p-fluid">
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="businessHeadCode">Business Head Code</label>
+                <InputText
+                  id="businessHeadCode"
+                  value={editedPost.businessHeadCode}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      businessHeadCode: e.target.value,
+                    })
+                  }
                 />
-            </DataTable>
-            <Dialog
-                header="Edit Business Head Data"
-                visible={editDialogVisible}
-                style={{ width: "50vw" }}
-                modal
-                onHide={() => setEditDialogVisible(false)}
-                className="my-dialog"
-            >
-                {editedPost && (
-                    <div>
-                        <div className="p-fluid">
-                            <div className="p-field" style={{ paddingBottom: "10px" }}>
-                                <label htmlFor="businessHeadCode">Business Head Code</label>
-                                <InputText
-                                    id="businessHeadCode"
-                                    value={editedPost.businessHeadCode}
-                                    onChange={(e) =>
-                                        setEditedPost({
-                                            ...editedPost,
-                                            businessHeadCode: e.target.value,
-                                        })
-                                    }
-                                />
-                            </div>
+              </div>
 
-                            <div className="p-field" style={{ paddingBottom: "10px" }}>
-                                <label htmlFor="businessHeadName">Business Head Name</label>
-                                <InputText
-                                    id="businessHeadName"
-                                    value={editedPost.businessHeadName}
-                                    onChange={(e) =>
-                                        setEditedPost({
-                                            ...editedPost,
-                                            businessHeadName: e.target.value,
-                                        })
-                                    }
-                                />
-                            </div>
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="businessHeadName">Business Head Name</label>
+                <InputText
+                  id="businessHeadName"
+                  value={editedPost.businessHeadName}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      businessHeadName: e.target.value,
+                    })
+                  }
+                />
+              </div>
 
-                            <div className="p-field" style={{ paddingBottom: "10px" }}>
-                                <label htmlFor="verticalCode">Vertical Code</label>
-                                <InputText
-                                    id="verticalCode"
-                                    value={editedPost.verticalCode}
-                                    onChange={(e) =>
-                                        setEditedPost({
-                                            ...editedPost,
-                                            verticalCode: e.target.value,
-                                        })
-                                    }
-                                />
-                            </div>
-
-                            <div className="p-field" style={{ paddingBottom: "10px" }}>
-                                <label htmlFor="verticalName">Vertical Name</label>
-                                <InputText
-                                    id="verticalName"
-                                    value={editedPost.verticalName}
-                                    onChange={(e) =>
-                                        setEditedPost({
-                                            ...editedPost,
-                                            verticalName: e.target.value,
-                                        })
-                                    }
-                                />
-                            </div>
-                        </div>
-                        <Button label="Save" icon="pi pi-check" onClick={saveEditedPost} />
-                    </div>
-                )}
-            </Dialog>
-        </div>
-    );
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="verticalCode">vertical Code</label>
+                <select
+                  required
+                  id="verticalCode"
+                  name="verticalCode"
+                  value={editedPost.verticalCode || ""}
+                  onChange={(e) =>
+                    setEditedPost({ ...editedPost, verticalCode: e.target.value })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  <option value="">Select vertical Code</option>
+                  {verticals.map((vertical) => (
+                    <option key={vertical.verticalCode} value={vertical.verticalCode}>
+                      {vertical.verticalCode}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="verticalName">vertical Name</label>
+                <select
+                  required
+                  id="verticalName"
+                  name="verticalName"
+                  value={editedPost.verticalName || ""}
+                  onChange={(e) =>
+                    setEditedPost({ ...editedPost, verticalName: e.target.value })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  {filteredverticals.map((vertical) => (
+                    <option key={vertical.verticalName} value={vertical.verticalName}>
+                      {vertical.verticalName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <Button label="Save" icon="pi pi-check" onClick={saveEditedPost} />
+          </div>
+        )}
+      </Dialog>
+    </div>
+  );
 };
 
 export default Businesshead;

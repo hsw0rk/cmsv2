@@ -26,16 +26,13 @@ import {
 
   principaldata,editprincipal,adminprincipal,getverticalinprincipal,getproductinprincipal,
 
-  businessheaddata,editbusinesshead,
-  // adminbusinesshead,
-  // regionheaddata,
-  // editregionhead,
+  businessheaddata,editbusinesshead,adminbusinesshead,getverticalinbusinesshead,
 
-  regionheaddata,editregionhead,
+  regionheaddata,editregionhead,adminregionhead,
  
   verticalheaddata,editverticalhead,
 
-  coheaddata,editcoheadmaster,
+  coheaddata,editcoheadmaster,adminco,
 
 } from "../controllers/auth.js";
 
@@ -106,13 +103,14 @@ router.get("/getproductinprincipal", getproductinprincipal);
 //businessheadmaster
 router.get("/businessheaddata", businessheaddata);
 router.put("/editbusinesshead/:id", editbusinesshead);
-// router.post("/adminbusinesshead", adminbusinesshead);
-// router.get("/getverticalinprincipal", getverticalinprincipal);
-// router.get("/getproductinprincipal", getproductinprincipal);
+router.post("/adminbusinesshead", adminbusinesshead);
+router.get("/getverticalinbusinesshead", getverticalinbusinesshead);
 
 //regionheadmaster
 router.get("/regionheaddata", regionheaddata);
 router.put("/editregionhead/:id", editregionhead);
+router.post("/adminregionhead", adminregionhead);
+
 
 //verticalheadmaster
 router.get("/verticalheaddata", verticalheaddata);
@@ -121,6 +119,7 @@ router.put("/editverticalhead/:id", editverticalhead);
 //coheadmaster
 router.get("/coheaddata", coheaddata);
 router.put("/editcoheadmaster/:id", editcoheadmaster);
+router.post("/adminco", adminco);
 
 //approvalmaster
 router.get("/approvaldata", approvaldata);

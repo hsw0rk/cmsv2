@@ -745,60 +745,67 @@ export const editbusinesshead = (req, res) => {
   });
 };
 
-// export const adminbusinesshead = (req, res) => {
-//   const businessHeadCode = req.body.verticalName;
-//   const businessHeadName = req.body.productName;
-//   const principal = req.body.principal;
+export const adminbusinesshead = (req, res) => {
+  const businessHeadCode = req.body.businessHeadCode;
+  const businessHeadName = req.body.businessHeadName;
+  const verticalCode = req.body.verticalCode;
+  const verticalName = req.body.verticalName;
 
-//   // Check if the data already exists in the database based on multiple fields
-//   const checkDuplicateQuery = "SELECT * FROM principalmaster WHERE verticalName = ? AND productName = ? AND principal = ?";
-//   const values = [verticalName, productName, principal ];
+  // Check if the data already exists in the database based on multiple fields
+  const checkDuplicateQuery =
+    "SELECT * FROM businessheadmaster WHERE businessHeadCode = ? AND businessHeadName = ? AND verticalCode = ? AND verticalName = ?";
+  const values = [businessHeadCode, businessHeadName, verticalCode, verticalName];
 
-//   db.query(checkDuplicateQuery, values, (err, results) => {
-//     if (err) return res.status(500).json(err);
+  db.query(checkDuplicateQuery, values, (err, results) => {
+    if (err) return res.status(500).json(err);
 
-//     if (results.length > 0) {
-//       // If the data already exists, update the existing row
-//       const updateQuery = "UPDATE principalmaster SET verticalName = ? AND productName = ? AND principal = ?";
-//       const updateValues = [verticalName, productName, principal];
+    if (results.length > 0) {
+      // If the data already exists, update the existing row
+      const updateQuery =
+        "UPDATE businessheadmaster SET businessHeadCode = ?, businessHeadName = ?, verticalCode = ?, verticalName = ? WHERE businessHeadCode = ? AND businessHeadName = ? AND verticalCode = ? AND verticalName = ?";
+      const updateValues = [
+        businessHeadCode,
+        businessHeadName,
+        verticalCode,
+        verticalName,
+        businessHeadCode,
+        businessHeadName,
+        verticalCode,
+        verticalName,
+      ];
 
-//       db.query(updateQuery, updateValues, (err, data) => {
-//         if (err) return res.status(500).json(err);
-//         return res.status(200).json("Principal data has been updated!");
-//       });
-//     } else {
-//       // If the data does not exist, insert the data into the database
-//       const insertQuery = "INSERT INTO principalmaster (`verticalName`,`productName`,`principal`) VALUES (?)";
+      db.query(updateQuery, updateValues, (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("Business Head data has been updated!");
+      });
+    } else {
+      // If the data does not exist, insert the data into the database
+      const insertQuery =
+        "INSERT INTO businessheadmaster (`businessHeadCode`,`businessHeadName`,`verticalCode`,`verticalName`) VALUES (?, ?, ?, ?)";
 
-//       const insertValues = [
-//         verticalName,
-//         productName,
-//         principal,
-//       ];
+      const insertValues = [
+        businessHeadCode,
+        businessHeadName,
+        verticalCode,
+        verticalName,
+      ];
 
-//       db.query(insertQuery, [insertValues], (err, data) => {
-//         if (err) return res.status(500).json(err);
-//         return res.status(200).json("Principal data has been created!");
-//       });
-//     }
-//   });
-// };
+      db.query(insertQuery, insertValues, (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("Business Head data has been created!");
+      });
+    }
+  });
+};
 
-// export const getverticalinprincipal = (req, res) => {
-//   const q = "SELECT * FROM verticalmaster";
-//   db.query(q, (err, data) => {
-//     if (err) return res.status(500).json("Internal server error");
-//     return res.status(200).json(data);
-//   });
-// };
 
-// export const getproductinprincipal = (req, res) => {
-//   const q = "SELECT * FROM productmaster";
-//   db.query(q, (err, data) => {
-//     if (err) return res.status(500).json("Internal server error");
-//     return res.status(200).json(data);
-//   });
-// };
+export const getverticalinbusinesshead = (req, res) => {
+  const q = "SELECT * FROM verticalmaster";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
+  });
+};
 
 
 //regionheadmaster
@@ -819,6 +826,59 @@ export const editregionhead = (req, res) => {
   db.query(q, (err, data) => {
     if (err) return res.status(500).json(err);
     return res.status(200).json(data);
+  });
+};
+
+export const adminregionhead = (req, res) => {
+  const regionHeadCode = req.body.regionHeadCode;
+  const regionHeadName = req.body.regionHeadName;
+  const regionCode = req.body.regionCode;
+  const regionName = req.body.regionName;
+
+  // Check if the data already exists in the database based on multiple fields
+  const checkDuplicateQuery =
+    "SELECT * FROM regionheadmaster WHERE regionHeadCode = ? AND regionHeadName = ? AND regionCode = ? AND regionName = ?";
+  const values = [regionHeadCode, regionHeadName, regionCode, regionName];
+
+  db.query(checkDuplicateQuery, values, (err, results) => {
+    if (err) return res.status(500).json(err);
+
+    if (results.length > 0) {
+      // If the data already exists, update the existing row
+      const updateQuery =
+        "UPDATE regionheadmaster SET regionHeadCode = ?, regionHeadName = ?, regionCode = ?, regionName = ? WHERE regionHeadCode = ? AND regionHeadName = ? AND regionCode = ? AND regionName = ?";
+      const updateValues = [
+        regionHeadCode,
+        regionHeadName,
+        regionCode,
+        regionName,
+        regionHeadCode,
+        regionHeadName,
+        regionCode,
+        regionName,
+      ];
+
+      db.query(updateQuery, updateValues, (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("Region Head data has been updated!");
+      });
+    } else {
+      // If the data does not exist, insert the data into the database
+      const insertQuery =
+        "INSERT INTO regionheadmaster (`regionHeadCode`,`regionHeadName`,`regionCode`,`regionName`) VALUES (?, ?, ?, ?)";
+
+      const insertValues = [
+        regionHeadCode,
+        regionHeadName,
+        regionCode,
+        regionName,
+      ];
+
+      db.query(insertQuery, insertValues, (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("Region Head data has been created!");
+      });
+    }
   });
 };
 
@@ -862,5 +922,38 @@ export const editcoheadmaster = (req, res) => {
   db.query(q, (err, data) => {
     if (err) return res.status(500).json(err);
     return res.status(200).json(data);
+  });
+};
+
+export const adminco = (req, res) => {
+  const coHeadCode = req.body.coHeadCode;
+  const coHeadName = req.body.coHeadName;
+
+  // Check if the data already exists in the database based on multiple fields
+  const checkDuplicateQuery = "SELECT * FROM coheadmaster WHERE coHeadCode = ? AND coHeadName = ?";
+  const values = [coHeadCode, coHeadName];
+
+  db.query(checkDuplicateQuery, values, (err, results) => {
+    if (err) return res.status(500).json(err);
+
+    if (results.length > 0) {
+      // If the data already exists, update the existing row
+      const updateQuery = "UPDATE coheadmaster SET coHeadCode = ?, coHeadName = ? WHERE coHeadCode = ? AND coHeadName = ?";
+      const updateValues = [coHeadCode, coHeadName, coHeadCode, coHeadName];
+
+      db.query(updateQuery, updateValues, (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("CO Head data has been updated!");
+      });
+    } else {
+      // If the data does not exist, insert the data into the database
+      const insertQuery = "INSERT INTO coheadmaster (`coHeadCode`, `coHeadName`) VALUES (?, ?)";
+      const insertValues = [coHeadCode, coHeadName];
+
+      db.query(insertQuery, insertValues, (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("CO Head data has been created!");
+      });
+    }
   });
 };

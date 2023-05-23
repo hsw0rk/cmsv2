@@ -5,6 +5,9 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import axios from "axios";
+import Papa from "papaparse";
+import { CSVLink } from "react-csv";
+import exc from "../../../Assets/exc.svg";
 import { data } from "../../../constants/admindata";
 import UserInfo from "../../../Components/Admin/user-info/UserInfo";
 import "./product.css";
@@ -126,6 +129,120 @@ const Product = () => {
       );
     }
   }, [editedPost, verticals]);
+
+  const clearFilter = () => {
+    initFilters();
+  };
+
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    let _filters = { ...filters };
+
+    if (_filters.global) {
+      _filters.global.value = value;
+    } else {
+      _filters.global = { value, matchMode: FilterMatchMode.CONTAINS };
+    }
+
+    setFilters(_filters);
+    setGlobalFilterValue(value);
+  };
+
+
+  const initFilters = () => {
+    setFilters({
+      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      verticalName: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },
+      verticalCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      productName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      productCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    });
+    setGlobalFilterValue("");
+  };
+
+
+  const downloadCSV = () => {
+    // Define the headers for the CSV
+    const headers = [
+      "Vertical Name",
+      "Vertical Code",
+      "Product Name",
+      "Product Code",
+    ];
+
+    // Create an array of rows to be included in the CSV
+    const rows = posts.map((post) => [
+      post.verticalName,
+      post.verticalCode,
+      post.productName,
+      post.productCode,
+    ]);
+
+    // Combine headers and rows into a single array
+    const csvData = [headers, ...rows];
+
+    // Convert the array to CSV content
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      csvData.map((row) => row.join(",")).join("\n");
+
+    // Create a download link and trigger the download
+    const encodedURI = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedURI);
+    link.setAttribute("download", "productmaster.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+
+  const samplecsv = [
+    {
+      id: "",
+      verticalName: "",
+      regionCode: "",
+      productName: "",
+      productCode: "",
+    },
+  ];
+
+  const handleFileUpload = (file) => {
+    Papa.parse(file, {
+      header: true,
+      complete: async (results) => {
+        const { data } = results;
+        const filteredData = data.filter((row) => {
+          // Check if all values in the row are empty or not
+          return Object.values(row).some((value) => value.trim() !== "");
+        });
+        for (let i = 0; i < filteredData.length; i++) {
+          const row = filteredData[i];
+          try {
+            await axios.post("http://localhost:8800/api/auth/adminregionhead", row);
+            console.log(`Inserted row ${i + 1}: ${JSON.stringify(row)}`);
+          } catch (err) {
+            console.error(
+              `Error inserting row ${i + 1}: ${JSON.stringify(row)}`
+            );
+            console.error(err);
+            alert("Error occurred while uploading data. Please try again.");
+            return;
+          }
+        }
+        setPosts(filteredData);
+        alert("Data has been uploaded successfully.");
+      },
+      error: (error) => {
+        console.error(error);
+        alert("Error occurred while uploading data. Please try again.");
+      },
+    });
+  };
+
 
   return (
     <div className="form">
@@ -276,6 +393,66 @@ const Product = () => {
           )}
         </div>
       </div>
+      <input
+          type="file"
+          className="branchfile"
+          onChange={(e) => handleFileUpload(e.target.files[0])}
+        />
+
+        <div
+          className="flex align-items-end justify-content-end gap-2 exc"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            gap: "2px",
+            marginBottom: "30px",
+            marginTop: "-60px",
+          }}
+        >
+          <Button>
+            <CSVLink
+              data={samplecsv}
+              filename={"sampleregionheaddata"}
+              target="_blank"
+            >
+              Sample
+            </CSVLink>
+          </Button>
+
+          <Button
+            type="button"
+            icon={<img alt="excel icon" src={exc} />}
+            rounded
+            onClick={downloadCSV}
+            style={{
+              marginRight: "20px",
+              backgroundColor: "lightgreen",
+              border: "none",
+            }}
+            title="Download CSV"
+          />
+        </div>
+
+      <div className="flex justify-content-between gap-5 clearred">
+        <Button
+          type="button"
+          icon="pi pi-filter-slash"
+          label="Clear"
+          outlined
+          onClick={clearFilter}
+          style={{ marginLeft: "20px", color: "red" }}
+        />
+        <span className="p-input-icon-left search">
+          <i className="pi pi-search" />
+          <InputText
+            value={globalFilterValue}
+            onChange={onGlobalFilterChange}
+            placeholder="Search"
+            className="searchbar"
+          />
+        </span>
+      </div>
 
       <DataTable
         value={posts}
@@ -313,7 +490,7 @@ const Product = () => {
         />
       </DataTable>
       <Dialog
-        header="Edit Product Data"
+        header="Update Product Data"
         visible={editDialogVisible}
         style={{ width: "50vw" }}
         modal

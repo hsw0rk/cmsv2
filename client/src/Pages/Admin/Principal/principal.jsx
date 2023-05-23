@@ -354,7 +354,7 @@ const Principal = () => {
           <Button style={{ flex: "" }}>
             <CSVLink
               data={samplecsv}
-              filename={"samplebranchdata"}
+              filename={"sampleprincipaldata"}
               target="_blank"
             >
               Sample
@@ -461,7 +461,7 @@ const Principal = () => {
         />
       </DataTable>
       <Dialog
-        header="Edit Principal Data"
+        header="Update Principal Data"
         visible={editDialogVisible}
         style={{ width: "50vw" }}
         modal

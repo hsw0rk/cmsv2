@@ -20,98 +20,35 @@ const CO = () => {
   const [filters, setFilters] = useState({});
   const [editedPost, setEditedPost] = useState(null);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
+  const [showAdditionalregion, setShowAdditionalregion] = useState(false);
 
   const [err, setErr] = useState(null);
   const [msg, setMsg] = useState(null);
 
   const [inputs, setInputs] = useState({
-    verticalName: "",
-    productName: "",
-    principal: "",
+    coHeadCode: "",
+    coHeadName: "",
   });
 
-  const [vertical, setVertical] = useState([]);
-  const [product, setProduct] = useState([]);
-  const [filteredVerticals, setFilteredVerticals] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [showAdditionaluser, setShowAdditionaluser] = useState(false);
-
-  useEffect(() => {
-    const fetchVertical = async () => {
-      const res = await axios.get(
-        "http://localhost:8800/api/auth/getverticalinprincipal"
-      );
-      setVertical(res.data);
-    };
-    const fetchProduct = async () => {
-      const res = await axios.get(
-        "http://localhost:8800/api/auth/getproductinprincipal"
-      );
-      setProduct(res.data);
-    };
-    fetchVertical();
-    fetchProduct();
-  }, []);
-
-  useEffect(() => {
-    if (inputs.verticalName) {
-      const filteredVerticals = vertical.filter(
-        (verticals) => verticals.verticalName === inputs.verticalName
-      );
-      setFilteredVerticals(filteredVerticals);
-
-      const filteredProducts = product.filter(
-        (products) => products.verticalName === inputs.verticalName
-      );
-      setFilteredProducts(filteredProducts);
-    } else {
-      setFilteredVerticals([]);
-      setFilteredProducts([]);
-    }
-  }, [inputs.verticalName, vertical, product]);
-
   const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setInputs((prevInputs) => ({
-      ...prevInputs,
-      [name]: value,
+    setInputs((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
     }));
-
-    if (name === "verticalName") {
-      const selectedVertical = vertical.find(
-        (verticals) => verticals.verticalName === value
-      );
-      console.log("selectedVertical:", selectedVertical);
-      setInputs((prevInputs) => ({
-        ...prevInputs,
-        verticalName: value,
-        productName: "", // Reset the productName when changing the verticalName
-      }));
-
-      // Update filteredProducts based on selected verticalName
-      const filteredProducts = product.filter(
-        (products) => products.verticalName === value
-      );
-      setFilteredProducts(filteredProducts);
-    }
-
-    if (name === "productName") {
-      setInputs((prevInputs) => ({
-        ...prevInputs,
-        productName: value,
-      }));
-    }
   };
-
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await axios.post(
-        "http://localhost:8800/api/auth/adminbusinesshead",
-        { ...inputs }
+        "http://localhost:8800/api/auth/adminco",
+        {
+          ...inputs,
+          coHeadCode: inputs.coHeadCode,
+          coHeadName: inputs.coHeadName,
+        }
       );
       setMsg(response.data);
       setErr(null);
@@ -120,7 +57,7 @@ const CO = () => {
       setMsg(null);
     }
   };
-
+  
   useEffect(() => {
     axios.get("http://localhost:8800/api/auth/coheaddata").then((res) => {
       setPosts(res.data);
@@ -165,55 +102,67 @@ const CO = () => {
   const initFilters = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      businessHeadCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      businessHeadName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      verticalCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      verticalName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      coHeadCode: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },
+      coHeadName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     });
     setGlobalFilterValue("");
   };
 
   const downloadCSV = () => {
+    // Define the headers for the CSV
+    const headers = ["CO Head Code", "CO Head Name"];
+  
+    // Create an array of rows to be included in the CSV
+    const rows = posts.map((post) => [
+      post.coHeadCode,
+      post.coHeadName,
+    ]);
+  
+    // Combine headers and rows into a single array
+    const csvData = [headers, ...rows];
+  
+    // Convert the array to CSV content
     const csvContent =
       "data:text/csv;charset=utf-8," +
-      posts.map((post) => Object.values(post).join(",")).join("\n");
+      csvData.map((row) => row.join(",")).join("\n");
+  
+    // Create a download link and trigger the download
     const encodedURI = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedURI);
-    link.setAttribute("download", "businessheadmaster.csv");
+    link.setAttribute("download", "comaster.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
+  
 
   const samplecsv = [
-    {
-      id: "",
-      businessHeadCode: "",
-      businessHeadName: "",
-      verticalCode: "",
-      verticalName: "",
-    },
-  ];
+    { id: "", coHeadCode: "", coHeadName: "" }
+  ]
 
   const handleFileUpload = (file) => {
     Papa.parse(file, {
       header: true,
       complete: async (results) => {
         const { data } = results;
-        const filteredData = data.filter((row) => {
+        const filteredData = data.filter(row => {
           // Check if all values in the row are empty or not
-          return Object.values(row).some((value) => value.trim() !== "");
+          return Object.values(row).some(value => value.trim() !== '');
         });
         for (let i = 0; i < filteredData.length; i++) {
           const row = filteredData[i];
           try {
-            await axios.post("http://localhost:8800/api/auth/adminbusinesshead", row);
+            await axios.post(
+              "http://localhost:8800/api/auth/adminco",
+              row
+            );
             console.log(`Inserted row ${i + 1}: ${JSON.stringify(row)}`);
           } catch (err) {
-            console.error(
-              `Error inserting row ${i + 1}: ${JSON.stringify(row)}`
-            );
+            console.error(`Error inserting row ${i + 1}: ${JSON.stringify(row)}`);
             console.error(err);
             alert("Error occurred while uploading data. Please try again.");
             return;
@@ -243,88 +192,90 @@ const CO = () => {
         CO Head
       </p>
 
-      {/* <div>
       <p
         type="button"
-        className="Addbuttonuser"
-        onClick={() => setShowAdditionaluser(true)}
+        className="Addbuttonregion"
+        onClick={() => setShowAdditionalregion(true)}
       >
-        <i className="fa fa-plus"></i>Click Here to Create Principal{" "}
+        <i className="fa fa-plus"></i>Click Here to Create CO{" "}
       </p>
 
-      <div className={`additional-user ${showAdditionaluser ? "show" : ""}`}>
-        <div className="form-container-user">
-          <form className="formuser" onSubmit={handleSubmit}>
+      <div className={`additional-region ${showAdditionalregion ? "show" : ""}`}>
+        <div className="form-container-region">
+          <form className="formregion" onSubmit={handleSubmit}>
             <div>
               <label>
-                Vertical Name
-                <select
+                CO Head Code
+                <input
+                  autoComplete="off"
                   required
-                  className="userinput"
-                  id="verticalName"
-                  name="verticalName"
-                  value={inputs.verticalName || ""}
+                  className="regioninput"
+                  id="coHeadCode"
+                  name="coHeadCode"
                   onChange={handleChange}
-                >
-                  <option value="">Select Vertical Name</option>
-                  {vertical.map((verticals) => (
-                    <option
-                      key={verticals.verticalName}
-                      value={verticals.verticalName}
-                    >
-                      {verticals.verticalName}
-                    </option>
-                  ))}
-                </select>
+                  type="number"
+                />
               </label>
             </div>
 
             <div>
               <label>
-                Product Name
-                <select
-                  className="userinput"
-                  id="productName"
-                  name="productName"
-                  value={inputs.productName || ""}
-                  onChange={handleChange}
-                >
-                  {filteredVerticals.map((product) => (
-                    <option
-                      key={product.productName}
-                      value={product.productName}
-                    >
-                      {product.productName}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-
-            <div>
-              <label>
-                Principal
+                CO Head Name
                 <input
                   required
-                  className="userinput"
-                  id="principal"
-                  name="principal"
+                  autoComplete="off"
+                  className="regioninput"
+                  id="coHeadName"
+                  name="coHeadName"
                   onChange={handleChange}
                 />
               </label>
             </div>
 
-            <button type="submit" className="Submitbuttonuser">
+            <button type="submit" className="Submitbuttonregion">
               Submit
             </button>
+
+
           </form>
+          {err && (
+            <>
+              <div className="popup-background"></div>
+              <div className="popup-wrapper">
+                <p className="investmsgp">{err}</p>
+                <div className="investmsg-buttons">
+                  <button className="investmsg-yes" onClick={handleSubmit}>
+                    Yes
+                  </button>
+                  <a href="/admin/comaster">
+                    <button className="investmsg-no" onClick={() => setErr(null)}>
+                      No
+                    </button>
+                  </a>
+                </div>
+              </div>
+            </>
+          )}
+
+          {msg && (
+            <>
+              <div className="popup-background"></div>
+              <div className="popup-wrapper">
+                <p className="investmsgp">{msg}</p>
+                <a href="/admin/comaster">
+                  <p className="investmsgclose" onClick={() => setMsg(null)}>
+                    close
+                  </p>
+                </a>
+              </div>
+            </>
+          )}
         </div>
+
 
         <input
           type="file"
-          className="userfile"
           onChange={(e) => handleFileUpload(e.target.files[0])}
-          style={{ flex: "" }}
         />
 
         <div
@@ -335,18 +286,15 @@ const CO = () => {
             justifyContent: "flex-start",
             gap: "2px",
             marginBottom: "30px",
-            marginTop: "-60px",
+            marginTop: "-50px",
           }}
         >
-          <Button style={{ flex: "" }}>
-            <CSVLink
-              data={samplecsv}
-              filename={"samplebranchdata"}
-              target="_blank"
-            >
-              Sample
-            </CSVLink>
-          </Button>
+          <Button><CSVLink
+            data={samplecsv}
+            filename={"samplecodata"}
+            target="_blank"
+          >Sample</CSVLink></Button>
+
 
           <Button
             type="button"
@@ -354,45 +302,16 @@ const CO = () => {
             rounded
             onClick={downloadCSV}
             style={{
-              flex: "",
-              marginRight: "0px",
+              marginRight: "20px",
               backgroundColor: "lightgreen",
               border: "none",
             }}
             title="Download CSV"
           />
+
         </div>
-
-        {err && (
-          <>
-            <div className="popup-background"></div>
-            <div className="popup-wrapper">
-              <p className="investmsgp">{err}</p>
-              <div className="investmsg-buttons">
-                <a href="/admin/principalmaster">
-                  <button className="investmsg-no" onClick={() => setErr(null)}>
-                    Close
-                  </button>
-                </a>
-              </div>
-            </div>
-          </>
-        )}
-
-        {msg && (
-          <>
-            <div className="popup-background"></div>
-            <div className="popup-wrapper">
-              <p className="investmsgp">{msg}</p>
-              <a href="/admin/principalmaster">
-                <p className="investmsgclose" onClick={() => setMsg(null)}>
-                  close
-                </p>
-              </a>
-            </div>
-          </>
-        )}
       </div>
+      
       <div className="flex justify-content-between gap-5 clearred">
         <Button
           type="button"
@@ -412,8 +331,6 @@ const CO = () => {
           />
         </span>
       </div>
-      </div> */}
-
       <DataTable
         value={posts}
         filters={filters}
@@ -448,7 +365,7 @@ const CO = () => {
         />
       </DataTable>
       <Dialog
-        header="Edit CO Head Data"
+        header="Update CO Head Data"
         visible={editDialogVisible}
         style={{ width: "50vw" }}
         modal
@@ -487,9 +404,6 @@ const CO = () => {
                   }
                 />
               </div>
-
-
-
             </div>
             <Button label="Save" icon="pi pi-check" onClick={saveEditedPost} />
           </div>
