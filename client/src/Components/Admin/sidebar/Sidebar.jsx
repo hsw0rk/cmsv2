@@ -145,7 +145,7 @@ const Sidebar = () => {
                   }}>
                   <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
                     <i
-                      className="sidebar__menu__item__icon bx bx-cube pl-2"
+                      className="sidebar__menu__item__icon bx bx-box pl-2"
                       style={{ fontSize: "25px", marginRight: "25px" }}
                     ></i>
                     Product Master
@@ -160,7 +160,7 @@ const Sidebar = () => {
                   }}>
                   <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
                     <i
-                      className="sidebar__menu__item__icon bx bx-cube pl-2"
+                      className="sidebar__menu__item__icon bx bx-collection pl-2"
                       style={{ fontSize: "25px", marginRight: "25px" }}
                     ></i>
                     Principal Master
@@ -175,7 +175,7 @@ const Sidebar = () => {
                   }}>
                   <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
                     <i
-                      className="sidebar__menu__item__icon bx bx-cube pl-2"
+                      className="sidebar__menu__item__icon bx bx-briefcase pl-2"
                       style={{ fontSize: "25px", marginRight: "25px" }}
                     ></i>
                     Business Head Master
@@ -190,7 +190,7 @@ const Sidebar = () => {
                   }}>
                   <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
                     <i
-                      className="sidebar__menu__item__icon bx bx-cube pl-2"
+                      className="sidebar__menu__item__icon bx bx-folder-open pl-2"
                       style={{ fontSize: "25px", marginRight: "25px" }}
                     ></i>
                     Region Head Master
@@ -205,7 +205,7 @@ const Sidebar = () => {
                   }}>
                   <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
                     <i
-                      className="sidebar__menu__item__icon bx bx-cube pl-2"
+                      className="sidebar__menu__item__icon bx  bx-folder-plus pl-2"
                       style={{ fontSize: "25px", marginRight: "25px" }}
                     ></i>
                     Vertical Head Master
@@ -235,7 +235,7 @@ const Sidebar = () => {
                   }}>
                   <div className="pt-pl-1 sidebar__menu__item font-dark text-right list">
                     <i
-                      className="sidebar__menu__item__icon bx bx-cube pl-2"
+                      className="sidebar__menu__item__icon bx bx-user-plus pl-2"
                       style={{ fontSize: "25px", marginRight: "25px" }}
                     ></i>
                     CO Master

@@ -313,7 +313,7 @@ const User = () => {
           fontSize: "20px",
         }}
       >
-        User
+        Employee
       </p>
 
       <p
