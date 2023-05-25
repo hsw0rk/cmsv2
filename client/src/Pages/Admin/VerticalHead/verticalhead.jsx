@@ -45,7 +45,12 @@ const Verticalhead = () => {
   const [filteredregionheads, setFilteredregionheads] = useState([]);
   const [filteredbusinessheads, setFilteredbusinessheads] = useState([]);
   const [showAdditionaluser, setShowAdditionaluser] = useState(false);
+  const [filteredEditverticals, setFilteredEditverticals] = useState([]);
+  const [filteredEditbusinessheads, setFilteredEditbusinessheads] = useState([]);
+  const [filteredEditregions, setFilteredEditregions] = useState([]);
+  const [filteredEditregionheads, setFilteredEditregionheads] = useState([]);
 
+  // fetch
   useEffect(() => {
     const fetchvertical = async () => {
       const res = await axios.get(
@@ -53,7 +58,6 @@ const Verticalhead = () => {
       );
       setvertical(res.data);
     };
-
 
     const fetchbusinesshead = async () => {
       const res = await axios.get(
@@ -69,7 +73,6 @@ const Verticalhead = () => {
       setregion(res.data);
     };
 
-
     const fetchregionhead = async () => {
       const res = await axios.get(
         "http://localhost:8800/api/auth/getregionheadinverticalhead"
@@ -83,6 +86,7 @@ const Verticalhead = () => {
     fetchregionhead();
   }, []);
 
+  //filters
   useEffect(() => {
     if (inputs.verticalCode) {
       const filteredverticals = vertical.filter(
@@ -99,7 +103,6 @@ const Verticalhead = () => {
       setFilteredbusinessheads([]);
     }
 
-
     if (inputs.regionCode) {
       const filteredregions = region.filter(
         (regions) => regions.regionCode === inputs.regionCode
@@ -114,13 +117,48 @@ const Verticalhead = () => {
       setFilteredregions([]);
       setFilteredregionheads([]);
     }
+  }, [
+    inputs.verticalCode,
+    vertical,
+    businesshead,
+    inputs.regionCode,
+    region,
+    regionhead,
+  ]);
 
+  useEffect(() => {
+    if (editedPost && editedPost.verticalCode) {
+      const filteredverticals = vertical.filter(
+        (verticals) => verticals.verticalCode === editedPost.verticalCode
+      );
+      setFilteredEditverticals(filteredverticals);
+  
+      const filteredbusinessheads = businesshead.filter(
+        (businessheads) => businessheads.verticalCode === editedPost.verticalCode
+      );
+      setFilteredEditbusinessheads(filteredbusinessheads);
+    } else {
+      setFilteredEditverticals([]);
+      setFilteredEditbusinessheads([]);
+    }
+  
+    if (editedPost && editedPost.regionCode) {
+      const filteredregions = region.filter(
+        (regions) => regions.regionCode === editedPost.regionCode
+      );
+      setFilteredEditregions(filteredregions);
+  
+      const filteredregionheads = regionhead.filter(
+        (regionheads) => regionheads.regionCode === editedPost.regionCode
+      );
+      setFilteredEditregionheads(filteredregionheads);
+    } else {
+      setFilteredEditregions([]);
+      setFilteredEditregionheads([]);
+    }
+  }, [editedPost, vertical, businesshead, region, regionhead]);  
 
-  }, [inputs.verticalCode, vertical, businesshead]
-  [inputs.regionCode, region, regionhead]);
-
-
-
+  //input change
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -129,70 +167,64 @@ const Verticalhead = () => {
       [name]: value,
     }));
 
-    if (name === "verticalName") {
-      const selectedvertical = vertical.find(
-        (verticals) => verticals.verticalName === value
+    if (name === "verticalCode") {
+      const selectedVertical = businesshead.find(
+        (businessheads) => businessheads.verticalCode === value
       );
-      console.log("selectedvertical:", selectedvertical);
+
       setInputs((prevInputs) => ({
         ...prevInputs,
-        verticalName: value,
-        businessHeadName: "", // Reset the productName when changing the verticalName
-      }));
-
-      // Update filteredProducts based on selected verticalName
-      const filteredbusinessheads = businesshead.filter(
-        (businessheads) => businessheads.verticalName === value
-      );
-      setFilteredbusinessheads(filteredbusinessheads);
-    }
-
-    if (name === "businessHeadName") {
-      setInputs((prevInputs) => ({
-        ...prevInputs,
-        businessHeadName: value,
+        verticalName: selectedVertical ? selectedVertical.verticalName : "",
+        businessHeadName: selectedVertical
+          ? selectedVertical.businessHeadName
+          : "",
+        businessHeadCode: selectedVertical
+          ? selectedVertical.businessHeadCode
+          : "",
       }));
     }
 
-    if (name === "regionName") {
-      const selectedregion = region.find(
-        (regions) => regions.regionName === value
+    if (name === "regionCode") {
+      const selectedRegion = region.find(
+        (regions) => regions.regionCode === value
       );
-      console.log("selectedregion:", selectedregion);
+      console.log("selectedRegion:", selectedRegion);
       setInputs((prevInputs) => ({
         ...prevInputs,
-        regionName: value,
-        regionHeadName: "", // Reset the productName when changing the verticalName
+        regionName: selectedRegion ? selectedRegion.regionName : "",
+        regionHeadName: "",
       }));
 
-      // Update filteredProducts based on selected verticalName
       const filteredregionheads = regionhead.filter(
-        (regionheads) => regionheads.regionHeadName === value
+        (regionheads) => regionheads.regionCode === value
       );
       setFilteredregionheads(filteredregionheads);
-    }
 
-    if (name === "regionHeadName") {
-      setInputs((prevInputs) => ({
-        ...prevInputs,
-        regionHeadName: value,
-      }));
+      if (filteredregionheads.length === 1) {
+        const selectedRegionHead = filteredregionheads[0];
+        console.log("selectedRegionHead:", selectedRegionHead);
+        setInputs((prevInputs) => ({
+          ...prevInputs,
+          regionHeadName: selectedRegionHead.regionHeadName,
+          regionHeadCode: selectedRegionHead.regionHeadCode,
+        }));
+      }
     }
   };
 
-
+  //form submit (insert)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const response = await axios.post(
-        "http://localhost:8800/api/auth/adminregionhead",
+        "http://localhost:8800/api/auth/adminverticalhead",
         { ...inputs }
       );
-      setMsg(response.data);
+      setMsg(response.data); // Extract the 'msg' property from the response object
       setErr(null);
     } catch (err) {
-      setErr(err.response.data);
+      setErr(err.response.data); // Extract the 'err' property from the error object
       setMsg(null);
     }
   };
@@ -204,14 +236,52 @@ const Verticalhead = () => {
   }, []);
 
   const saveEditedPost = () => {
-    const selectedvertical = vertical.find(
+    console.log("Edited Post:", editedPost);
+  
+    const selectedVertical = vertical.find(
       (verticals) => verticals.verticalCode === editedPost.verticalCode
     );
-    if (selectedvertical) {
-      const updatedPost = { ...editedPost, verticalName: selectedvertical.verticalName };
+    console.log("Selected Vertical:", selectedVertical);
+  
+    const selectedBusinessHead = businesshead.find(
+      (businessheads) =>
+        businessheads.verticalCode === editedPost.verticalCode &&
+        businessheads.businessHeadName === editedPost.businessHeadName &&
+        businessheads.businessHeadCode === editedPost.businessHeadCode
+    );
+     
+    console.log("Selected Business Head:", selectedBusinessHead);
+    
+    const selectedRegion = region.find(
+      (regions) => regions.regionCode === editedPost.regionCode
+    );
+    console.log("Selected Region:", selectedRegion);
+  
+    const selectedRegionHead = regionhead.find(
+      (regionheads) =>
+        regionheads.regionCode === editedPost.regionCode &&
+        regionheads.regionHeadName === editedPost.regionHeadName
+    );
+    
+    console.log("Selected Region Head:", selectedRegionHead);
+  
+    if (
+      selectedVertical &&
+      selectedBusinessHead &&
+      selectedRegion &&
+      selectedRegionHead
+    ) {
+      const updatedPost = {
+        ...editedPost,
+        verticalName: selectedVertical.verticalName,
+        businessHeadCode: selectedBusinessHead.businessHeadCode,
+        regionName: selectedRegion.regionName,
+        regionHeadCode: selectedRegionHead.regionHeadCode,
+      };
+  
       axios
         .put(
-          `http://localhost:8800/api/auth/editbusinesshead/${editedPost.id}`,
+          `http://localhost:8800/api/auth/editverticalhead/${editedPost.id}`,
           updatedPost
         )
         .then((res) => {
@@ -223,97 +293,57 @@ const Verticalhead = () => {
           alert("You have edited the data.");
         })
         .catch((error) => console.log(error));
-    }
-  };
-
-  const clearFilter = () => {
-    initFilters();
-  };
-
-  const onGlobalFilterChange = (e) => {
-    const value = e.target.value;
-    let _filters = { ...filters };
-
-    if (_filters.global) {
-      _filters.global.value = value;
     } else {
-      _filters.global = { value, matchMode: FilterMatchMode.CONTAINS };
+      // Handle the case when a selected value is not found
+      console.log("One or more selected values not found.");
     }
-
-    setFilters(_filters);
-    setGlobalFilterValue(value);
   };
+  
+  
 
-  const initFilters = () => {
-    setFilters({
-      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      regionHeadCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      regionHeadName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      regionCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      regionName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-    });
-    setGlobalFilterValue("");
-  };
-
-  const downloadCSV = () => {
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      posts.map((post) => Object.values(post).join(",")).join("\n");
-    const encodedURI = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedURI);
-    link.setAttribute("download", "regionheadmaster.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const samplecsv = [
-    {
-      id: "",
-      regionHeadCode: "",
-      regionHeadName: "",
-      regionCode: "",
-      regionName: "",
-    },
-  ];
-
-  const handleFileUpload = (file) => {
-    Papa.parse(file, {
-      header: true,
-      complete: async (results) => {
-        const { data } = results;
-        const filteredData = data.filter((row) => {
-          // Check if all values in the row are empty or not
-          return Object.values(row).some((value) => value.trim() !== "");
-        });
-        for (let i = 0; i < filteredData.length; i++) {
-          const row = filteredData[i];
-          try {
-            await axios.post("http://localhost:8800/api/auth/adminregionhead", row);
-            console.log(`Inserted row ${i + 1}: ${JSON.stringify(row)}`);
-          } catch (err) {
-            console.error(
-              `Error inserting row ${i + 1}: ${JSON.stringify(row)}`
-            );
-            console.error(err);
-            alert("Error occurred while uploading data. Please try again.");
-            return;
-          }
-        }
-        setPosts(filteredData);
-        alert("Data has been uploaded successfully.");
-      },
-      error: (error) => {
-        console.error(error);
-        alert("Error occurred while uploading data. Please try again.");
-      },
-    });
-  };
+  useEffect(() => {
+    if (
+      editedPost &&
+      editedPost.regionCode &&
+      region.length > 0 &&
+      editedPost.regionHeadCode &&
+      regionhead.length > 0
+    ) {
+        const filteredRegions = region.filter(
+          (regions) => regions.regionCode === editedPost.regionCode
+        );
+        setFilteredregions(filteredRegions);
+    
+        const filteredRegionHeads = regionhead.filter(
+          (regionheads) =>
+          regionheads.regionCode === editedPost.regionCode &&
+          regionheads.regionHeadCode === editedPost.regionHeadCode
+        );
+        setFilteredregionheads(filteredRegionHeads);
+    }
+    if (
+      editedPost &&
+      editedPost.verticalCode &&
+      vertical.length > 0 &&
+      editedPost.businessHeadCode &&
+      businesshead.length > 0
+    ) {
+      const filteredVerticals = vertical.filter(
+        (verticals) => verticals.verticalCode === editedPost.verticalCode
+      );
+      setFilteredverticals(filteredVerticals);
+  
+      const filteredBusinessHeads = businesshead.filter(
+        (businessheads) =>
+          businessheads.verticalCode === editedPost.verticalCode &&
+          businessheads.businessHeadCode === editedPost.businessHeadCode
+      );
+      setFilteredbusinessheads(filteredBusinessHeads);
+    }
+  }, [editedPost, region, vertical, businesshead, regionhead]);
 
   return (
     <div className="form">
-
       <div className="suser">
         <UserInfo user={data.user} />
       </div>
@@ -331,7 +361,7 @@ const Verticalhead = () => {
           className="Addbuttonuser"
           onClick={() => setShowAdditionaluser(true)}
         >
-          <i className="fa fa-plus"></i>Click Here to Create Principal{" "}
+          <i className="fa fa-plus"></i>Click Here to Create Vertical Head{" "}
         </p>
 
         <div className={`additional-user ${showAdditionaluser ? "show" : ""}`}>
@@ -385,48 +415,31 @@ const Verticalhead = () => {
 
               <div>
                 <label>
-                  businessHead Name
-                  <select
+                  Business Head Name
+                  <input
+                    type="text"
                     className="userinput"
                     id="businessHeadName"
                     name="businessHeadName"
                     value={inputs.businessHeadName || ""}
-                    onChange={handleChange}
-                  >
-                    {filteredbusinessheads.map((businessheads) => (
-                      <option
-                        key={businessheads.businessHeadName}
-                        value={businessheads.businessHeadName}
-                      >
-                        {businessheads.businessHeadName}
-                      </option>
-                    ))}
-                  </select>
+                    readOnly
+                  />
                 </label>
               </div>
 
               <div>
                 <label>
-                  businessHead Code
-                  <select
+                  Business Head Code
+                  <input
+                    type="text"
                     className="userinput"
                     id="businessHeadCode"
                     name="businessHeadCode"
                     value={inputs.businessHeadCode || ""}
-                    onChange={handleChange}
-                  >
-                    {filteredbusinessheads.map((businessheads) => (
-                      <option
-                        key={businessheads.businessHeadCode}
-                        value={businessheads.businessHeadCode}
-                      >
-                        {businessheads.businessHeadCode}
-                      </option>
-                    ))}
-                  </select>
+                    readOnly
+                  />
                 </label>
               </div>
-
               <div>
                 <label>
                 Region Code
@@ -549,57 +562,17 @@ const Verticalhead = () => {
             </form>
           </div>
 
-          <input
-            type="file"
-            className="userfile"
-            onChange={(e) => handleFileUpload(e.target.files[0])}
-            style={{ flex: "" }}
-          />
-
-          <div
-            className="flex align-items-end justify-content-end gap-2 exc"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-start",
-              gap: "2px",
-              marginBottom: "30px",
-              marginTop: "-60px",
-            }}
-          >
-            <Button style={{ flex: "" }}>
-              <CSVLink
-                data={samplecsv}
-                filename={"samplebranchdata"}
-                target="_blank"
-              >
-                Sample
-              </CSVLink>
-            </Button>
-
-            <Button
-              type="button"
-              icon={<img alt="excel icon" src={exc} />}
-              rounded
-              onClick={downloadCSV}
-              style={{
-                flex: "",
-                marginRight: "0px",
-                backgroundColor: "lightgreen",
-                border: "none",
-              }}
-              title="Download CSV"
-            />
-          </div>
-
           {err && (
             <>
               <div className="popup-background"></div>
               <div className="popup-wrapper">
-                <p className="investmsgp">{err}</p>
+                <p className="investmsgp">{err.sqlMessage}</p>
                 <div className="investmsg-buttons">
-                  <a href="/admin/principalmaster">
-                    <button className="investmsg-no" onClick={() => setErr(null)}>
+                  <a href="/admin/verticalheadmaster">
+                    <button
+                      className="investmsg-no"
+                      onClick={() => setErr(null)}
+                    >
                       Close
                     </button>
                   </a>
@@ -613,7 +586,7 @@ const Verticalhead = () => {
               <div className="popup-background"></div>
               <div className="popup-wrapper">
                 <p className="investmsgp">{msg}</p>
-                <a href="/admin/principalmaster">
+                <a href="/admin/verticalheadmaster">
                   <p className="investmsgclose" onClick={() => setMsg(null)}>
                     close
                   </p>
@@ -621,25 +594,6 @@ const Verticalhead = () => {
               </div>
             </>
           )}
-        </div>
-        <div className="flex justify-content-between gap-5 clearred">
-          <Button
-            type="button"
-            icon="pi pi-filter-slash"
-            label="Clear"
-            outlined
-            onClick={clearFilter}
-            style={{ marginLeft: "20px", color: "red" }}
-          />
-          <span className="p-input-icon-left search">
-            <i className="pi pi-search" />
-            <InputText
-              value={globalFilterValue}
-              onChange={onGlobalFilterChange}
-              placeholder="Search"
-              className="searchbar"
-            />
-          </span>
         </div>
       </div>
 
@@ -661,16 +615,40 @@ const Verticalhead = () => {
         onRowSelect={(e) => setSelectedPost(e.data)}
         onRowUnselect={() => setSelectedPost(null)}
       >
-        <Column field="verticalHeadCode" sortable header="Vertical Head Code"></Column>
-        <Column field="verticalHeadName" sortable header="Vertical Head Name"></Column>
+        <Column
+          field="verticalHeadCode"
+          sortable
+          header="Vertical Head Code"
+        ></Column>
+        <Column
+          field="verticalHeadName"
+          sortable
+          header="Vertical Head Name"
+        ></Column>
         <Column field="verticalCode" sortable header="Vertical Code"></Column>
         <Column field="verticalName" sortable header="Vertical Name"></Column>
-        <Column field="businessHeadCode" sortable header="Business Head Code"></Column>
-        <Column field="businessHeadName" sortable header="Business Head Name"></Column>
+        <Column
+          field="businessHeadCode"
+          sortable
+          header="Business Head Code"
+        ></Column>
+        <Column
+          field="businessHeadName"
+          sortable
+          header="Business Head Name"
+        ></Column>
         <Column field="regionCode" sortable header="Region Code"></Column>
         <Column field="regionName" sortable header="Region Name"></Column>
-        <Column field="regionHeadCode" sortable header="Region Head Code"></Column>
-        <Column field="regionHeadName" sortable header="Region Head Name"></Column>
+        <Column
+          field="regionHeadCode"
+          sortable
+          header="Region Head Code"
+        ></Column>
+        <Column
+          field="regionHeadName"
+          sortable
+          header="Region Head Name"
+        ></Column>
         <Column
           body={(rowData) => (
             <Button
@@ -696,7 +674,7 @@ const Verticalhead = () => {
           <div>
             <div className="p-fluid">
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="verticalHeadCode">verticalHead Code</label>
+                <label htmlFor="verticalHeadCode">Vertical Head Code</label>
                 <InputText
                   id="verticalHeadCode"
                   value={editedPost.verticalHeadCode}
@@ -710,7 +688,7 @@ const Verticalhead = () => {
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="verticalHeadName">verticalHead Name</label>
+                <label htmlFor="verticalHeadName">Vertical Head Name</label>
                 <InputText
                   id="verticalHeadName"
                   value={editedPost.verticalHeadName}
@@ -724,8 +702,8 @@ const Verticalhead = () => {
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="verticalCode">vertical Code</label>
-                <InputText
+                <label htmlFor="verticalCode">Vertical Code</label>
+                <select
                   id="verticalCode"
                   value={editedPost.verticalCode}
                   onChange={(e) =>
@@ -734,12 +712,21 @@ const Verticalhead = () => {
                       verticalCode: e.target.value,
                     })
                   }
-                />
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  <option value="">Select Vertical Code</option>
+                  {vertical.map((verticals) => (
+                    <option key={verticals.verticalCode} value={verticals.verticalCode}>
+                      {verticals.verticalCode}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="verticalName">verticalName</label>
-                <InputText
+                <label htmlFor="verticalName">Vertical Name</label>
+                <select
                   id="verticalName"
                   value={editedPost.verticalName}
                   onChange={(e) =>
@@ -748,25 +735,21 @@ const Verticalhead = () => {
                       verticalName: e.target.value,
                     })
                   }
-                />
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  {filteredEditverticals.map((verticals) => (
+                    <option key={verticals.verticalName} value={verticals.verticalName}>
+                      {verticals.verticalName}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="businessHeadCode">businessHead Code</label>
-                <InputText
-                  id="businessHeadCode"
-                  value={editedPost.businessHeadCode}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      businessHeadCode: e.target.value,
-                    })
-                  }
-                />
-              </div>
+             
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="businessHeadName">businessHead Name</label>
-                <InputText
+                <label htmlFor="businessHeadName">Business Head Name</label>
+                <select
                   id="businessHeadName"
                   value={editedPost.businessHeadName}
                   onChange={(e) =>
@@ -775,12 +758,42 @@ const Verticalhead = () => {
                       businessHeadName: e.target.value,
                     })
                   }
-                />
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  {filteredEditbusinessheads.map((businessheads) => (
+                    <option key={businessheads.businessHeadName} value={businessheads.businessHeadName}>
+                      {businessheads.businessHeadName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="businessHeadCode">Business Head Code</label>
+                <select
+                  id="businessHeadCode"
+                  value={editedPost.businessHeadCode}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      businessHeadCode: e.target.value,
+                    })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  {filteredEditbusinessheads.map((businessheads) => (
+                    <option key={businessheads.businessHeadCode} value={businessheads.businessHeadCode}>
+                      {businessheads.businessHeadCode}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
                 <label htmlFor="regionCode">Region Code</label>
-                <InputText
+                <select
                   id="regionCode"
                   value={editedPost.regionCode}
                   onChange={(e) =>
@@ -789,12 +802,21 @@ const Verticalhead = () => {
                       regionCode: e.target.value,
                     })
                   }
-                />
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  <option value="">Select Region Code</option>
+                  {region.map((regions) => (
+                    <option key={regions.regionCode} value={regions.regionCode}>
+                      {regions.regionCode}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
                 <label htmlFor="regionName">Region Name</label>
-                <InputText
+                <select
                   id="regionName"
                   value={editedPost.regionName}
                   onChange={(e) =>
@@ -803,26 +825,20 @@ const Verticalhead = () => {
                       regionName: e.target.value,
                     })
                   }
-                />
-              </div>
-
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="regionHeadCode">Region Head Code</label>
-                <InputText
-                  id="regionHeadCode"
-                  value={editedPost.regionHeadCode}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      regionHeadCode: e.target.value,
-                    })
-                  }
-                />
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  {filteredEditregions.map((regions) => (
+                    <option key={regions.regionName} value={regions.regionName}>
+                      {regions.regionName}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
                 <label htmlFor="regionHeadName">Region Head Name</label>
-                <InputText
+                <select
                   id="regionHeadName"
                   value={editedPost.regionHeadName}
                   onChange={(e) =>
@@ -831,9 +847,44 @@ const Verticalhead = () => {
                       regionHeadName: e.target.value,
                     })
                   }
-                />
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  {filteredEditregionheads.map((regionhead) => (
+                    <option
+                      key={regionhead.regionHeadName}
+                      value={regionhead.regionHeadName}
+                    >
+                      {regionhead.regionHeadName}
+                    </option>
+                  ))}
+                </select>
               </div>
 
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="regionHeadCode">Region Head Code</label>
+                <select
+                  id="regionHeadCode"
+                  value={editedPost.regionHeadCode}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      regionHeadCode: e.target.value,
+                    })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  {filteredEditregionheads.map((regionhead) => (
+                    <option
+                      key={regionhead.regionHeadCode}
+                      value={regionhead.regionHeadCode}
+                    >
+                      {regionhead.regionHeadCode}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
             </div>
             <Button label="Save" icon="pi pi-check" onClick={saveEditedPost} />

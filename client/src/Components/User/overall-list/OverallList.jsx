@@ -5,8 +5,9 @@ import { AuthContext } from "../../../context/authContext";
 const icons = [
     <i className='bx bx-user'></i>,
     <i className='bx bx-receipt'></i>,
-    <i className='bx bx-cube'></i>,
-    <i className='bx bx-dollar'></i>
+    <i className='bx bx-current-location'></i>,
+    <i className='bx bx-map-pin'></i>,
+    <i className='bx bxl-gmail'></i>
 ]
 
 const overall = (currentUser) => [
@@ -21,7 +22,15 @@ const overall = (currentUser) => [
     {
       value: currentUser.regionname,
       title: "Region Name",
-    }
+    },
+    {
+      value: currentUser.employeeDesignation,
+      title: "Designation",
+    },
+    {
+      value: currentUser.emailid,
+      title: "Email Id",
+    },
   ];
   
   const OverallList = () => {
@@ -49,4 +58,3 @@ const overall = (currentUser) => [
   
 export default OverallList;
   
-

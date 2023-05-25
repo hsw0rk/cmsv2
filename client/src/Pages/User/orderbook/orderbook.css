@@ -150,3 +150,56 @@
         margin-right: 40px;
     }  
   }    
+
+  .orderbook-dates {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 10px;
+  }
+  
+  .orderbook-dates label {
+    margin-right: 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .orderbook-dates .input-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  
+  .orderboofromDate,
+  .orderbooktoDate {
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    width: 14rem;
+  }
+  
+  .orderboofromDate::-webkit-inner-spin-button,
+  .orderboofromDate::-webkit-outer-spin-button,
+  .orderbooktoDate::-webkit-inner-spin-button,
+  .orderbooktoDate::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  .orderboofromDate[type="date"]::-webkit-calendar-picker-indicator,
+  .orderbooktoDate[type="date"]::-webkit-calendar-picker-indicator {
+    background-image: url(https://img.icons8.com/?size=512&id=SqCUs5XkuU76&format=png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+  
+  
+  .orderboofromDate:focus,
+  .orderbooktoDate:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  

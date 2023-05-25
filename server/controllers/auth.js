@@ -904,6 +904,106 @@ export const editverticalhead = (req, res) => {
   });
 };
 
+export const adminverticalhead = (req, res) => {
+  const verticalHeadCode = req.body.verticalHeadCode;
+  const verticalHeadName = req.body.verticalHeadName;
+  const verticalCode = req.body.verticalCode;
+  const verticalName = req.body.verticalName;
+  const businessHeadCode = req.body.businessHeadCode;
+  const businessHeadName = req.body.businessHeadName;
+  const regionCode = req.body.regionCode;
+  const regionName = req.body.regionName;
+  const regionHeadCode = req.body.regionHeadCode;
+  const regionHeadName = req.body.regionHeadName;
+
+  // Check if the data already exists in the database based on multiple fields
+  const checkDuplicateQuery =
+  "SELECT * FROM verticalheadmaster WHERE verticalHeadCode = ? AND verticalHeadName = ? AND verticalCode = ? AND verticalName = ? AND businessHeadCode = ? AND businessHeadName = ? AND regionCode = ? AND regionName = ? AND regionHeadCode = ? AND regionHeadName = ?";
+  const values = [verticalHeadCode, verticalHeadName, verticalCode, verticalName, businessHeadCode, businessHeadName, regionCode, regionName, regionHeadCode, regionHeadName];
+
+  db.query(checkDuplicateQuery, values, (err, results) => {
+    if (err) return res.status(500).json(err);
+
+    if (results.length > 0) {
+      // If the data already exists, update the existing row
+      const updateQuery =
+      "UPDATE verticalheadmaster SET verticalHeadCode = ?, verticalHeadName = ?, verticalCode = ?, verticalName = ?, businessHeadCode = ?, businessHeadName = ?, regionCode = ?, regionName = ?, regionHeadCode = ?, regionHeadName = ? WHERE verticalHeadCode = ? AND verticalHeadName = ? AND verticalCode = ? AND verticalName = ? AND businessHeadCode = ? AND businessHeadName = ? AND regionCode = ? AND regionName = ? AND regionHeadCode = ? AND regionHeadName = ?";
+      const updateValues = [
+        verticalHeadCode,
+        verticalHeadName,
+        verticalCode,
+        verticalName,
+        businessHeadCode,
+        businessHeadName,
+        regionCode,
+        regionName,
+        regionHeadCode,
+        regionHeadName
+      ];
+
+      db.query(updateQuery, updateValues, (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("Vertical Head data has been updated!");
+      });
+    } else {
+      // If the data does not exist, insert the data into the database
+      const insertQuery =
+        "INSERT INTO verticalheadmaster (`verticalHeadCode`,`verticalHeadName`,`verticalCode`,`verticalName`,`businessHeadCode`,`businessHeadName`,`regionCode`,`regionName`,`regionHeadCode`,`regionHeadName`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+      const insertValues = [
+        verticalHeadCode,
+        verticalHeadName,
+        verticalCode,
+        verticalName,
+        businessHeadCode,
+        businessHeadName,
+        regionCode,
+        regionName,
+        regionHeadCode,
+        regionHeadName
+      ];
+
+      db.query(insertQuery, insertValues, (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("Vertical Head data has been created!");
+      });
+    }
+  });
+};
+
+export const getverticalinverticalhead = (req, res) => {
+  const q = "SELECT * FROM verticalmaster";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
+  });
+};
+
+
+export const getbusinessinverticalhead = (req, res) => {
+  const q = "SELECT * FROM businessheadmaster";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
+  });
+};
+
+export const getregioninverticalhead = (req, res) => {
+  const q = "SELECT * FROM regionmaster";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
+  });
+};
+
+export const getregionheadinverticalhead = (req, res) => {
+  const q = "SELECT * FROM regionheadmaster";
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json("Internal server error");
+    return res.status(200).json(data);
+  });
+};
+
 //comaster
 export const coheaddata = (req, res) => {
   const q = "SELECT * FROM   coheadmaster";
@@ -959,36 +1059,3 @@ export const adminco = (req, res) => {
 };
 
 
-//verticalheadmaster
-export const getverticalinverticalhead = (req, res) => {
-  const q = "SELECT * FROM verticalmaster";
-  db.query(q, (err, data) => {
-    if (err) return res.status(500).json("Internal server error");
-    return res.status(200).json(data);
-  });
-};
-
-
-export const getbusinessinverticalhead = (req, res) => {
-  const q = "SELECT * FROM businessheadmaster";
-  db.query(q, (err, data) => {
-    if (err) return res.status(500).json("Internal server error");
-    return res.status(200).json(data);
-  });
-};
-
-export const getregioninverticalhead = (req, res) => {
-  const q = "SELECT * FROM regionmaster";
-  db.query(q, (err, data) => {
-    if (err) return res.status(500).json("Internal server error");
-    return res.status(200).json(data);
-  });
-};
-
-export const getregionheadinverticalhead = (req, res) => {
-  const q = "SELECT * FROM regionheadmaster";
-  db.query(q, (err, data) => {
-    if (err) return res.status(500).json("Internal server error");
-    return res.status(200).json(data);
-  });
-};

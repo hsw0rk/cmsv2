@@ -5,13 +5,12 @@ import { Column } from "primereact/column";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
-import { Calendar } from "primereact/calendar";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import exc from "../../../Assets/exc.svg";
 import axios from "axios";
 import "./orderbook.css";
-import { data } from '../../../constants/data'
-import UserInfo from '../../../Components/User/user-info/UserInfo'
+import { data } from "../../../constants/data";
+import UserInfo from "../../../Components/User/user-info/UserInfo";
 
 const OrderBook = () => {
   const { currentUser } = useContext(AuthContext);
@@ -19,9 +18,29 @@ const OrderBook = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [dialogVisible, setDialogVisible] = useState(false);
   const [globalFilterValue, setGlobalFilterValue] = useState("");
-  const [fromDate, setFromDate] = useState(null);
-  const [toDate, setToDate] = useState(null);
   const [filters, setFilters] = useState({});
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8800/api/auth/cmsverticalformdata?from=${fromDate}&to=${toDate}`
+        );
+        const filteredPosts = response.data.filter(
+          (post) => post.employeecode === currentUser.employeecode
+        );
+        setPosts(filteredPosts);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, [currentUser, fromDate, toDate]);
+
 
   const dialogFooterTemplate = () => {
     return (
@@ -41,13 +60,6 @@ const OrderBook = () => {
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
       principal: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      date: {
-        operator: FilterOperator.AND,
-        constraints: [
-          { value: null, matchMode: FilterMatchMode.GTE },
-          { value: null, matchMode: FilterMatchMode.LTE },
-        ],
-      },
       freshrenewal: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
@@ -58,21 +70,13 @@ const OrderBook = () => {
       },
     });
     setGlobalFilterValue("");
-    setFromDate(null);
-    setToDate(null);
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8800/api/auth/cmsverticalformdata",
-          {
-            params: {
-              from: fromDate ? fromDate.toISOString().slice(0, 10) : null,
-              to: toDate ? toDate.toISOString().slice(0, 10) : null,
-            },
-          }
+          "http://localhost:8800/api/auth/cmsverticalformdata"
         );
         const filteredPosts = response.data.filter(
           (post) => post.employeecode === currentUser.employeecode
@@ -84,11 +88,7 @@ const OrderBook = () => {
     };
 
     fetchData();
-  }, [currentUser, fromDate, toDate]);
-
-  // const clearFilter = () => {
-  //   initFilters();
-  // };
+  }, [currentUser]);
 
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
@@ -112,13 +112,6 @@ const OrderBook = () => {
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
       principal: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      date: {
-        operator: FilterOperator.AND,
-        constraints: [
-          { value: null, matchMode: FilterMatchMode.GTE },
-          { value: null, matchMode: FilterMatchMode.LTE },
-        ],
-      },
       freshrenewal: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
@@ -129,8 +122,6 @@ const OrderBook = () => {
       },
     });
     setGlobalFilterValue("");
-    setFromDate(null);
-    setToDate(null);
   };
 
   const downloadCSV = () => {
@@ -148,10 +139,13 @@ const OrderBook = () => {
 
   return (
     <div className="form">
-      <div className='suser'>
+      <div className="suser">
         <UserInfo user={data.user} />
       </div>
-      <div className="flex justify-content-start gap-5 clearred" style={{marginTop:'10px' , marginBottom:'10px'}}>
+      <div
+        className="flex justify-content-start gap-5 clearred"
+        style={{ marginTop: "10px", marginBottom: "10px" }}
+      >
         <Button
           type="button"
           icon="pi pi-filter-slash"
@@ -169,51 +163,57 @@ const OrderBook = () => {
             className="searchbar"
           />
         </span>
-
-        
       </div>
 
-      <div className="flex justify-content-start gap-5 clearred" style={{marginTop:'30px' , marginBottom:'10px' , marginLeft:'20px'}}>
-        <div>
-          <span className="p-float-label">
-            <Calendar
-              id="fromDate"
-              value={fromDate}
-              onChange={(e) => setFromDate(e.value)}
-              placeholder="From"
-              dateFormat="yy-mm-dd"
-            />
-            <label htmlFor="fromDate">From</label>
-          </span>
-        </div>
-        <div>
-          <span className="p-float-label">
-            <Calendar
-              id="toDate"
-              value={toDate}
-              onChange={(e) => setToDate(e.value)}
-              placeholder="To"
-              dateFormat="yy-mm-dd"
-            />
-            <label htmlFor="toDate">To</label>
-          </span>
-        </div>
+      <div
+        className="flex justify-content-start gap-5 clearred"
+        style={{ marginTop: "30px", marginBottom: "10px", marginLeft: "20px" }}>
+        <div className="flex align-items-end justify-content-start gap-2 exc"
+          >
 
-        <div className="flex align-items-end justify-content-start gap-2 exc">
-          <Button
-            type="button"
-            icon={<img alt="excel icon" src={exc} />}
-            rounded
-            onClick={downloadCSV}
-            style={{
-              marginRight: "20px",
-              backgroundColor: "lightgreen",
-              border: "none",
-            }}
-            title="Download CSV"
-          />
+          <div className="orderbook-dates">
+            <label htmlFor="fromDate">From: </label>
+            <div className="input-wrapper">
+              <input
+                type="date"
+                id="fromDate"
+                value={fromDate}
+                className="orderboofromDate"
+                onChange={(e) => setFromDate(e.target.value)}
+              />
+            </div>
+
+
+            <label htmlFor="toDate">To: </label>
+            <div className="input-wrapper">
+              <input
+                type="date"
+                id="toDate"
+                value={toDate}
+                className="orderbooktoDate"
+                onChange={(e) => setToDate(e.target.value)}
+              />
+            </div>
+          </div>
+
+
+          <div style={{ marginLeft: "40px", }}>
+            <Button
+              type="button"
+              icon={<img alt="excel icon" src={exc} />}
+              rounded
+              onClick={downloadCSV}
+              style={{
+                backgroundColor: "lightgreen",
+                border: "none",
+              }}
+              title="Download CSV"
+            />
+          </div>
+
+
+
         </div>
-        
       </div>
 
       <DataTable
@@ -262,61 +262,85 @@ const OrderBook = () => {
       >
         {selectedPost && (
           <div>
-            <p>
-              <span className="my-dialog-title">Customer Name:</span>
-              <span className="my-dialog-value">
-                {selectedPost.customername}
-              </span>
-            </p>
-            <p>
-              <span className="my-dialog-title">Product:</span>
-              <span className="my-dialog-value">{selectedPost.productName}</span>
-            </p>
-            <p>
-              <span className="my-dialog-title">Principal:</span>
-              <span className="my-dialog-value">{selectedPost.principal}</span>
-            </p>
-            <p>
-              <span className="my-dialog-title">Fresh Renewal:</span>
-              <span className="my-dialog-value">
-                {selectedPost.freshrenewal}
-              </span>
-            </p>
-            <p>
-              <span className="my-dialog-title">PAN:</span>
-              <span className="my-dialog-value">{selectedPost.pan}</span>
-            </p>
-            <p>
-              <span className="my-dialog-title">Mobile Number:</span>
-              <span className="my-dialog-value">{selectedPost.mobileno}</span>
-            </p>
-            <p>
-              <span className="my-dialog-title">Credit Branch:</span>
-              <span className="my-dialog-value">{selectedPost.creditbranch}</span>
-            </p>
-            <p>
-              <span className="my-dialog-title">Business:</span>
-              <span className="my-dialog-value">{selectedPost.business}</span>
-            </p>
-            <p>
-              <span className="my-dialog-title">Vertical:</span>
-              <span className="my-dialog-value">{selectedPost.vertical}</span>
-            </p>
-            <p>
-              <span className="my-dialog-title">Date:</span>
-              <span className="my-dialog-value">{selectedPost.date}</span>
-            </p>
-            <p>
-              <span className="my-dialog-title">Time:</span>
-              <span className="my-dialog-value">{selectedPost.time}</span>
-            </p>
-            <p>
-              <span className="my-dialog-title">Entry Owner:</span>
-              <span className="my-dialog-value">{selectedPost.employeename}</span>
-            </p>
+            {selectedPost.customername && (
+              <p>
+                <span className="my-dialog-title">Customer Name:</span>
+                <span className="my-dialog-value">{selectedPost.customername}</span>
+              </p>
+            )}
+            {selectedPost.productName && (
+              <p>
+                <span className="my-dialog-title">Product:</span>
+                <span className="my-dialog-value">{selectedPost.productName}</span>
+              </p>
+            )}
+            {selectedPost.principal && (
+              <p>
+                <span className="my-dialog-title">Principal:</span>
+                <span className="my-dialog-value">{selectedPost.principal}</span>
+              </p>
+            )}
+            {selectedPost.freshrenewal && (
+              <p>
+                <span className="my-dialog-title">Fresh Renewal:</span>
+                <span className="my-dialog-value">{selectedPost.freshrenewal}</span>
+              </p>
+            )}
+            {selectedPost.pan && (
+              <p>
+                <span className="my-dialog-title">PAN:</span>
+                <span className="my-dialog-value">{selectedPost.pan}</span>
+              </p>
+            )}
+            {selectedPost.mobileno && (
+              <p>
+                <span className="my-dialog-title">Mobile Number:</span>
+                <span className="my-dialog-value">{selectedPost.mobileno}</span>
+              </p>
+            )}
+            {selectedPost.creditbranch && (
+              <p>
+                <span className="my-dialog-title">Credit Branch:</span>
+                <span className="my-dialog-value">{selectedPost.creditbranch}</span>
+              </p>
+            )}
+            {selectedPost.business && (
+              <p>
+                <span className="my-dialog-title">Business:</span>
+                <span className="my-dialog-value">{selectedPost.business}</span>
+              </p>
+            )}
+            {selectedPost.vertical && (
+              <p>
+                <span className="my-dialog-title">Vertical:</span>
+                <span className="my-dialog-value">{selectedPost.vertical}</span>
+              </p>
+            )}
+            {selectedPost.date && (
+              <p>
+                <span className="my-dialog-title">Date:</span>
+                <span className="my-dialog-value">
+                  {selectedPost.date.split("T")[0]}
+                </span>
+              </p>
+            )}
+
+            {selectedPost.time && (
+              <p>
+                <span className="my-dialog-title">Time:</span>
+                <span className="my-dialog-value">{selectedPost.time}</span>
+              </p>
+            )}
+            {selectedPost.employeename && (
+              <p>
+                <span className="my-dialog-title">Entry Owner:</span>
+                <span className="my-dialog-value">{selectedPost.employeename}</span>
+              </p>
+            )}
           </div>
         )}
       </Dialog>
+
     </div>
   );
 };

@@ -30,12 +30,10 @@ import {
 
   regionheaddata,editregionhead,adminregionhead,
  
-  verticalheaddata,editverticalhead,
+  verticalheaddata,editverticalhead,adminverticalhead,getverticalinverticalhead,getbusinessinverticalhead,getregioninverticalhead,getregionheadinverticalhead,
 
   coheaddata,editcoheadmaster,adminco,
-
-  getverticalinverticalhead,getbusinessinverticalhead,getregioninverticalhead,getregionheadinverticalhead
-
+  
 } from "../controllers/auth.js";
 
 const router = express.Router();
@@ -117,17 +115,16 @@ router.post("/adminregionhead", adminregionhead);
 //verticalheadmaster
 router.get("/verticalheaddata", verticalheaddata);
 router.put("/editverticalhead/:id", editverticalhead);
+router.post("/adminverticalhead", adminverticalhead);
+router.get("/getverticalinverticalhead", getverticalinverticalhead);
+router.get("/getbusinessinverticalhead", getbusinessinverticalhead);
+router.get("/getregioninverticalhead", getregioninverticalhead);
+router.get("/getregionheadinverticalhead", getregionheadinverticalhead);
 
 //coheadmaster
 router.get("/coheaddata", coheaddata);
 router.put("/editcoheadmaster/:id", editcoheadmaster);
 router.post("/adminco", adminco);
-
-//businessheadmaster
-router.get("/getverticalinverticalhead", getverticalinverticalhead);
-router.get("/getbusinessinverticalhead", getbusinessinverticalhead);
-router.get("/getregioninverticalhead", getregioninverticalhead);
-router.get("/getregionheadinverticalhead", getregionheadinverticalhead);
 
 //approvalmaster
 router.get("/approvaldata", approvaldata);
