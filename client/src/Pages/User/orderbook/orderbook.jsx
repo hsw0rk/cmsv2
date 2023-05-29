@@ -55,16 +55,16 @@ const OrderBook = () => {
   const clearFilter = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      product: {
+      productName: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
       principal: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      freshrenewal: {
+      freshRenewal: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
-      customername: {
+      customerName: {
         operator: FilterOperator.OR,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
@@ -112,11 +112,11 @@ const OrderBook = () => {
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
       principal: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      freshrenewal: {
+      freshRenewal: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
-      customername: {
+      customerName: {
         operator: FilterOperator.OR,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
@@ -235,8 +235,8 @@ const OrderBook = () => {
         <Column field="principal" sortable header="Principal"></Column>
         <Column field="productName" sortable header="Product"></Column>
         <Column field="pan" sortable header="PAN"></Column>
-        <Column field="creditbranch" sortable header="Credit Branch"></Column>
-        <Column field="mobileno" sortable header="Mobile Number"></Column>
+        <Column field="creditBranch" sortable header="Credit Branch"></Column>
+        <Column field="mobileNumber" sortable header="Mobile Number"></Column>
         <Column
           body={(rowData) => (
             <Button
@@ -262,10 +262,10 @@ const OrderBook = () => {
       >
         {selectedPost && (
           <div>
-            {selectedPost.customername && (
+            {selectedPost.customerName && (
               <p>
                 <span className="my-dialog-title">Customer Name:</span>
-                <span className="my-dialog-value">{selectedPost.customername}</span>
+                <span className="my-dialog-value">{selectedPost.customerName}</span>
               </p>
             )}
             {selectedPost.productName && (
@@ -280,10 +280,10 @@ const OrderBook = () => {
                 <span className="my-dialog-value">{selectedPost.principal}</span>
               </p>
             )}
-            {selectedPost.freshrenewal && (
+            {selectedPost.freshRenewal && (
               <p>
                 <span className="my-dialog-title">Fresh Renewal:</span>
-                <span className="my-dialog-value">{selectedPost.freshrenewal}</span>
+                <span className="my-dialog-value">{selectedPost.freshRenewal}</span>
               </p>
             )}
             {selectedPost.pan && (
@@ -292,16 +292,16 @@ const OrderBook = () => {
                 <span className="my-dialog-value">{selectedPost.pan}</span>
               </p>
             )}
-            {selectedPost.mobileno && (
+            {selectedPost.mobileNumber && (
               <p>
                 <span className="my-dialog-title">Mobile Number:</span>
-                <span className="my-dialog-value">{selectedPost.mobileno}</span>
+                <span className="my-dialog-value">{selectedPost.mobileNumber}</span>
               </p>
             )}
-            {selectedPost.creditbranch && (
+            {selectedPost.creditBranch && (
               <p>
                 <span className="my-dialog-title">Credit Branch:</span>
-                <span className="my-dialog-value">{selectedPost.creditbranch}</span>
+                <span className="my-dialog-value">{selectedPost.creditBranch}</span>
               </p>
             )}
             {selectedPost.business && (
@@ -331,10 +331,10 @@ const OrderBook = () => {
                 <span className="my-dialog-value">{selectedPost.time}</span>
               </p>
             )}
-            {selectedPost.employeename && (
+            {selectedPost.employeeName && (
               <p>
                 <span className="my-dialog-title">Entry Owner:</span>
-                <span className="my-dialog-value">{selectedPost.employeename}</span>
+                <span className="my-dialog-value">{selectedPost.employeeName}</span>
               </p>
             )}
           </div>

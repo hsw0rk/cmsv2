@@ -178,9 +178,6 @@ export const investments = (req, res) => {
   }
 };
 
-
-
-
 export const getproductininvestments = (req, res) => {
   const q =
     "SELECT productName FROM productmaster WHERE verticalName = 'Investments'";
