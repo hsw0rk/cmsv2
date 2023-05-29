@@ -292,6 +292,7 @@ const Branch = () => {
                 onChange={(event) =>
                   setInputs({ ...inputs, regionName: event.target.value })
                 }
+                style={{ pointerEvents: "none", appearance: "none" }}
               >
                 {filteredRegions.map((region) => (
                   <option key={region.regionName} value={region.regionName}>
@@ -543,6 +544,7 @@ const Branch = () => {
                   }
                   disabled={!editedPost}
                   className="userinput"
+                  style={{ pointerEvents: "none", appearance: "none" }}
                 >
                   {filteredRegions.map((region) => (
                     <option key={region.regionName} value={region.regionName}>

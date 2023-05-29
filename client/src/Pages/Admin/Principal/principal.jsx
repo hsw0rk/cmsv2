@@ -319,6 +319,7 @@ const Principal = () => {
                 Principal
                 <input
                   required
+                  autoComplete="off"
                   className="userinput"
                   id="principal"
                   name="principal"
@@ -477,6 +478,7 @@ const Principal = () => {
                 <InputText
                   id="principal"
                   value={editedPost.principal}
+                  required
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,

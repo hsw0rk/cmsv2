@@ -315,6 +315,7 @@ const Product = () => {
                   onChange={(event) =>
                     setInputs({ ...inputs, verticalCode: event.target.value })
                   }
+                  style={{ pointerEvents: "none", appearance: "none" }}
                 >
                   {filteredVertical.map((vertical) => (
                     <option
@@ -511,6 +512,7 @@ const Product = () => {
                 <label htmlFor="productName">Product Name</label>
                 <InputText
                   id="productName"
+                  required
                   value={editedPost.productName}
                   onChange={(e) =>
                     setEditedPost({
@@ -524,6 +526,7 @@ const Product = () => {
                 <label htmlFor="productCode">Product Code</label>
                 <InputText
                   id="productCode"
+                  required
                   value={editedPost.productCode}
                   onChange={(e) =>
                     setEditedPost({
@@ -566,6 +569,7 @@ const Product = () => {
                   }
                   disabled={!editedPost}
                   className="userinput"
+                  style={{ pointerEvents: "none", appearance: "none" }}
                 >
                   {filteredVertical.map((vertical) => (
                     <option key={vertical.verticalCode} value={vertical.verticalCode}>

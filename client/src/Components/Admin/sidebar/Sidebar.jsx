@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./asidebar.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { images } from "../../../constants";
 import {
   Accordion,
@@ -12,11 +12,12 @@ import ArrowIcon from "../../../Assets/arrowicon";
 
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
   const [activeItem, setActiveItem] = useState("");
 
   useEffect(() => {
-    setActiveItem("dashboard");
-  }, []);
+    setActiveItem(location.pathname.split("/")[2] || "dashboard");
+  }, [location]);
 
   const handleAccordionClick = () => {
     setOpen(!open);

@@ -245,11 +245,8 @@ const Verticalhead = () => {
   
     const selectedBusinessHead = businesshead.find(
       (businessheads) =>
-        businessheads.verticalCode === editedPost.verticalCode &&
-        businessheads.businessHeadName === editedPost.businessHeadName &&
-        businessheads.businessHeadCode === editedPost.businessHeadCode
+        businessheads.verticalCode === editedPost.verticalCode 
     );
-     
     console.log("Selected Business Head:", selectedBusinessHead);
     
     const selectedRegion = region.find(
@@ -259,8 +256,7 @@ const Verticalhead = () => {
   
     const selectedRegionHead = regionhead.find(
       (regionheads) =>
-        regionheads.regionCode === editedPost.regionCode &&
-        regionheads.regionHeadName === editedPost.regionHeadName
+        regionheads.regionCode === editedPost.regionCode 
     );
     
     console.log("Selected Region Head:", selectedRegionHead);
@@ -274,8 +270,10 @@ const Verticalhead = () => {
       const updatedPost = {
         ...editedPost,
         verticalName: selectedVertical.verticalName,
+        businessHeadName: selectedBusinessHead.businessHeadName,
         businessHeadCode: selectedBusinessHead.businessHeadCode,
         regionName: selectedRegion.regionName,
+        regionHeadName: selectedRegionHead.regionHeadName,
         regionHeadCode: selectedRegionHead.regionHeadCode,
       };
   
@@ -296,6 +294,7 @@ const Verticalhead = () => {
     } else {
       // Handle the case when a selected value is not found
       console.log("One or more selected values not found.");
+      alert("One or more selected values not found.");
     }
   };
   
@@ -317,6 +316,7 @@ const Verticalhead = () => {
         const filteredRegionHeads = regionhead.filter(
           (regionheads) =>
           regionheads.regionCode === editedPost.regionCode &&
+          regionheads.regionHeadName === editedPost.regionHeadName &&
           regionheads.regionHeadCode === editedPost.regionHeadCode
         );
         setFilteredregionheads(filteredRegionHeads);
@@ -400,6 +400,7 @@ const Verticalhead = () => {
                     name="verticalName"
                     value={inputs.verticalName || ""}
                     onChange={handleChange}
+                    style={{ pointerEvents: "none", appearance: "none" }}
                   >
                     {filteredverticals.map((verticals) => (
                       <option
@@ -473,6 +474,7 @@ const Verticalhead = () => {
                     name="regionName"
                     value={inputs.regionName || ""}
                     onChange={handleChange}
+                    style={{ pointerEvents: "none", appearance: "none" }}
                   >
                     {filteredregions.map((regions) => (
                       <option
@@ -495,6 +497,7 @@ const Verticalhead = () => {
                     name="regionHeadName"
                     value={inputs.regionHeadName || ""}
                     onChange={handleChange}
+                    style={{ pointerEvents: "none", appearance: "none" }}
                   >
                     {filteredregionheads.map((regionhead) => (
                       <option
@@ -517,6 +520,7 @@ const Verticalhead = () => {
                     name="regionHeadCode"
                     value={inputs.regionHeadCode || ""}
                     onChange={handleChange}
+                    style={{ pointerEvents: "none", appearance: "none" }}
                   >
                     {filteredregionheads.map((regionhead) => (
                       <option
@@ -535,6 +539,7 @@ const Verticalhead = () => {
                   Vertical Head code
                   <input
                     required
+                    autoComplete="off"
                     className="userinput"
                     id="verticalHeadCode"
                     name="verticalHeadCode"
@@ -548,6 +553,7 @@ const Verticalhead = () => {
                   Vertical Head Name
                   <input
                     required
+                    autoComplete="off"
                     className="userinput"
                     id="verticalHeadName"
                     name="verticalHeadName"
@@ -663,7 +669,7 @@ const Verticalhead = () => {
         />
       </DataTable>
       <Dialog
-        header="Edit Vertical Head Data"
+        header="Update Vertical Head Data"
         visible={editDialogVisible}
         style={{ width: "50vw" }}
         modal
@@ -677,6 +683,7 @@ const Verticalhead = () => {
                 <label htmlFor="verticalHeadCode">Vertical Head Code</label>
                 <InputText
                   id="verticalHeadCode"
+                  required
                   value={editedPost.verticalHeadCode}
                   onChange={(e) =>
                     setEditedPost({
@@ -691,6 +698,7 @@ const Verticalhead = () => {
                 <label htmlFor="verticalHeadName">Vertical Head Name</label>
                 <InputText
                   id="verticalHeadName"
+                  required
                   value={editedPost.verticalHeadName}
                   onChange={(e) =>
                     setEditedPost({
@@ -705,6 +713,7 @@ const Verticalhead = () => {
                 <label htmlFor="verticalCode">Vertical Code</label>
                 <select
                   id="verticalCode"
+                  required
                   value={editedPost.verticalCode}
                   onChange={(e) =>
                     setEditedPost({
@@ -737,6 +746,7 @@ const Verticalhead = () => {
                   }
                   disabled={!editedPost}
                   className="userinput"
+                  style={{ pointerEvents: "none", appearance: "none" }}
                 >
                   {filteredEditverticals.map((verticals) => (
                     <option key={verticals.verticalName} value={verticals.verticalName}>
@@ -760,6 +770,7 @@ const Verticalhead = () => {
                   }
                   disabled={!editedPost}
                   className="userinput"
+                  style={{ pointerEvents: "none", appearance: "none" }}
                 >
                   {filteredEditbusinessheads.map((businessheads) => (
                     <option key={businessheads.businessHeadName} value={businessheads.businessHeadName}>
@@ -782,6 +793,7 @@ const Verticalhead = () => {
                   }
                   disabled={!editedPost}
                   className="userinput"
+                  style={{ pointerEvents: "none", appearance: "none" }}
                 >
                   {filteredEditbusinessheads.map((businessheads) => (
                     <option key={businessheads.businessHeadCode} value={businessheads.businessHeadCode}>
@@ -795,6 +807,7 @@ const Verticalhead = () => {
                 <label htmlFor="regionCode">Region Code</label>
                 <select
                   id="regionCode"
+                  required
                   value={editedPost.regionCode}
                   onChange={(e) =>
                     setEditedPost({
@@ -827,6 +840,7 @@ const Verticalhead = () => {
                   }
                   disabled={!editedPost}
                   className="userinput"
+                  style={{ pointerEvents: "none", appearance: "none" }}
                 >
                   {filteredEditregions.map((regions) => (
                     <option key={regions.regionName} value={regions.regionName}>
@@ -849,6 +863,7 @@ const Verticalhead = () => {
                   }
                   disabled={!editedPost}
                   className="userinput"
+                  style={{ pointerEvents: "none", appearance: "none" }}
                 >
                   {filteredEditregionheads.map((regionhead) => (
                     <option
@@ -874,6 +889,7 @@ const Verticalhead = () => {
                   }
                   disabled={!editedPost}
                   className="userinput"
+                  style={{ pointerEvents: "none", appearance: "none" }}
                 >
                   {filteredEditregionheads.map((regionhead) => (
                     <option

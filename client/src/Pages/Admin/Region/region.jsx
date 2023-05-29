@@ -381,6 +381,7 @@ const Region = () => {
                 <label htmlFor="regionName">Region Name</label>
                 <InputText
                   id="regionName"
+                  required
                   value={editedPost.regionName}
                   style={{ textTransform: "uppercase" }}
                   onChange={(e) =>
@@ -392,6 +393,7 @@ const Region = () => {
                 <label htmlFor="regionCode">Region Code</label>
                 <InputText
                   id="regionCode"
+                  required
                   value={editedPost.regionCode}
                   style={{ textTransform: "uppercase" }}
                   onChange={(e) =>

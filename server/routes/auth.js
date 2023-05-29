@@ -14,7 +14,7 @@ import {
 
   branchdata,editbranch,adminbranch,getverticalinbranch,
 
-  userdata,edituser,adminuser,getbranchinuser,getregioninuser,getbranchadd,
+  userdata,edituser,adminuser,getbranchinuser,getregioninuser,getverticalinuser,getbusinessinuser,getregionheadinuser,getverticalheadinuser,getbranchadd,
 
   verticaldata,editVertical,adminvertical,
 
@@ -75,8 +75,12 @@ router.get("/getverticalinbranch", getverticalinbranch);
 router.get("/userdata", userdata);
 router.put("/edituser/:id", edituser);
 router.post("/adminuser", adminuser);
-router.get("/getbranchinuser", getbranchinuser);
 router.get("/getregioninuser", getregioninuser);
+router.get("/getbranchinuser", getbranchinuser);
+router.get("/getverticalinuser", getverticalinuser);
+router.get("/getbusinessinuser", getbusinessinuser);
+router.get("/getregionheadinuser", getregionheadinuser);
+router.get("/getverticalheadinuser", getverticalheadinuser);
 
 //Others
 router.get("/getverticalName", getverticalName);
@@ -110,7 +114,6 @@ router.get("/getverticalinbusinesshead", getverticalinbusinesshead);
 router.get("/regionheaddata", regionheaddata);
 router.put("/editregionhead/:id", editregionhead);
 router.post("/adminregionhead", adminregionhead);
-
 
 //verticalheadmaster
 router.get("/verticalheaddata", verticalheaddata);

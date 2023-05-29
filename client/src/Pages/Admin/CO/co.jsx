@@ -380,6 +380,7 @@ const CO = () => {
                 <label htmlFor="coHeadCode">CO Head Code</label>
                 <InputText
                   id="coHeadCode"
+                  required
                   value={editedPost.coHeadCode}
                   onChange={(e) =>
                     setEditedPost({
@@ -395,6 +396,7 @@ const CO = () => {
                 <label htmlFor="coHeadName">CO Head Name</label>
                 <InputText
                   id="coHeadName"
+                  required
                   value={editedPost.coHeadName}
                   onChange={(e) =>
                     setEditedPost({

@@ -40,15 +40,15 @@ const Investments = () => {
   const [inputs, setInputs] = useState({
     principal: "",
     productName: "",
-    freshrenewal: "",
+    freshRenewal: "",
     pan: "",
-    mobileno: "",
-    customername: "",
-    creditbranch: "",
+    mobileNumber: "",
+    customerName: "",
+    creditBranch: "",
     business: "",
     vertical: "Investments",
-    employeename: currentUser.employeename,
-    employeecode: currentUser.employeecode,
+    employeeName: currentUser.employeeName,
+    employeeCode: currentUser.employeeCode,
   });
 
   const [iproduct, setiproduct] = useState([]);
@@ -236,8 +236,8 @@ const Investments = () => {
                   Fresh / Renewal<span style={{ color: "red" }}>*</span>
                   <select
                     className="investmentsinput"
-                    id="freshrenewal"
-                    name="freshrenewal"
+                    id="freshRenewal"
+                    name="freshRenewal"
                     onChange={handleChange}
                     required
                     onInvalid={(e) =>
@@ -326,8 +326,8 @@ const Investments = () => {
                 required
                 className="investmentsinput"
                 type="text"
-                id="customername"
-                name="customername"
+                id="customerName"
+                name="customerName"
                 onChange={handleChange}
                 onInvalid={(e) =>
                   e.target.setCustomValidity("Customer Name Is Missing ")
@@ -344,8 +344,8 @@ const Investments = () => {
                 required
                 className="investmentsinput"
                 type="test"
-                id="mobileno"
-                name="mobileno"
+                id="mobileNumber"
+                name="mobileNumber"
                 pattern="^(?!.*[A-Za-z])[1-9][0-9]*$"
                 maxLength={10}
                 onChange={handleChange}
@@ -364,8 +364,8 @@ const Investments = () => {
                 <select
                   required
                   className="investmentsinput"
-                  id="creditbranch"
-                  name="creditbranch"
+                  id="creditBranch"
+                  name="creditBranch"
                   onChange={handleChange}
                   onInvalid={(e) =>
                     e.target.setCustomValidity("Select Credit Branch")
@@ -373,11 +373,11 @@ const Investments = () => {
                   onInput={(e) => e.target.setCustomValidity("")}
                 >
                   <option value="">Select</option>
-                  {currentUser.branchname && currentUser.branchcode && (
+                  {currentUser.branchName && currentUser.branchCode && (
                     <option
-                      value={`${currentUser.branchname}-${currentUser.branchcode}`}
+                      value={`${currentUser.branchName}-${currentUser.branchCode}`}
                     >
-                      {currentUser.branchname}-{currentUser.branchcode}
+                      {currentUser.branchName}-{currentUser.branchCode}
                     </option>
                   )}
                   {currentUser.Branchname2 && currentUser.Branchcode2 && (
@@ -441,7 +441,7 @@ const Investments = () => {
                 className="investmentsinput"
                 type="hidden"
                 id="vertical"
-                value="investment"
+                value="Investments"
                 name="vertical"
               />
             </label>
@@ -453,9 +453,9 @@ const Investments = () => {
                 required
                 className="investmentsinput"
                 type="hidden"
-                id="employeename"
-                name="employeename"
-                value={currentUser.employeename}
+                id="employeeName"
+                name="employeeName"
+                value={currentUser.employeeName}
               />
             </label>
           </div>
@@ -467,9 +467,9 @@ const Investments = () => {
                 required
                 className="investmentsinput"
                 type="hidden"
-                id="employeecode"
-                name="employeecode"
-                value={currentUser.employeecode}
+                id="employeeCode"
+                name="employeeCode"
+                value={currentUser.employeeCode}
               />
             </label>
           </div>
@@ -478,15 +478,15 @@ const Investments = () => {
             Submit
           </button>
         </form>
-        {err && (
+        {err && err.duplicate && (
           <>
             <div className="popup-background"></div>
             <div className="popup-wrapper">
-              <p className="investmsgp">{err}</p>
+              <p className="investmsgp">{err.error}</p>
               <div className="investmsg-buttons">
-                <button className="investmsg-yes" onClick={handleSubmit}>
+                {/* <button className="investmsg-yes" onClick={handleSubmit}>
                   Yes
-                </button>
+                </button> */}
                 <a href="/employee/investments">
                   <button className="investmsg-no" onClick={() => setErr(null)}>
                     No

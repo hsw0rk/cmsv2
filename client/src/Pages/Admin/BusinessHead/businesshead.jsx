@@ -313,6 +313,7 @@ const Businesshead = () => {
                   onChange={(event) =>
                     setInputs({ ...inputs, verticalName: event.target.value })
                   }
+                  style={{ pointerEvents: "none", appearance: "none" }}
                 >
                   {filteredverticals.map((vertical) => (
                     <option key={vertical.verticalName} value={vertical.verticalName}>
@@ -490,7 +491,7 @@ const Businesshead = () => {
         />
       </DataTable>
       <Dialog
-        header="Edit Business Head Data"
+        header="Update Business Head Data"
         visible={editDialogVisible}
         style={{ width: "50vw" }}
         modal
@@ -504,6 +505,7 @@ const Businesshead = () => {
                 <label htmlFor="businessHeadCode">Business Head Code</label>
                 <InputText
                   id="businessHeadCode"
+                  required
                   value={editedPost.businessHeadCode}
                   onChange={(e) =>
                     setEditedPost({
@@ -518,6 +520,7 @@ const Businesshead = () => {
                 <label htmlFor="businessHeadName">Business Head Name</label>
                 <InputText
                   id="businessHeadName"
+                  required
                   value={editedPost.businessHeadName}
                   onChange={(e) =>
                     setEditedPost({
@@ -561,6 +564,7 @@ const Businesshead = () => {
                   }
                   disabled={!editedPost}
                   className="userinput"
+                  style={{ pointerEvents: "none", appearance: "none" }}
                 >
                   {filteredverticals.map((vertical) => (
                     <option key={vertical.verticalName} value={vertical.verticalName}>

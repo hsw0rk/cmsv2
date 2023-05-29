@@ -9,7 +9,7 @@ import { Toast } from 'primereact/toast';
 function LoginRegister() {
   const [option, setOption] = React.useState(1);
   const [inputs, setInputs] = useState({
-    employeecode: "",
+    employeeCode: "",
     password: "",
   });
   const [err, setErr] = useState(null);
@@ -44,7 +44,7 @@ function LoginRegister() {
 
   const onSubmit = () => {
     setInputs({
-      employeecode: "",
+      employeeCode: "",
       password: "",
     });
   };
@@ -120,10 +120,10 @@ function LoginRegister() {
   >
     {option !== 3 && (
       <>
-        {/* <label htmlFor="employeecode">Employee Code:</label> */}
+        {/* <label htmlFor="employeeCode">Employee Code:</label> */}
         <input
-          id="employeecode"
-          name="employeecode"
+          id="employeeCode"
+          name="employeeCode"
           type="text"
           placeholder="Employee Code"
           required
@@ -135,8 +135,8 @@ function LoginRegister() {
       <>
         {/* <label htmlFor="mobilenumber">Mobile Number:</label> */}
         <input
-          id="mobilenumber"
-          name="mobilenumber"
+          id="mobileNumber"
+          name="mobileNumber"
           type="number"
           placeholder="Mobile Number"
           required
@@ -158,8 +158,8 @@ function LoginRegister() {
       <>
         {/* <label htmlFor="employeename">Employee Name:</label> */}
         <input
-          id="employeename"
-          name="employeename"
+          id="employeeName"
+          name="employeeName"
           type="text"
           placeholder="Employee Name"
           required={option === 2 ? true : false}
@@ -168,8 +168,8 @@ function LoginRegister() {
         />
         {/* <label htmlFor="mobilenumber">Mobile Number:</label> */}
         <input
-          id="mobilenumber"
-          name="mobilenumber"
+          id="mobileNumber"
+          name="mobileNumber"
           type="number"
           placeholder="Mobile Number"
           required={option === 2 ? true : false}

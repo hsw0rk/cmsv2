@@ -20,71 +20,147 @@ const User = () => {
   const [filters, setFilters] = useState({});
   const [editedPost, setEditedPost] = useState(null);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
-
   const [err, setErr] = useState(null);
   const [msg, setMsg] = useState(null);
 
   const [inputs, setInputs] = useState({
-    employeename: "",
-    employeecode: "",
-    mobilenumber: "",
+    employeeName: "",
+    employeeCode: "",
+    employeeDesignation: "",
+    mobileNumber: "",
+    emailId: "",
     regionCode: "",
     regionName: "",
-    branchName: "",
     branchCode: "",
-    branchName2: "",
+    branchName: "",
+    verticalCode: "",
+    verticalName: "",
+    verticalHeadCode: "",
+    verticalHeadName: "",
+    regionHeadCode: "",
+    regionHeadName: "",
+    businessHeadCode: "",
+    businessHeadName: "",
     branchCode2: "",
-    branchName3: "",
+    branchName2: "",
     branchCode3: "",
-    branchName4: "",
+    branchName3: "",
     branchCode4: "",
-    branchName5: "",
+    branchName4: "",
     branchCode5: "",
+    branchName5: "",
   });
 
+  const [region, setregion] = useState([]);
+  const [regionhead, setregionhead] = useState([]);
   const [branches, setBranches] = useState([]);
-  const [branchesadd, setBranchesadd] = useState([]);
-  const [regions, setRegions] = useState([]);
-  const [filteredRegions, setFilteredRegions] = useState([]);
+  const [vertical, setvertical] = useState([]);
+  const [verticalhead, setverticalhead] = useState([]);
+  const [businesshead, setbusinesshead] = useState([]);
+
   const [filteredBranches, setFilteredBranches] = useState([]);
   const [filteredbranchCodes, setFilteredbranchCodes] = useState([]);
+  const [filteredverticals, setFilteredverticals] = useState([]);
+  const [filteredregions, setFilteredregions] = useState([]);
+  const [filteredregionheads, setFilteredregionheads] = useState([]);
+  const [filteredbusinessheads, setFilteredbusinessheads] = useState([]);
+  const [filteredverticalheads, setFilteredverticalheads] = useState([]);
+
   const [showAdditionaluser, setShowAdditionaluser] = useState(false);
 
+  const [filteredEditverticals, setFilteredEditverticals] = useState([]);
+  const [filteredEditverticalheads, setFilteredEditverticalheads] = useState([]);
+  const [filteredEditbusinessheads, setFilteredEditbusinessheads] = useState([]);
+  const [filteredEditregions, setFilteredEditregions] = useState([]);
+  const [filteredEditbranches, setFilteredEditbranches] = useState([]);
+  const [filteredEditbranchCodes, setFilteredEditbranchCodes] = useState([]);
+  const [filteredEditregionheads, setFilteredEditregionheads] = useState([]);
 
+  // fetch
   useEffect(() => {
-    const fetchBranchesadd = async () => {
+    const fetchregion = async () => {
       const res = await axios.get(
-        "http://localhost:8800/api/auth/getbranchadd"
+        "http://localhost:8800/api/auth/getregioninuser"
       );
-      setBranchesadd(res.data);
+      setregion(res.data);
     };
-    fetchBranchesadd();
-  }, []);
 
+    const fetchregionhead = async () => {
+      const res = await axios.get(
+        "http://localhost:8800/api/auth/getregionheadinuser"
+      );
+      setregionhead(res.data);
+    };
 
-  useEffect(() => {
-    const fetchBranches = async () => {
+    const fetchbranch = async () => {
       const res = await axios.get(
         "http://localhost:8800/api/auth/getbranchinuser"
       );
       setBranches(res.data);
     };
-    const fetchRegions = async () => {
+
+    const fetchvertical = async () => {
       const res = await axios.get(
-        "http://localhost:8800/api/auth/getregioninuser"
+        "http://localhost:8800/api/auth/getverticalinuser"
       );
-      setRegions(res.data);
+      setvertical(res.data);
     };
-    fetchBranches();
-    fetchRegions();
+
+    const fetchverticalhead = async () => {
+      const res = await axios.get(
+        "http://localhost:8800/api/auth/getverticalheadinuser"
+      );
+      setverticalhead(res.data);
+    };
+
+    const fetchbusiness = async () => {
+      const res = await axios.get(
+        "http://localhost:8800/api/auth/getbusinessinuser"
+      );
+      setbusinesshead(res.data);
+    };
+
+    fetchregion();
+    fetchbranch();
+    fetchregionhead();
+    fetchvertical();
+    fetchverticalhead();
+    fetchbusiness();
   }, []);
 
+  //filters
   useEffect(() => {
-    if (inputs.regionCode) {
-      const filteredRegions = regions.filter(
-        (region) => region.regionCode === inputs.regionCode
+    if (inputs.verticalCode) {
+      const filteredverticals = vertical.filter(
+        (verticals) => verticals.verticalCode === inputs.verticalCode
       );
-      setFilteredRegions(filteredRegions);
+      setFilteredverticals(filteredverticals);
+
+      const filteredverticalheads = verticalhead.filter(
+        (verticalheads) => verticalheads.verticalCode === inputs.verticalCode
+      );
+      setFilteredverticalheads(filteredverticalheads);
+
+      const filteredbusinessheads = businesshead.filter(
+        (businessheads) => businessheads.verticalCode === inputs.verticalCode
+      );
+      setFilteredbusinessheads(filteredbusinessheads);
+    } else {
+      setFilteredverticals([]);
+      setFilteredverticalheads([]);
+      setFilteredbusinessheads([]);
+    }
+
+    if (inputs.regionCode) {
+      const filteredregions = region.filter(
+        (regions) => regions.regionCode === inputs.regionCode
+      );
+      setFilteredregions(filteredregions);
+
+      const filteredregionheads = regionhead.filter(
+        (regionheads) => regionheads.regionCode === inputs.regionCode
+      );
+      setFilteredregionheads(filteredregionheads);
 
       const filteredBranches = branches.filter(
         (branch) => branch.regionCode === inputs.regionCode
@@ -99,13 +175,82 @@ const User = () => {
       );
       setFilteredbranchCodes(filteredbranchCodes);
     } else {
-      setFilteredRegions([]);
+      setFilteredregions([]);
+      setFilteredregionheads([]);
       setFilteredBranches([]);
       setFilteredbranchCodes([]);
     }
-  }, [inputs.regionCode, inputs.branchName, inputs.branchCode, regions, branches]);
+  }, [
+    inputs.verticalCode,
+    vertical,
+    businesshead,
+    inputs.regionCode,
+    inputs.branchName,
+    inputs.branchCode,
+    region,
+    regionhead,
+    branches,
+  ]);
+
+  useEffect(() => {
+    if (editedPost && editedPost.verticalCode) {
+      const filteredverticals = vertical.filter(
+        (verticals) => verticals.verticalCode === editedPost.verticalCode
+      );
+      setFilteredEditverticals(filteredverticals);
+  
+      const filteredverticalheads = verticalhead.filter(
+        (verticalheads) =>
+          verticalheads.verticalCode === editedPost.verticalCode
+      );
+      setFilteredEditverticalheads(filteredverticalheads);
+  
+      const filteredbusinessheads = businesshead.filter(
+        (businessheads) =>
+          businessheads.verticalCode === editedPost.verticalCode
+      );
+      setFilteredEditbusinessheads(filteredbusinessheads);
+    } else {
+      setFilteredEditverticals([]);
+      setFilteredEditverticalheads([]);
+      setFilteredEditbusinessheads([]);
+    }
+  
+    if (editedPost && editedPost.regionCode) {
+      const filteredregions = region.filter(
+        (regions) => regions.regionCode === editedPost.regionCode
+      );
+      setFilteredEditregions(filteredregions);
+  
+      const filteredregionheads = regionhead.filter(
+        (regionheads) =>
+          regionheads.regionCode === editedPost.regionCode
+      );
+      setFilteredEditregionheads(filteredregionheads);
+  
+      const filteredBranches = branches.filter(
+        (branch) => branch.regionCode === editedPost.regionCode
+      );
+      setFilteredEditbranches(filteredBranches);
+  
+      const filteredbranchCodes = branches.filter(
+        (branch) =>
+          branch.regionCode === editedPost.regionCode &&
+          branch.branchName === editedPost.branchName &&
+          branch.branchCode !== editedPost.branchCode
+      );
+      setFilteredEditbranchCodes(filteredbranchCodes);
+    } else {
+      setFilteredEditregions([]);
+      setFilteredEditregionheads([]);
+      setFilteredEditbranches([]);
+      setFilteredEditbranchCodes([]);
+    }
+  }, [editedPost, vertical, branches, verticalhead, businesshead, region, regionhead]);
+  
 
 
+  //input change
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -114,43 +259,73 @@ const User = () => {
       [name]: value,
     }));
 
-    if (name === 'regionCode') {
-      const selectedRegion = regions.find(
-        (region) => region.regionCode === value
-      );
-      console.log('selectedRegion:', selectedRegion);
-      setInputs((prevInputs) => ({
-        ...prevInputs,
-        regionName: selectedRegion ? selectedRegion.regionName : '',
-      }));
-    }
-
-    if (name === 'branchName') {
+    if (name === "branchName") {
       const selectedBranch = branches.find(
         (branch) =>
           branch.regionCode === inputs.regionCode && branch.branchName === value
       );
-      console.log('selectedBranch:', selectedBranch);
+      console.log("selectedBranch:", selectedBranch);
       setInputs((prevInputs) => ({
         ...prevInputs,
-        branchCode: selectedBranch ? selectedBranch.branchCode : '',
+        branchCode: selectedBranch ? selectedBranch.branchCode : "",
       }));
     }
 
-    if (name === 'branchName2') {
-      const selectedBranch2 = branchesadd.find(
-        (branch) =>
-          branch.regionCode === inputs.regionCode && branch.branchName2 === value
+    if (name === "verticalCode") {
+      const selectedVerticalhead = verticalhead.find(
+        (verticalheads) => verticalheads.verticalCode === value
       );
-      console.log('selectedBranch2:', selectedBranch2);
+      const selectedVertical = businesshead.find(
+        (businessheads) => businessheads.verticalCode === value
+      );
+
       setInputs((prevInputs) => ({
         ...prevInputs,
-        branchCode2: selectedBranch2 ? selectedBranch2.branchCode2 : '',
+        verticalName: selectedVertical ? selectedVertical.verticalName : "",
+        verticalHeadName: selectedVerticalhead
+          ? selectedVerticalhead.verticalHeadName
+          : "",
+        verticalHeadCode: selectedVerticalhead
+          ? selectedVerticalhead.verticalHeadCode
+          : "",
+        businessHeadName: selectedVertical
+          ? selectedVertical.businessHeadName
+          : "",
+        businessHeadCode: selectedVertical
+          ? selectedVertical.businessHeadCode
+          : "",
       }));
+    }
+
+    if (name === "regionCode") {
+      const selectedRegion = region.find(
+        (regions) => regions.regionCode === value
+      );
+      console.log("selectedRegion:", selectedRegion);
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        regionName: selectedRegion ? selectedRegion.regionName : "",
+        regionHeadName: "",
+      }));
+
+      const filteredregionheads = regionhead.filter(
+        (regionheads) => regionheads.regionCode === value
+      );
+      setFilteredregionheads(filteredregionheads);
+
+      if (filteredregionheads.length === 1) {
+        const selectedRegionHead = filteredregionheads[0];
+        console.log("selectedRegionHead:", selectedRegionHead);
+        setInputs((prevInputs) => ({
+          ...prevInputs,
+          regionHeadName: selectedRegionHead.regionHeadName,
+          regionHeadCode: selectedRegionHead.regionHeadCode,
+        }));
+      }
     }
   };
 
-
+  //form submit (insert)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -159,10 +334,10 @@ const User = () => {
         "http://localhost:8800/api/auth/adminuser",
         { ...inputs }
       );
-      setMsg(response.data);
+      setMsg(response.data); // Extract the 'msg' property from the response object
       setErr(null);
     } catch (err) {
-      setErr(err.response.data);
+      setErr(err.response.data); // Extract the 'err' property from the error object
       setMsg(null);
     }
   };
@@ -174,21 +349,148 @@ const User = () => {
   }, []);
 
   const saveEditedPost = () => {
-    axios
-      .put(
-        `http://localhost:8800/api/auth/edituser/${editedPost.id}`,
-        editedPost
-      )
-      .then((res) => {
-        setPosts(
-          posts.map((post) => (post.id === editedPost.id ? editedPost : post))
-        );
-        setEditedPost(null);
-        setEditDialogVisible(false);
-        alert("You have edited the data.");
-      })
-      .catch((error) => console.log(error));
+    console.log("Edited Post:", editedPost);
+
+  //vertical
+    const selectedVertical = vertical.find(
+      (verticals) => verticals.verticalCode === editedPost.verticalCode
+    );
+    console.log("Selected Vertical:", selectedVertical);
+  
+    const selectedVerticalHead = verticalhead.find(
+      (verticalheads) =>
+        verticalheads.verticalCode === editedPost.verticalCode 
+    );
+    console.log("Selected Vertical Head:", selectedVerticalHead);
+  
+    const selectedBusinessHead = businesshead.find(
+      (businessheads) =>
+        businessheads.verticalCode === editedPost.verticalCode 
+    );
+    console.log("Selected Business Head:", selectedBusinessHead);
+  
+    //region
+    const selectedRegion = region.find(
+      (regions) => regions.regionCode === editedPost.regionCode
+    );
+    console.log("Selected Region:", selectedRegion);
+  
+    const selectedRegionHead = regionhead.find(
+      (regionheads) =>
+        regionheads.regionCode === editedPost.regionCode 
+    );
+    console.log("Selected Region Head:", selectedRegionHead);
+  
+    const selectedBranch = branches.find(
+      (branch) =>
+        branch.regionCode === editedPost.regionCode &&
+        branch.branchName === editedPost.branchName
+    );
+    console.log("Selected Branch:", selectedBranch);
+  
+    if (
+      selectedVertical &&
+      selectedVerticalHead &&
+      selectedBusinessHead &&
+      selectedRegion &&
+      selectedRegionHead &&
+      selectedBranch
+    ) {
+      const updatedPost = {
+        ...editedPost,
+        verticalName: selectedVertical.verticalName,
+        verticalHeadName: selectedVerticalHead.verticalHeadName,
+        verticalHeadCode: selectedVerticalHead.verticalHeadCode,
+        businessHeadName: selectedBusinessHead.businessHeadName,
+        businessHeadCode: selectedBusinessHead.businessHeadCode,
+        regionName: selectedRegion.regionName,
+        regionHeadName: selectedRegionHead.regionHeadName,
+        regionHeadCode: selectedRegionHead.regionHeadCode,
+        branchCode: selectedBranch.branchCode,
+      };
+  
+      axios
+        .put(
+          `http://localhost:8800/api/auth/edituser/${editedPost.id}`,
+          updatedPost
+        )
+        .then((res) => {
+          setPosts(
+            posts.map((post) => (post.id === editedPost.id ? updatedPost : post))
+          );
+          setEditedPost(null);
+          setEditDialogVisible(false);
+          alert("You have edited the data.");
+        })
+        .catch((error) => console.log(error));
+    } else {
+      // Handle the case when a selected value is not found
+      console.log("One or more selected values not found.");
+      alert("One or more selected values not found.");
+    }
   };
+  
+  
+  useEffect(() => {
+    if (
+      editedPost &&
+      editedPost.regionCode &&
+      region.length > 0 &&
+      editedPost.regionHeadCode &&
+      regionhead.length > 0 && 
+      editedPost.branchCode &&
+      branches.length > 0
+    ) {
+        const filteredRegions = region.filter(
+          (regions) => regions.regionCode === editedPost.regionCode
+        );
+        setFilteredregions(filteredRegions);
+    
+        const filteredRegionHeads = regionhead.filter(
+          (regionheads) =>
+          regionheads.regionCode === editedPost.regionCode &&
+          regionheads.regionHeadName === editedPost.regionHeadName &&
+          regionheads.regionHeadCode === editedPost.regionHeadCode
+        );
+        setFilteredregionheads(filteredRegionHeads);
+
+        const filteredbranchCodes = branches.filter(
+          (branch) =>
+          branch.regionCode === editedPost.regionCode &&
+          branch.branchCode === editedPost.branchCode
+        );
+        setFilteredbranchCodes(filteredbranchCodes);
+    }
+    if (
+      editedPost &&
+      editedPost.verticalCode &&
+      vertical.length > 0 &&
+      editedPost.verticalHeadName &&
+      verticalhead.length > 0 &&
+      editedPost.businessHeadCode &&
+      businesshead.length > 0
+    ) {
+      const filteredVerticals = vertical.filter(
+        (verticals) => verticals.verticalCode === editedPost.verticalCode
+      );
+      setFilteredverticals(filteredVerticals);
+
+      const filteredVerticalHeads = verticalhead.filter(
+        (verticalheads) =>
+        verticalheads.verticalCode === editedPost.verticalCode &&
+        verticalheads.verticalHeadName === editedPost.verticalHeadName
+      );
+      setFilteredverticalheads(filteredVerticalHeads);
+  
+      const filteredBusinessHeads = businesshead.filter(
+        (businessheads) =>
+          businessheads.verticalCode === editedPost.verticalCode &&
+          businessheads.businessHeadCode === editedPost.businessHeadCode
+      );
+      setFilteredbusinessheads(filteredBusinessHeads);
+    }
+  }, [editedPost, region, branches, vertical, verticalhead, businesshead, regionhead]);
+
 
   const clearFilter = () => {
     initFilters();
@@ -211,36 +513,113 @@ const User = () => {
   const initFilters = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      regionName: {
+      employeeName: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
-      employeename: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      employeecode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      mobilenumber: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      employeeCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      employeeDesignation: {
+        value: null,
+        matchMode: FilterMatchMode.STARTS_WITH,
+      },
+      mobileNumber: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      emailId: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       regionCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      regionName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       branchCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName2: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      branchName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      verticalCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      verticalName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      verticalHeadCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      verticalHeadName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      regionHeadCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      regionHeadName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      businessHeadCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      businessHeadName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       branchCode2: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName3: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      branchName2: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       branchCode3: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName4: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      branchName3: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       branchCode4: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName5: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      branchName4: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       branchCode5: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      branchName5: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     });
     setGlobalFilterValue("");
   };
 
   const downloadCSV = () => {
+    // Define the headers for the CSV
+    const headers = [
+      "Employee Name",
+      "Employee Code",
+      "Employee Designation",
+      "Mobile Number",
+      "Email Id",
+      "Region Code",
+      "Region Name",
+      "Branch Code",
+      "Branch Name",
+      "Vertical Code",
+      "Vertical Name",
+      "Vertical Head Code",
+      "Vertical Head Name",
+      "Region Head Code",
+      "Region Head Name",
+      "Business Head Code",
+      "Business Head Name",
+      "Branch Code 2",
+      "Branch Name 2",
+      "Branch Code 3",
+      "Branch Name 3",
+      "Branch Code 4",
+      "Branch Name 4",
+      "Branch Code 5",
+      "Branch Name 5",
+    ];
+
+    // Create an array of rows to be included in the CSV
+    const rows = posts.map((post) => [
+      post.employeeName,
+      post.employeeCode,
+      post.employeeDesignation,
+      post.mobileNumber,
+      post.emailId,
+      post.regionCode,
+      post.regionName,
+      post.branchCode,
+      post.branchName,
+      post.verticalCode,
+      post.verticalName,
+      post.verticalHeadCode,
+      post.verticalHeadName,
+      post.regionHeadCode,
+      post.regionHeadName,
+      post.businessHeadCode,
+      post.businessHeadName,
+      post.branchCode2,
+      post.branchName2,
+      post.branchCode3,
+      post.branchName3,
+      post.branchCode4,
+      post.branchName4,
+      post.branchCode5,
+      post.branchName5,
+    ]);
+
+    // Combine headers and rows into a single array
+    const csvData = [headers, ...rows];
+
+    // Convert the array to CSV content
     const csvContent =
       "data:text/csv;charset=utf-8," +
-      posts.map((post) => Object.values(post).join(",")).join("\n");
+      csvData.map((row) => row.join(",")).join("\n");
+
+    // Create a download link and trigger the download
     const encodedURI = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedURI);
-    link.setAttribute("download", "usermaster.csv");
+    link.setAttribute("download", "employeemaster.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -248,22 +627,23 @@ const User = () => {
 
   const samplecsv = [
     {
-      id: "",
-      employeename: "",
-      employeecode: "",
-      mobilenumber: "",
+      employeeName: "",
+      employeeCode: "",
+      employeeDesignation: "",
+      mobileNumber: "",
+      emailId: "",
       regionCode: "",
-      regionName: "",
-      branchName: "",
       branchCode: "",
-      branchName2: "",
+      verticalCode: "",
+
       branchCode2: "",
-      branchName3: "",
+      branchName2: "",
       branchCode3: "",
-      branchName4: "",
+      branchName3: "",
       branchCode4: "",
-      branchName5: "",
+      branchName4: "",
       branchCode5: "",
+      branchName5: "",
     },
   ];
 
@@ -273,29 +653,121 @@ const User = () => {
       complete: async (results) => {
         const { data } = results;
         const filteredData = data.filter((row) => {
-          // Check if all values in the row are empty or not
           return Object.values(row).some((value) => value.trim() !== "");
         });
+        let successCount = 0;
+        let errorCount = 0;
         for (let i = 0; i < filteredData.length; i++) {
           const row = filteredData[i];
+
           try {
-            await axios.post("http://localhost:8800/api/auth/adminuser", row);
-            console.log(`Inserted row ${i + 1}: ${JSON.stringify(row)}`);
-          } catch (err) {
-            console.error(
-              `Error inserting row ${i + 1}: ${JSON.stringify(row)}`
-            );
-            console.error(err);
-            alert("Error occurred while uploading data. Please try again.");
-            return;
+            let selectedRegion = null;
+            let selectedRegionHead = null;
+            let selectedBranch = null;
+            let selectedVertical = null;
+            let selectedVerticalHead = null;
+            let selectedBusinessHead = null;
+
+            if (row.regionCode) {
+              selectedRegion = region.find(
+                (regions) => regions.regionCode === row.regionCode
+              );
+            }
+
+            if (selectedRegion) {
+              selectedRegionHead = regionhead.find(
+                (regionheads) =>
+                  regionheads.regionCode === selectedRegion.regionCode
+              );
+            }
+
+            if (row.branchCode && selectedRegion) {
+              selectedBranch = branches.find(
+                (branch) =>
+                  branch.regionCode === selectedRegion.regionCode &&
+                  branch.branchCode === row.branchCode
+              );
+            }
+
+            if (row.verticalCode) {
+              selectedVertical = vertical.find(
+                (verticals) => verticals.verticalCode === row.verticalCode
+              );
+            }
+
+            if (selectedVertical) {
+              selectedVerticalHead = verticalhead.find(
+                (verticalheads) =>
+                  verticalheads.verticalCode === selectedVertical.verticalCode
+              );
+            }
+
+            if (selectedVertical) {
+              selectedBusinessHead = businesshead.find(
+                (businessheads) =>
+                  businessheads.verticalCode === selectedVertical.verticalCode
+              );
+            }
+
+            await axios.post("http://localhost:8800/api/auth/adminuser", {
+              employeeName: row.employeeName,
+              employeeCode: row.employeeCode,
+              employeeDesignation: row.employeeDesignation,
+              mobileNumber: row.mobileNumber,
+              emailId: row.emailId,
+              regionCode: row.regionCode,
+              regionName: selectedRegion ? selectedRegion.regionName : "",
+              branchCode: row.branchCode,
+              branchName: selectedBranch ? selectedBranch.branchName : "",
+              verticalCode: row.verticalCode,
+              verticalName: selectedVertical
+                ? selectedVertical.verticalName
+                : "",
+              verticalHeadCode: selectedVerticalHead
+                ? selectedVerticalHead.verticalHeadCode
+                : "",
+              verticalHeadName: selectedVerticalHead
+                ? selectedVerticalHead.verticalHeadName
+                : "",
+              regionHeadCode: selectedRegionHead
+                ? selectedRegionHead.regionHeadCode
+                : "",
+              regionHeadName: selectedRegionHead
+                ? selectedRegionHead.regionHeadName
+                : "",
+              businessHeadCode: selectedBusinessHead
+                ? selectedBusinessHead.businessHeadCode
+                : "",
+              businessHeadName: selectedBusinessHead
+                ? selectedBusinessHead.businessHeadName
+                : "",
+              branchCode2: row.branchCode2,
+              branchName2: row.branchName2,
+              branchCode3: row.branchCode3,
+              branchName3: row.branchName3,
+              branchCode4: row.branchCode4,
+              branchName4: row.branchName4,
+              branchCode5: row.branchCode5,
+              branchName5: row.branchName5,
+            });
+            successCount++;
+          } catch (error) {
+            console.error(`Error processing row ${i + 2}:`, error);
+            errorCount++;
           }
         }
-        setPosts(filteredData);
-        alert("Data has been uploaded successfully.");
-      },
-      error: (error) => {
-        console.error(error);
-        alert("Error occurred while uploading data. Please try again.");
+        if (successCount === filteredData.length) {
+          alert("Data successfully uploaded");
+        } else if (errorCount === filteredData.length) {
+          alert("Failed to upload. Retry again.");
+        } else {
+          alert(
+            `Data uploaded successfully (${successCount} row(s)), with ${errorCount} error(s).`
+          );
+        }
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000); // Reload after 2 seconds
       },
     });
   };
@@ -313,306 +785,404 @@ const User = () => {
         Employee
       </p>
 
-      <p
-        type="button"
-        className="Addbuttonuser"
-        onClick={() => setShowAdditionaluser(true)}
-      >
-        <i className="fa fa-plus"></i>Click Here to Create User{" "}
-      </p>
+      <div>
+        <p
+          type="button"
+          className="Addbuttonuser"
+          onClick={() => setShowAdditionaluser(true)}
+        >
+          <i className="fa fa-plus"></i>Click Here to Create User{" "}
+        </p>
 
-      <div className={`additional-user ${showAdditionaluser ? "show" : ""}`}>
-        <div className="form-container-user">
-          <form className="formuser" onSubmit={handleSubmit}>
-          <div>
-              <label>
-                Employee Code
-                <input
-                  required
-                  className="userinput"
-                  id="employeecode"
-                  name="employeecode"
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
-            <div>
-              <label>
-                Employee Name
-                <input
-                  required
-                  className="userinput"
-                  id="employeename"
-                  name="employeename"
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+        <div className={`additional-user ${showAdditionaluser ? "show" : ""}`}>
+          <div className="form-container-user">
+            <form className="formuser" onSubmit={handleSubmit}>
+              <div>
+                <label>
+                  Employee code
+                  <input
+                    required
+                    autoComplete="off"
+                    className="userinput"
+                    id="employeeCode"
+                    name="employeeCode"
+                    onChange={handleChange}
+                  />
+                </label>
+              </div>
 
-            
+              <div>
+                <label>
+                  Employee Name
+                  <input
+                    required
+                    autoComplete="off"
+                    className="userinput"
+                    id="employeeName"
+                    name="employeeName"
+                    onChange={handleChange}
+                  />
+                </label>
+              </div>
 
-            <div>
-              <label>
-                Mobile Number
-                <input
-                  required
-                  className="userinput"
-                  id="mobilenumber"
-                  name="mobilenumber"
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+              <div>
+                <label>
+                  Mobile Number
+                  <input
+                    required
+                    autoComplete="off"
+                    className="userinput"
+                    id="mobileNumber"
+                    name="mobileNumber"
+                    onChange={handleChange}
+                  />
+                </label>
+              </div>
 
+              <div>
+                <label>
+                  Email ID
+                  <input
+                    required
+                    autoComplete="off"
+                    className="userinput"
+                    id="emailId"
+                    name="emailId"
+                    onChange={handleChange}
+                  />
+                </label>
+              </div>
 
-            <div>
-              <label>
-                Region Code
-                <select
-                  required
-                  className="userinput"
-                  id="regionCode"
-                  name="regionCode"
-                  value={inputs.regionCode || ""}
-                  onChange={handleChange}
-                >
-                  <option value="">Select Region Code</option>
-                  {regions.map((region) => (
-                    <option key={region.regionCode} value={region.regionCode}>
-                      {region.regionCode}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
+              <div>
+                <label>
+                  Employee Designation
+                  <input
+                    required
+                    autoComplete="off"
+                    className="userinput"
+                    id="employeeDesignation"
+                    name="employeeDesignation"
+                    onChange={handleChange}
+                  />
+                </label>
+              </div>
 
-            <div hidden>
-              <label>
-                Region Name
-                <select
-                  className="userinput"
-                  id="regionName"
-                  name="regionName"
-                  value={inputs.regionName || ""}
-                  onChange={handleChange}
-                >
-                  {filteredRegions.map((region) => (
-                    <option key={region.regionName} value={region.regionName}>
-                      {region.regionName}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
+              <div>
+                <label>
+                  Region Code
+                  <select
+                    required
+                    className="userinput"
+                    id="regionCode"
+                    name="regionCode"
+                    value={inputs.regionCode || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Region Code</option>
+                    {region.map((regions) => (
+                      <option
+                        key={regions.regionCode}
+                        value={regions.regionCode}
+                      >
+                        {regions.regionCode}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
 
-            <div>
-              <label>
-                Branch Name
-                <select
-                  required
-                  className="userinput"
-                  id="branchName"
-                  name="branchName"
-                  value={inputs.branchName || ""}
-                  onChange={handleChange}
-                >
-                  <option value="">Select Branch Name</option>
-                  {filteredBranches.map((branch) => (
-                    <option key={branch.branchName} value={branch.branchName}>
-                      {branch.branchName}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
+              <div>
+                <label>
+                  Region Name
+                  <select
+                    className="userinput"
+                    id="regionName"
+                    name="regionName"
+                    value={inputs.regionName || ""}
+                    onChange={handleChange}
+                    style={{ pointerEvents: "none", appearance: "none" }}
+                  >
+                    {filteredregions.map((regions) => (
+                      <option
+                        key={regions.regionName}
+                        value={regions.regionName}
+                      >
+                        {regions.regionName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
 
-            <div hidden>
-              <label>
-                Branch Code
-                <select
+              <div>
+                <label>
+                  Region Head Name
+                  <select
+                    className="userinput"
+                    id="regionHeadName"
+                    name="regionHeadName"
+                    value={inputs.regionHeadName || ""}
+                    onChange={handleChange}
+                    style={{ pointerEvents: "none", appearance: "none" }}
+                  >
+                    {filteredregionheads.map((regionhead) => (
+                      <option
+                        key={regionhead.regionHeadName}
+                        value={regionhead.regionHeadName}
+                      >
+                        {regionhead.regionHeadName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
 
-                  className="userinput"
-                  id="branchCode"
-                  name="branchCode" // update name attribute to "branchCode"
-                  value={inputs.branchCode || ""}
-                  onChange={handleChange}
-                >
-                  {filteredbranchCodes.map((branch) => (
-                    <option key={branch.branchCode} value={branch.branchCode}>
-                      {branch.branchCode}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
+              <div hidden>
+                <label>
+                  Region Head Code
+                  <select
+                    className="userinput"
+                    id="regionHeadCode"
+                    name="regionHeadCode"
+                    value={inputs.regionHeadCode || ""}
+                    onChange={handleChange}
+                  >
+                    {filteredregionheads.map((regionhead) => (
+                      <option
+                        key={regionhead.regionHeadCode}
+                        value={regionhead.regionHeadCode}
+                      >
+                        {regionhead.regionHeadCode}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
 
-            <div>
-              <label>
-                Vertical
-                <select
-                  required
-                  className="userinput"
-                  id="branchName"
-                  name="branchName"
-                  value={inputs.branchName || ""}
-                  onChange={handleChange}
-                >
-                  <option value="">Select Vertical Name</option>
-                  {filteredBranches.map((branch) => (
-                    <option key={branch.branchName} value={branch.branchName}>
-                      {branch.branchName}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
+              <div>
+                <label>
+                  Branch Name
+                  <select
+                    required
+                    className="userinput"
+                    id="branchName"
+                    name="branchName"
+                    value={inputs.branchName || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Branch Name</option>
+                    {filteredBranches.map((branch) => (
+                      <option key={branch.branchName} value={branch.branchName}>
+                        {branch.branchName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
 
-            <div>
-              <label>
-                Vertical Head 
-                <select
-                  required
-                  className="userinput"
-                  id="branchName"
-                  name="branchName"
-                  value={inputs.branchName || ""}
-                  onChange={handleChange}
-                >
-                  <option value="">Select Verticcal Name</option>
-                  {filteredBranches.map((branch) => (
-                    <option key={branch.branchName} value={branch.branchName}>
-                      {branch.branchName}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
+              <div hidden>
+                <label>
+                  Branch Code
+                  <select
+                    className="userinput"
+                    id="branchCode"
+                    name="branchCode"
+                    value={inputs.branchCode || ""}
+                    onChange={handleChange}
+                  >
+                    {filteredbranchCodes.map((branch) => (
+                      <option key={branch.branchCode} value={branch.branchCode}>
+                        {branch.branchCode}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
 
-            <div hidden>
-              <label>
-                Vertical Head Code 
-                <select
-                  required
-                  className="userinput"
-                  id="branchName"
-                  name="branchName"
-                  value={inputs.branchName || ""}
-                  onChange={handleChange}
-                >
-                  <option value="">Select Verticcal Name</option>
-                  {filteredBranches.map((branch) => (
-                    <option key={branch.branchName} value={branch.branchName}>
-                      {branch.branchName}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
+              <div>
+                <label>
+                  Vertical Code
+                  <select
+                    required
+                    className="userinput"
+                    id="verticalCode"
+                    name="verticalCode"
+                    value={inputs.verticalCode || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Vertical Code</option>
+                    {vertical.map((verticals) => (
+                      <option
+                        key={verticals.verticalCode}
+                        value={verticals.verticalCode}
+                      >
+                        {verticals.verticalCode}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
 
-            <div>
-              <label>
-                Region Head
-                <select
-                  required
-                  className="userinput"
-                  id="branchName"
-                  name="branchName"
-                  value={inputs.branchName || ""}
-                  onChange={handleChange}
-                >
-                  <option value="">Select Region Head</option>
-                  {filteredBranches.map((branch) => (
-                    <option key={branch.branchName} value={branch.branchName}>
-                      {branch.branchName}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
+              <div>
+                <label>
+                  Vertical Name
+                  <select
+                    className="userinput"
+                    id="verticalName"
+                    name="verticalName"
+                    value={inputs.verticalName || ""}
+                    onChange={handleChange}
+                    style={{ pointerEvents: "none", appearance: "none" }}
+                  >
+                    {filteredverticals.map((verticals) => (
+                      <option
+                        key={verticals.verticalName}
+                        value={verticals.verticalName}
+                      >
+                        {verticals.verticalName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
 
-            <div hidden>
-              <label>
-                Region Head Code 
-                <select
-                  required
-                  className="userinput"
-                  id="branchName"
-                  name="branchName"
-                  value={inputs.branchName || ""}
-                  onChange={handleChange}
-                >
-                  <option value="">Select Region Code</option>
-                  {filteredBranches.map((branch) => (
-                    <option key={branch.branchName} value={branch.branchName}>
-                      {branch.branchName}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
+              <div>
+                <label>
+                  Vertical Head Name
+                  <select
+                    className="userinput"
+                    id="verticalHeadName"
+                    name="verticalHeadName"
+                    value={inputs.verticalHeadName || ""}
+                    onChange={handleChange}
+                    style={{ pointerEvents: "none", appearance: "none" }}
+                  >
+                    {filteredverticalheads.map((verticalheads) => (
+                      <option
+                        key={verticalheads.verticalHeadName}
+                        value={verticalheads.verticalHeadName}
+                      >
+                        {verticalheads.verticalHeadName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
 
-            <button type="submit" className="Submitbuttonuser">
-              Submit
-            </button>
-          </form>
+              <div hidden>
+                <label>
+                  Vertical Head Code
+                  <select
+                    required
+                    className="userinput"
+                    id="verticalHeadCode"
+                    name="verticalHeadCode"
+                    value={inputs.verticalHeadCode || ""}
+                    onChange={handleChange}
+                  >
+                    {filteredverticalheads.map((verticalheads) => (
+                      <option
+                        key={verticalheads.verticalHeadCode}
+                        value={verticalheads.verticalHeadCode}
+                      >
+                        {verticalheads.verticalHeadCode}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+              <div>
+                <label>
+                  Business Head Name
+                  <select
+                    className="userinput"
+                    id="businessHeadName"
+                    name="businessHeadName"
+                    value={inputs.businessHeadName || ""}
+                    onChange={handleChange}
+                    style={{ pointerEvents: "none", appearance: "none" }}
+                  >
+                    {filteredbusinessheads.map((businesshead) => (
+                      <option
+                        key={businesshead.businessHeadName}
+                        value={businesshead.businessHeadName}
+                      >
+                        {businesshead.businessHeadName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+              <div hidden>
+                <label>
+                  Business Head Code
+                  <select
+                    required
+                    className="userinput"
+                    id="businessHeadCode"
+                    name="businessHeadCode"
+                    value={inputs.businessHeadCode || ""}
+                    onChange={handleChange}
+                  >
+                    {filteredbusinessheads.map((businesshead) => (
+                      <option
+                        key={businesshead.businessHeadCode}
+                        value={businesshead.businessHeadCode}
+                      >
+                        {businesshead.businessHeadCode}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+              <button type="submit" className="Submitbuttonuser">
+                Submit
+              </button>
+            </form>
+          </div>
+
+          {err && (
+            <>
+              <div className="popup-background"></div>
+              <div className="popup-wrapper">
+                <p className="investmsgp">{err.sqlMessage}</p>
+                <div className="investmsg-buttons">
+                  <a href="/admin/employeemaster">
+                    <button
+                      className="investmsg-no"
+                      onClick={() => setErr(null)}
+                    >
+                      Close
+                    </button>
+                  </a>
+                </div>
+              </div>
+            </>
+          )}
+
+          {msg && (
+            <>
+              <div className="popup-background"></div>
+              <div className="popup-wrapper">
+                <p className="investmsgp">{msg}</p>
+                <a href="/admin/employeemaster">
+                  <p className="investmsgclose" onClick={() => setMsg(null)}>
+                    close
+                  </p>
+                </a>
+              </div>
+            </>
+          )}
+
+          <input
+            type="file"
+            className="branchfile"
+            onChange={(e) => handleFileUpload(e.target.files[0])}
+          />
         </div>
-
-
-
-        <div>
-          <label>
-            Branch Name 2
-            <select
-              required
-              className="userinput"
-              id="branchName2"
-              name="branchName2"
-              value={inputs.branchName2 || ""}
-              onChange={handleChange}
-            >
-              <option value="">Select Branch Name 2</option>
-              {filteredBranches.map((branch) => (
-                <option key={branch.branchName} value={branch.branchName}>
-                  {branch.branchName}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-
-
-        <div >
-          <label>
-            Branch Code 2
-            <select
-
-              className="userinput"
-              id="branchCode2"
-              name="branchCode2" // update name attribute to "branchCode"
-              value={inputs.branchCode2 || ""}
-              onChange={handleChange}
-            >
-              {filteredbranchCodes.map((branch) => (
-                <option key={branch.branchCode} value={branch.branchCode}>
-                  {branch.branchCode}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-
-
-
-
-
-
-        <input
-          type="file"
-          className="userfile"
-          onChange={(e) => handleFileUpload(e.target.files[0])}
-          style={{ flex: "" }}
-        />
-
         <div
           className="flex align-items-end justify-content-end gap-2 exc"
           style={{
@@ -624,10 +1194,10 @@ const User = () => {
             marginTop: "-60px",
           }}
         >
-          <Button style={{ flex: "" }}>
+          <Button>
             <CSVLink
               data={samplecsv}
-              filename={"samplebranchdata"}
+              filename={"sampleemployeedata"}
               target="_blank"
             >
               Sample
@@ -640,44 +1210,13 @@ const User = () => {
             rounded
             onClick={downloadCSV}
             style={{
-              flex: "",
-              marginRight: "0px",
+              marginRight: "20px",
               backgroundColor: "lightgreen",
               border: "none",
             }}
             title="Download CSV"
           />
         </div>
-
-        {err && (
-          <>
-            <div className="popup-background"></div>
-            <div className="popup-wrapper">
-              <p className="investmsgp">{err}</p>
-              <div className="investmsg-buttons">
-                <a href="/admin/usermaster">
-                  <button className="investmsg-no" onClick={() => setErr(null)}>
-                    Close
-                  </button>
-                </a>
-              </div>
-            </div>
-          </>
-        )}
-
-        {msg && (
-          <>
-            <div className="popup-background"></div>
-            <div className="popup-wrapper">
-              <p className="investmsgp">{msg}</p>
-              <a href="/admin/usermaster">
-                <p className="investmsgclose" onClick={() => setMsg(null)}>
-                  close
-                </p>
-              </a>
-            </div>
-          </>
-        )}
       </div>
       <div className="flex justify-content-between gap-5 clearred">
         <Button
@@ -698,7 +1237,6 @@ const User = () => {
           />
         </span>
       </div>
-
       <DataTable
         value={posts}
         filters={filters}
@@ -717,26 +1255,27 @@ const User = () => {
         onRowSelect={(e) => setSelectedPost(e.data)}
         onRowUnselect={() => setSelectedPost(null)}
       >
-        <Column field="employeename" sortable header="Employee Name"></Column>
-        <Column field="employeecode" sortable header="Employee Code"></Column>
-        <Column field="mobilenumber" sortable header="Mobile Number"></Column>
-        <Column field="regionName" sortable header="Region Name"></Column>
+        <Column field="employeeCode" sortable header="Employee Code"></Column>
+        <Column field="employeeName" sortable header="Employee Name"></Column>
+        <Column field="mobileNumber" sortable header="Mobile Number"></Column>
+        <Column field="emailId" sortable header="Email ID"></Column>
+        <Column field="employeeDesignation" sortable header="Employee Designation"></Column>
         <Column field="regionCode" sortable header="Region Code"></Column>
-        <Column field="branchName" sortable header="Branch Name 1"></Column>
-        <Column field="branchCode" sortable header="Branch Code 1"></Column>
-        <Column field="branchCode2" sortable header="Branch Name 2"></Column>
-        <Column field="branchCode2" sortable header="Branch Code 2"></Column>
-        <Column field="branchCode3" sortable header="Branch Name 3"></Column>
-        <Column field="branchCode3" sortable header="Branch Code 3"></Column>
-        <Column field="branchCode4" sortable header="Branch Name 4"></Column>
-        <Column field="branchCode4" sortable header="Branch Code 4"></Column>
-        <Column field="branchCode5" sortable header="Branch Name 5"></Column>
-        <Column field="branchCode5" sortable header="Branch Code 5"></Column>
-
+        <Column field="regionName" sortable header="Region Name"></Column>
+        <Column field="regionHeadName" sortable header="Region Head Name"></Column>
+        <Column field="regionHeadCode" sortable header="Region Head Code"></Column>
+        <Column field="branchName" sortable header="Branch Name"></Column>
+        <Column field="branchCode" sortable header="Branch Code"></Column>
+        <Column field="verticalName" sortable header="Vertical Name"></Column>
+        <Column field="verticalCode" sortable header="Vertical Code"></Column>
+        <Column field="verticalHeadName" sortable header="Vertical Head Name"></Column>
+        <Column field="verticalHeadCode" sortable header="Vertical Head Code"></Column>
+        <Column field="businessHeadName" sortable header="Business Head Name"></Column>
+        <Column field="businessHeadCode" sortable header="Business Head Code"></Column>
         <Column
           body={(rowData) => (
             <Button
-              label="Edit"
+              label="Update"
               icon="pi pi-pencil"
               onClick={() => {
                 setEditedPost(rowData);
@@ -747,7 +1286,7 @@ const User = () => {
         />
       </DataTable>
       <Dialog
-        header="Edit Post"
+        header="Update User Data"
         visible={editDialogVisible}
         style={{ width: "50vw" }}
         modal
@@ -758,42 +1297,75 @@ const User = () => {
           <div>
             <div className="p-fluid">
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="employeename">Employee Name</label>
+                <label htmlFor="employeeCode">Employee Code</label>
                 <InputText
-                  id="employeename"
-                  value={editedPost.employeename}
+                  id="employeeCode"
+                  required
+                  value={editedPost.employeeCode}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      employeename: e.target.value,
+                      employeeCode: e.target.value,
                     })
                   }
                 />
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="employeecode">Employee Code</label>
+                <label htmlFor="employeeName">Employee Name</label>
                 <InputText
-                  id="employeecode"
-                  value={editedPost.employeecode}
+                  id="employeeName"
+                  required
+                  value={editedPost.employeeName}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      employeecode: e.target.value,
+                      employeeName: e.target.value,
                     })
                   }
                 />
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="mobilenumber">Mobile Number</label>
+                <label htmlFor="mobileNumber">Mobile Number</label>
                 <InputText
-                  id="mobilenumber"
-                  value={editedPost.mobilenumber}
+                  id="mobileNumber"
+                  required
+                  value={editedPost.mobileNumber}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      mobilenumber: e.target.value,
+                      mobileNumber: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="emailId">Email ID</label>
+                <InputText
+                  id="emailId"
+                  required
+                  value={editedPost.emailId}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      emailId: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="employeeDesignation">Employee Designation</label>
+                <InputText
+                  id="employeeDesignation"
+                  required
+                  value={editedPost.employeeDesignation}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      employeeDesignation: e.target.value,
                     })
                   }
                 />
@@ -801,29 +1373,104 @@ const User = () => {
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
                 <label htmlFor="regionCode">Region Code</label>
-                <InputText
+                <select
                   id="regionCode"
                   value={editedPost.regionCode}
                   onChange={(e) =>
-                    setEditedPost({ ...editedPost, regionCode: e.target.value })
+                    setEditedPost({
+                      ...editedPost,
+                      regionCode: e.target.value,
+                    })
                   }
-                />
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  <option value="">Select Region Code</option>
+                  {region.map((regions) => (
+                    <option key={regions.regionCode} value={regions.regionCode}>
+                      {regions.regionCode}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
                 <label htmlFor="regionName">Region Name</label>
-                <InputText
+                <select
                   id="regionName"
                   value={editedPost.regionName}
                   onChange={(e) =>
-                    setEditedPost({ ...editedPost, regionName: e.target.value })
+                    setEditedPost({
+                      ...editedPost,
+                      regionName: e.target.value,
+                    })
                   }
-                />
+                  disabled={!editedPost}
+                  className="userinput"
+                  style={{ pointerEvents: "none", appearance: "none" }}
+                >
+                  {filteredEditregions.map((regions) => (
+                    <option key={regions.regionName} value={regions.regionName}>
+                      {regions.regionName}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchName">Branch Name 1</label>
-                <InputText
+                <label htmlFor="regionHeadName">Region Head Name</label>
+                <select
+                  id="regionHeadName"
+                  value={editedPost.regionHeadName}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      regionHeadName: e.target.value,
+                    })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                  style={{ pointerEvents: "none", appearance: "none" }}
+                >
+                  {filteredEditregionheads.map((regionhead) => (
+                    <option
+                      key={regionhead.regionHeadName}
+                      value={regionhead.regionHeadName}
+                    >
+                      {regionhead.regionHeadName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div hidden className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="regionHeadCode">Region Head Code</label>
+                <select
+                  id="regionHeadCode"
+                  value={editedPost.regionHeadCode}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      regionHeadCode: e.target.value,
+                    })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  {filteredEditregionheads.map((regionhead) => (
+                    <option
+                      key={regionhead.regionHeadCode}
+                      value={regionhead.regionHeadCode}
+                    >
+                      {regionhead.regionHeadCode}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="branchName">Branch Name</label>
+                <select
                   id="branchName"
                   value={editedPost.branchName}
                   onChange={(e) =>
@@ -832,12 +1479,21 @@ const User = () => {
                       branchName: e.target.value,
                     })
                   }
-                />
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  <option value="">Select Branch Name</option>
+                  {filteredEditbranches.map((branch) => (
+                    <option key={branch.branchName} value={branch.branchName}>
+                      {branch.branchName}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchCode">Branch Code 1</label>
-                <InputText
+              <div hidden className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="branchCode">Branch Code</label>
+                <select
                   id="branchCode"
                   value={editedPost.branchCode}
                   onChange={(e) =>
@@ -846,120 +1502,155 @@ const User = () => {
                       branchCode: e.target.value,
                     })
                   }
-                />
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  {filteredEditbranchCodes.map((branch) => (
+                    <option key={branch.branchCode} value={branch.branchCode}>
+                      {branch.branchCode}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchName2">Branch Name 2</label>
-                <InputText
-                  id="branchName2"
-                  value={editedPost.branchName2}
+                <label htmlFor="verticalCode">Vertical Code</label>
+                <select
+                  id="verticalCode"
+                  value={editedPost.verticalCode}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      branchName2: e.target.value,
+                      verticalCode: e.target.value,
                     })
                   }
-                />
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  <option value="">Select Vertical Code</option>
+                  {vertical.map((verticals) => (
+                    <option key={verticals.verticalCode} value={verticals.verticalCode}>
+                      {verticals.verticalCode}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchCode2">Branch Code 2</label>
-                <InputText
-                  id="branchCode2"
-                  value={editedPost.branchCode2}
+                <label htmlFor="verticalName">Vertical Name</label>
+                <select
+                  id="verticalName"
+                  value={editedPost.verticalName}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      branchCode2: e.target.value,
+                      verticalName: e.target.value,
                     })
                   }
-                />
+                  disabled={!editedPost}
+                  className="userinput"
+                  style={{ pointerEvents: "none", appearance: "none" }}
+                >
+                  {filteredEditverticals.map((verticals) => (
+                    <option key={verticals.verticalName} value={verticals.verticalName}>
+                      {verticals.verticalName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+             
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="verticalHeadName">Vertical Head Name</label>
+                <select
+                  id="verticalHeadName"
+                  value={editedPost.verticalHeadName}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      verticalHeadName: e.target.value,
+                    })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                  style={{ pointerEvents: "none", appearance: "none" }}
+                >
+                  {filteredEditverticalheads.map((verticalheads) => (
+                    <option key={verticalheads.verticalHeadName} value={verticalheads.verticalHeadName}>
+                      {verticalheads.verticalHeadName}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchName3">Branch Name 3</label>
-                <InputText
-                  id="branchName3"
-                  value={editedPost.branchName3}
+              <div hidden className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="verticalHeadCode">Vertical Head Code</label>
+                <select
+                  id="verticalHeadCode"
+                  value={editedPost.verticalHeadCode}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      branchName3: e.target.value,
+                      verticalHeadCode: e.target.value,
                     })
                   }
-                />
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  {filteredEditverticalheads.map((verticalheads) => (
+                    <option key={verticalheads.verticalHeadCode} value={verticalheads.verticalHeadCode}>
+                      {verticalheads.verticalHeadCode}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchCode3">Branch Code 3</label>
-                <InputText
-                  id="branchCode3"
-                  value={editedPost.branchCode3}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      branchCode3: e.target.value,
-                    })
-                  }
-                />
-              </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchName4">Branch Name 4</label>
-                <InputText
-                  id="branchName4"
-                  value={editedPost.branchName4}
+                <label htmlFor="businessHeadName">Business Head Name</label>
+                <select
+                  id="businessHeadName"
+                  value={editedPost.businessHeadName}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      branchName4: e.target.value,
+                      businessHeadName: e.target.value,
                     })
                   }
-                />
+                  disabled={!editedPost}
+                  className="userinput"
+                  style={{ pointerEvents: "none", appearance: "none" }}
+                >
+                  {filteredEditbusinessheads.map((businessheads) => (
+                    <option key={businessheads.businessHeadName} value={businessheads.businessHeadName}>
+                      {businessheads.businessHeadName}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchCode4">Branch Code 4</label>
-                <InputText
-                  id="branchCode4"
-                  value={editedPost.branchCode4}
+              <div hidden className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="businessHeadCode">Business Head Code</label>
+                <select
+                  id="businessHeadCode"
+                  value={editedPost.businessHeadCode}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      branchCode4: e.target.value,
+                      businessHeadCode: e.target.value,
                     })
                   }
-                />
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  {filteredEditbusinessheads.map((businessheads) => (
+                    <option key={businessheads.businessHeadCode} value={businessheads.businessHeadCode}>
+                      {businessheads.businessHeadCode}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchName5">Branch Name 5</label>
-                <InputText
-                  id="branchName5"
-                  value={editedPost.branchName5}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      branchName5: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchCode5">Branch Code 5</label>
-                <InputText
-                  id="branchCode5"
-                  value={editedPost.branchCode5}
-                  onChange={(e) =>
-                    setEditedPost({
-                      ...editedPost,
-                      branchCode5: e.target.value,
-                    })
-                  }
-                />
-              </div>
+              
             </div>
             <Button label="Save" icon="pi pi-check" onClick={saveEditedPost} />
           </div>

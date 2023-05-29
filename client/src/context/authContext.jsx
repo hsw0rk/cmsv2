@@ -25,7 +25,7 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const isAdmin = () => {
-    return currentUser && currentUser.employeecode === "Admin1";
+    return currentUser && currentUser.employeeCode === "Admin1";
   };
 
   useEffect(() => {

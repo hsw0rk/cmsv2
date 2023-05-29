@@ -12,15 +12,15 @@ const icons = [
 
 const overall = (currentUser) => [
     {
-        value: currentUser.employeecode,
+        value: currentUser.employeeCode,
         title: "Employee Code",
       },
     {
-      value: currentUser.regioncode,
+      value: currentUser.regionCode,
       title: "Region Code",
     },
     {
-      value: currentUser.regionname,
+      value: currentUser.regionName,
       title: "Region Name",
     },
     {
@@ -28,7 +28,7 @@ const overall = (currentUser) => [
       title: "Designation",
     },
     {
-      value: currentUser.emailid,
+      value: currentUser.emailId,
       title: "Email Id",
     },
   ];

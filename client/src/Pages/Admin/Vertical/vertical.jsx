@@ -247,6 +247,7 @@ const Vertical = () => {
                 <label htmlFor="verticalName">Vertical Name</label>
                 <InputText
                   id="verticalName"
+                  required
                   value={editedPost.verticalName}
                   onChange={(e) =>
                     setEditedPost({
@@ -260,6 +261,7 @@ const Vertical = () => {
                 <label htmlFor="verticalCode">Vertical Code</label>
                 <InputText
                   id="verticalCode"
+                  required
                   value={editedPost.verticalCode}
                   onChange={(e) =>
                     setEditedPost({

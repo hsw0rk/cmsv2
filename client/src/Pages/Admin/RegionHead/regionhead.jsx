@@ -314,6 +314,7 @@ const Regionhead = () => {
                   onChange={(event) =>
                     setInputs({ ...inputs, regionName: event.target.value })
                   }
+                  style={{ pointerEvents: "none", appearance: "none" }}
                 >
                   {filteredRegions.map((region) => (
                     <option key={region.regionName} value={region.regionName}>
@@ -401,7 +402,8 @@ const Regionhead = () => {
           onChange={(e) => handleFileUpload(e.target.files[0])}
         />
 
-        <div
+      </div>
+      <div
           className="flex align-items-end justify-content-end gap-2 exc"
           style={{
             display: "flex",
@@ -435,7 +437,6 @@ const Regionhead = () => {
             title="Download CSV"
           />
         </div>
-      </div>
       <div className="flex justify-content-between gap-5 clearred">
         <Button
           type="button"
@@ -570,6 +571,7 @@ const Regionhead = () => {
                   }
                   disabled={!editedPost}
                   className="userinput"
+                  style={{ pointerEvents: "none", appearance: "none" }}
                 >
                   {filteredRegions.map((region) => (
                     <option key={region.regionName} value={region.regionName}>
