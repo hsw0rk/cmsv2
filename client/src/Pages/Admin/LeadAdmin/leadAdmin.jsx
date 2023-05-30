@@ -512,37 +512,32 @@ const LeadAdmin = () => {
   const initFilters = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      leadRefID: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },
       employeeName: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
       employeeCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      employeeDesignation: {
-        value: null,
-        matchMode: FilterMatchMode.STARTS_WITH,
-      },
-      mobileNumber: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      emailId: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      regionCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      regionName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      customerCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      customerAddress: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      customerName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      customerCity: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      customerPAN: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      customerPinCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      customerMobileNumber: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       branchCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       branchName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      verticalCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       verticalName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      verticalHeadCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      verticalHeadName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      regionHeadCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      regionHeadName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      businessHeadCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      businessHeadName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchCode2: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName2: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchCode3: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName3: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchCode4: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName4: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchCode5: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName5: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      productName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      principalName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      purchaseType: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      businessAmount: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      creditBranch: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      status: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      refNumber: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     });
     setGlobalFilterValue("");
   };
@@ -626,7 +621,6 @@ const LeadAdmin = () => {
 
   const sampleInvestments = [
     {
-      employeeName: "",
       employeeCode: "",
       branchCode: "",  
       customerCode: "",
@@ -649,26 +643,47 @@ const LeadAdmin = () => {
 
   const samplecsvHomeLoans  = [
     {
-      employeeName: "",
       employeeCode: "",
-
+      branchCode: "",  
+      customerName: "",
+      customerAddress: "",
+      customerCity: "",
+      customerPinCode: "",
+      customerMobileNumber: "",
+      verticalName: "",
+      productName: "",
+      principalName: "",
     },
   ];
 
 
   const samplecsvInsurance = [
     {
-      employeeName: "",
       employeeCode: "",
-
+      branchCode: "",  
+      customerName: "",
+      customerAddress: "",
+      customerCity: "",
+      customerPinCode: "",
+      customerMobileNumber: "",
+      verticalName: "",
+      productName: "",
+      principalName: "",
     },
   ];
 
   const samplecsvfields = [
     {
-      employeeName: "",
       employeeCode: "",
-
+      branchCode: "",  
+      customerName: "",
+      customerAddress: "",
+      customerCity: "",
+      customerPinCode: "",
+      customerMobileNumber: "",
+      verticalName: "",
+      productName: "",
+      principalName: "",
     },
   ];
 

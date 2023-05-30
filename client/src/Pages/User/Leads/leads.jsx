@@ -214,8 +214,10 @@ const Leads = () => {
         rowsPerPageOptions={[5, 10, 25, 50]}
       >
         <Column field="leadRefID" sortable header="leadRefID"></Column>
-        <Column field="employeeCode" sortable header="employeeCode"></Column>
-        <Column field="employeeName" sortable header="employeeName"></Column>
+        <Column field="customerCode" sortable header="Customer Code"></Column>
+        <Column field="customerName" sortable header="Customer Name"></Column>
+        <Column field="branchCode" sortable header="Branch Code"></Column>
+        <Column field="branchName" sortable header="Branch Name"></Column>
         <Column
           body={(rowData) => (
             <Button
@@ -241,34 +243,34 @@ const Leads = () => {
       >
         {selectedPost && (
           <div>
+            {selectedPost.leadRefID && (
+              <p>
+                <span className="my-dialog-title">Lead RefID:</span>
+                <span className="my-dialog-value">{selectedPost.leadRefID}</span>
+              </p>
+            )}
+            {selectedPost.customerCode && (
+              <p>
+                <span className="my-dialog-title">Customer Code:</span>
+                <span className="my-dialog-value">{selectedPost.customerCode}</span>
+              </p>
+            )}
             {selectedPost.customerName && (
               <p>
                 <span className="my-dialog-title">Customer Name:</span>
                 <span className="my-dialog-value">{selectedPost.customerName}</span>
               </p>
             )}
-            {selectedPost.productName && (
+            {selectedPost.branchCode && (
               <p>
-                <span className="my-dialog-title">Product:</span>
-                <span className="my-dialog-value">{selectedPost.productName}</span>
+                <span className="my-dialog-title">Branch Code:</span>
+                <span className="my-dialog-value">{selectedPost.branchCode}</span>
               </p>
             )}
-            {selectedPost.principal && (
+            {selectedPost.branchName && (
               <p>
-                <span className="my-dialog-title">Principal:</span>
-                <span className="my-dialog-value">{selectedPost.principal}</span>
-              </p>
-            )}
-            {selectedPost.freshRenewal && (
-              <p>
-                <span className="my-dialog-title">Fresh Renewal:</span>
-                <span className="my-dialog-value">{selectedPost.freshRenewal}</span>
-              </p>
-            )}
-            {selectedPost.pan && (
-              <p>
-                <span className="my-dialog-title">PAN:</span>
-                <span className="my-dialog-value">{selectedPost.pan}</span>
+                <span className="my-dialog-title">Branch Name:</span>
+                <span className="my-dialog-value">{selectedPost.branchName}</span>
               </p>
             )}
             {selectedPost.mobileNumber && (
