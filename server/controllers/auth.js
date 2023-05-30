@@ -85,17 +85,21 @@ export const logout = (req, res) => {
 
 // Investments
 export const investments = (req, res) => {
-  const principal = req.body.principal;
+  const principalName = req.body.principalName;
   const productName = req.body.productName;
-  const freshRenewal = req.body.freshRenewal;
-  const pan = req.body.pan;
-  const mobileNumber = req.body.mobileNumber;
+  const purchaseType = req.body.purchaseType;
+  const customerPAN = req.body.customerPAN;
+  const customerMobileNumber = req.body.customerMobileNumber;
   const customerName = req.body.customerName;
   const creditBranch = req.body.creditBranch;
-  const business = req.body.business;
-  const vertical = req.body.vertical;
+  const businessAmount = req.body.businessAmount;
+  const verticalName = req.body.verticalName;
   const employeeName = req.body.employeeName;
   const employeeCode = req.body.employeeCode;
+  const leadRefID = req.body.leadRefID;
+  const branchName = req.body.branchName;
+  const branchCode = req.body.branchCode;
+  const mobileNumber = req.body.mobileNumber; // Add this line to define the mobileNumber variable
 
   // Check if the mobileNumber exists in the employeemaster table
   const checkUserQuery = "SELECT * FROM employeemaster WHERE mobileNumber = ?";
@@ -108,14 +112,20 @@ export const investments = (req, res) => {
       const matchedUser = userResults.find(
         (user) =>
           user.customerName === customerName &&
-          user.mobileNumber === mobileNumber
+          user.customerMobileNumber === mobileNumber
       );
 
       if (matchedUser) {
-        if (customerName === matchedUser.employeeName && mobileNumber === matchedUser.mobileNumber) {
+        if (
+          customerName === matchedUser.employeeName &&
+          customerMobileNumber === matchedUser.mobileNumber
+        ) {
           // If the customername matches the employeeName and mobileNumber matches, insert the data into cmsverticalform
           insertData();
-        } else if (customerName !== matchedUser.employeeName && mobileNumber !== matchedUser.mobileNumber) {
+        } else if (
+          customerName !== matchedUser.employeeName &&
+          customerMobileNumber !== matchedUser.mobileNumber
+        ) {
           // If the customername and mobileNumber do not match the employeeName and mobileNumber, insert the data into cmsverticalform
           insertData();
         } else {
@@ -125,22 +135,22 @@ export const investments = (req, res) => {
             error: "Customer name or Mobile Number is wrong.",
             duplicate: false, // Set duplicate to false to indicate that it's not a duplicate data
           });
-        }    
+        }
       } else {
         // If the customername and mobileNumber do not match any user in the employeemaster table, insert the data into cmsverticalform
         insertData();
       }
     } else {
-      // If the mobileNumber does not exist in the employeemaster table, insert the data into cmsverticalform
+      // If the mobileNumber does not exist in the employeemaster table, insert the data into leadmaster
       insertData();
     }
   });
 
   function insertData() {
-    // Check if the data already exists in the cmsverticalform table
+    // Check if the data already exists in the leadmaster table
     const checkDuplicateQuery =
-      "SELECT * FROM cmsverticalform WHERE mobileNumber = ?";
-    const duplicateValues = [mobileNumber];
+      "SELECT * FROM leadmaster WHERE customerMobileNumber = ?";
+    const duplicateValues = [customerMobileNumber];
 
     db.query(checkDuplicateQuery, duplicateValues, (err, results) => {
       if (err) return res.status(500).json(err);
@@ -152,21 +162,24 @@ export const investments = (req, res) => {
           duplicate: true,
         });
       } else {
-        // If the data does not exist, insert it into the cmsverticalform table
+        // If the data does not exist, insert it into the leadmaster table
         const insertQuery =
-          "INSERT INTO cmsverticalform (`principal`, `productName`, `freshRenewal`, `pan`, `mobileNumber`, `customerName`, `creditBranch`, `business`, `vertical`, `employeeName`, `employeeCode`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+          "INSERT INTO leadmaster (`principalName`, `productName`, `purchaseType`, `customerPAN`, `customerMobileNumber`, `customerName`, `creditBranch`, `businessAmount`, `verticalName`, `employeeName`, `employeeCode`,`leadRefID`,`branchCode`,`branchName`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         const insertValues = [
-          principal,
+          principalName,
           productName,
-          freshRenewal,
-          pan,
-          mobileNumber,
+          purchaseType,
+          customerPAN,
+          customerMobileNumber,
           customerName,
           creditBranch,
-          business,
-          vertical,
+          businessAmount,
+          verticalName,
           employeeName,
           employeeCode,
+          leadRefID,
+          branchCode,
+          branchName,
         ];
 
         db.query(insertQuery, insertValues, (err, data) => {
@@ -211,6 +224,39 @@ export const cmsverticalformdata = (req, res) => {
   const { from, to } = req.query;
 
   let q = "SELECT * FROM cmsverticalform";
+
+  // Append the date filter to the query if both "from" and "to" dates are provided
+  if (from && to) {
+    q += ` WHERE DATE(date) >= '${from}' AND DATE(date) <= '${to}'`;
+  }
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+// Leads
+export const employeelead = (req, res) => {
+  const { from, to } = req.query;
+
+  let q = "SELECT * FROM leadmaster";
+
+  // Append the date filter to the query if both "from" and "to" dates are provided
+  if (from && to) {
+    q += ` WHERE DATE(date) >= '${from}' AND DATE(date) <= '${to}'`;
+  }
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const dashboardlead = (req, res) => {
+  const { from, to } = req.query;
+
+  let q = "SELECT * FROM leadmaster";
 
   // Append the date filter to the query if both "from" and "to" dates are provided
   if (from && to) {
@@ -487,7 +533,7 @@ export const adminuser = (req, res) => {
 
   // Check if the data already exists in the database based on multiple fields
   const checkDuplicateQuery =
-  "SELECT * FROM employeemaster WHERE employeeName = ? AND employeeCode = ? AND employeeDesignation = ? AND mobileNumber = ? AND emailId = ? AND regionCode = ? AND regionName = ? AND branchCode = ? AND branchName = ? AND verticalCode = ? AND verticalName = ? AND verticalHeadCode = ? AND verticalHeadName = ? AND regionHeadCode = ? AND regionHeadName = ? AND businessHeadCode = ? AND businessHeadName = ? AND branchCode2 = ? AND branchName2 = ? AND branchCode3 = ? AND branchName3 = ? AND branchCode4 = ? AND branchName4 = ? AND branchCode5 = ? AND branchName5 = ?";
+    "SELECT * FROM employeemaster WHERE employeeName = ? AND employeeCode = ? AND employeeDesignation = ? AND mobileNumber = ? AND emailId = ? AND regionCode = ? AND regionName = ? AND branchCode = ? AND branchName = ? AND verticalCode = ? AND verticalName = ? AND verticalHeadCode = ? AND verticalHeadName = ? AND regionHeadCode = ? AND regionHeadName = ? AND businessHeadCode = ? AND businessHeadName = ? AND branchCode2 = ? AND branchName2 = ? AND branchCode3 = ? AND branchName3 = ? AND branchCode4 = ? AND branchName4 = ? AND branchCode5 = ? AND branchName5 = ?";
   const values = [
     employeeName,
     employeeCode,
@@ -522,7 +568,7 @@ export const adminuser = (req, res) => {
     if (results.length > 0) {
       // If the data already exists, update the existing row
       const updateQuery =
-      "UPDATE employeemaster SET employeeName = ?, employeeCode = ?, employeeDesignation = ?, mobileNumber = ?, emailId = ?, regionCode = ?, regionName = ?, branchCode = ?, branchName = ?, verticalCode = ?, verticalName = ?, verticalHeadCode = ?, verticalHeadName = ?, regionHeadCode = ?, regionHeadName = ?, businessHeadCode = ?, businessHeadName = ?, branchCode2 = ?, branchName2 = ?, branchCode3 = ?, branchName3 = ?, branchCode4 = ?, branchName4 = ?, branchCode5 = ?, branchName5 = ?";
+        "UPDATE employeemaster SET employeeName = ?, employeeCode = ?, employeeDesignation = ?, mobileNumber = ?, emailId = ?, regionCode = ?, regionName = ?, branchCode = ?, branchName = ?, verticalCode = ?, verticalName = ?, verticalHeadCode = ?, verticalHeadName = ?, regionHeadCode = ?, regionHeadName = ?, businessHeadCode = ?, businessHeadName = ?, branchCode2 = ?, branchName2 = ?, branchCode3 = ?, branchName3 = ?, branchCode4 = ?, branchName4 = ?, branchCode5 = ?, branchName5 = ?";
       const updateValues = [
         employeeName,
         employeeCode,
@@ -1293,6 +1339,150 @@ export const adminco = (req, res) => {
       db.query(insertQuery, insertValues, (err, data) => {
         if (err) return res.status(500).json(err);
         return res.status(200).json("CO Head data has been created!");
+      });
+    }
+  });
+};
+
+//leadadmin
+export const leaduserdata = (req, res) => {
+  const q = "SELECT * FROM employeemaster";
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const adminleaddata = (req, res) => {
+  const { from, to } = req.query;
+
+  let q = "SELECT * FROM leadmaster";
+
+  // Append the date filter to the query if both "from" and "to" dates are provided
+  if (from && to) {
+    q += ` WHERE DATE(date) >= '${from}' AND DATE(date) <= '${to}'`;
+  }
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const adminlead = (req, res) => {
+  const leadRefID = req.body.leadRefID;
+  const employeeName = req.body.employeeName;
+  const employeeCode = req.body.employeeCode;
+  const branchName = req.body.branchName;
+  const branchCode = req.body.branchCode;
+  const customerCode = req.body.customerCode;
+  const customerName = req.body.customerName;
+  const customerPAN = req.body.customerPAN;
+  const customerAddress = req.body.customerAddress;
+  const customerCity = req.body.customerCity;
+  const customerPinCode = req.body.customerPinCode;
+  const customerMobileNumber = req.body.customerMobileNumber;
+  const verticalName = req.body.verticalName;
+  const productName = req.body.productName;
+  const principalName = req.body.principalName;
+  const purchaseType = req.body.purchaseType;
+  const businessAmount = req.body.businessAmount;
+  const creditBranch = req.body.creditBranch;
+  const status = req.body.status;
+  const refNumber = req.body.refNumber;
+
+  // Check if the data already exists in the database based on multiple fields
+  const checkDuplicateQuery =
+    "SELECT * FROM leadmaster WHERE leadRefID = ? AND employeeName = ? AND employeeCode = ? AND branchName = ? AND branchCode = ? AND customerCode = ? AND customerName = ? AND customerPAN = ? AND customerAddress = ? AND customerCity = ? AND customerPinCode = ? AND customerMobileNumber = ? AND verticalName = ? AND productName = ? AND principalName = ? AND purchaseType = ? AND businessAmount = ? AND creditBranch = ? AND status = ? AND refNumber = ?";
+  const values = [
+    leadRefID,
+    employeeName,
+    employeeCode,
+    branchName,
+    branchCode,
+    customerCode,
+    customerName,
+    customerPAN,
+    customerAddress,
+    customerCity,
+    customerPinCode,
+    customerMobileNumber,
+    verticalName,
+    productName,
+    principalName,
+    purchaseType,
+    businessAmount,
+    creditBranch,
+    status,
+    refNumber,
+  ];
+
+  db.query(checkDuplicateQuery, values, (err, results) => {
+    if (err) return res.status(500).json(err);
+
+    if (results.length > 0) {
+      // If the data already exists, update the existing row
+      const updateQuery =
+        "UPDATE leadmaster SET employeeName = ?, employeeCode = ?, branchName = ?, branchCode = ?, customerCode = ?, customerName = ?, customerPAN = ?, customerAddress = ?, customerCity = ?, customerPinCode = ?, customerMobileNumber = ?, verticalName = ?, productName = ?, principalName = ?, purchaseType = ?, businessAmount = ?, creditBranch = ?, status = ?, refNumber = ? WHERE leadRefID = ?";
+      const updateValues = [
+        employeeName,
+        employeeCode,
+        branchName,
+        branchCode,
+        customerCode,
+        customerName,
+        customerPAN,
+        customerAddress,
+        customerCity,
+        customerPinCode,
+        customerMobileNumber,
+        verticalName,
+        productName,
+        principalName,
+        purchaseType,
+        businessAmount,
+        creditBranch,
+        status,
+        refNumber,
+        leadRefID,
+      ];
+
+      db.query(updateQuery, updateValues, (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("User data has been updated!");
+      });
+    } else {
+      // If the data does not exist, insert the data into the database
+      const insertQuery =
+        "INSERT INTO leadmaster (`leadRefID`,`employeeName`,`employeeCode`,`branchName`,`branchCode`,`customerCode`,`customerName`,`customerPAN`,`customerAddress`,`customerCity`,`customerPinCode`,`customerMobileNumber`,`verticalName`,`productName`,`principalName`,`purchaseType`,`businessAmount`,`creditBranch`,`status`,`refNumber`) VALUES (?)";
+
+      const insertValues = [
+        leadRefID,
+        employeeName,
+        employeeCode,
+        branchName,
+        branchCode,
+        customerCode,
+        customerName,
+        customerPAN,
+        customerAddress,
+        customerCity,
+        customerPinCode,
+        customerMobileNumber,
+        verticalName,
+        productName,
+        principalName,
+        purchaseType,
+        businessAmount,
+        creditBranch,
+        status,
+        refNumber,
+      ];
+
+      db.query(insertQuery, [insertValues], (err, data) => {
+        if (err) return res.status(500).json(err);
+        return res.status(200).json("User data has been created!");
       });
     }
   });

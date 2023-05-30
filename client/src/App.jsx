@@ -26,6 +26,7 @@ import Businesshead from './Pages/Admin/BusinessHead/businesshead';
 import Regionhead from './Pages/Admin/RegionHead/regionhead';
 import Verticalhead from './Pages/Admin/VerticalHead/verticalhead';
 import CO from './Pages/Admin/CO/co';
+import LeadAdmin from './Pages/Admin/LeadAdmin/leadAdmin';
 
 function App() {
     return (
@@ -54,7 +55,7 @@ function App() {
                     <Route path="comaster" element={<CO />} />
                     
                     <Route path="approvalmaster" element={<Approval />} />
-                    <Route path="leads" element={<Leads />} />
+                    <Route path="leads" element={<LeadAdmin />} />
                 </Route>
             </Routes>
         </BrowserRouter>

@@ -33,6 +33,10 @@ import {
   verticalheaddata,editverticalhead,adminverticalhead,getverticalinverticalhead,getbusinessinverticalhead,getregioninverticalhead,getregionheadinverticalhead,
 
   coheaddata,editcoheadmaster,adminco,
+
+  employeelead,dashboardlead,
+
+  leaduserdata,adminleaddata,adminlead
   
 } from "../controllers/auth.js";
 
@@ -53,6 +57,10 @@ router.get("/getprincipalininsurance", getprincipalininsurance);
 
 //orderbook
 router.get("/cmsverticalformdata", cmsverticalformdata);
+
+//leads
+router.get("/employeelead", employeelead);
+router.get("/dashboardlead", dashboardlead);
 
 //regionmaster
 router.get("/regiondata", regiondata);
@@ -133,5 +141,11 @@ router.post("/adminco", adminco);
 router.get("/approvaldata", approvaldata);
 router.put("/editapproval/:id", editapproval);
 router.put("/adminapproval", adminapproval);
+
+//leadadmin
+router.get("/leaduserdata", leaduserdata);
+router.get("/adminleaddata", adminleaddata);
+router.post("/adminlead", adminlead);
+
 
 export default router;

@@ -38,17 +38,20 @@ const Investments = () => {
   }, []);
 
   const [inputs, setInputs] = useState({
-    principal: "",
+    principalName: "",
     productName: "",
-    freshRenewal: "",
-    pan: "",
-    mobileNumber: "",
+    productType: "",
+    customerPAN: "",
+    customerMobileNumber: "",
     customerName: "",
     creditBranch: "",
-    business: "",
-    vertical: "Investments",
+    businessAmount: "",
+    verticalName: "Investments",
     employeeName: currentUser.employeeName,
     employeeCode: currentUser.employeeCode,
+    branchName: currentUser.branchName,
+    branchCode: currentUser.branchCode,
+    leadRefID: `CL${currentUser.employeeCode}${new Date().toLocaleString('en-US', { month: 'long' }).toUpperCase()}${new Date().toISOString().replace(/[-:.Z]/g, '').replace('T', '')}`,
   });
 
   const [iproduct, setiproduct] = useState([]);
@@ -85,7 +88,7 @@ const Investments = () => {
     e.preventDefault();
 
     try {
-      const uppercasePan = inputs.pan.toUpperCase(); // Convert the PAN number to uppercase
+      const uppercasePan = inputs.customerPAN.toUpperCase(); // Convert the PAN number to uppercase
       const response = await axios.post(
         "http://localhost:8800/api/auth/investments",
         { ...inputs, pan: uppercasePan } // Include the uppercase PAN number in the request payload
@@ -174,7 +177,7 @@ const Investments = () => {
               <select
                 required
                 className="investmentsinput"
-                name="product"
+                name="productName"
                 value={selectedProduct}
                 onChange={handleProductChange}
                 onInvalid={(e) => e.target.setCustomValidity("Select Product")}
@@ -201,7 +204,7 @@ const Investments = () => {
                   <select
                     required
                     className="investmentsinput"
-                    name="principal"
+                    name="principalName"
                     onChange={handleChange}
                     onInvalid={(e) =>
                       e.target.setCustomValidity("Select Principal")
@@ -236,8 +239,8 @@ const Investments = () => {
                   Fresh / Renewal<span style={{ color: "red" }}>*</span>
                   <select
                     className="investmentsinput"
-                    id="freshRenewal"
-                    name="freshRenewal"
+                    id="purchaseType"
+                    name="purchaseType"
                     onChange={handleChange}
                     required
                     onInvalid={(e) =>
@@ -307,8 +310,8 @@ const Investments = () => {
               <input
                 className="investmentsinput"
                 type="text"
-                id="pan"
-                name="pan"
+                id="customerPAN"
+                name="customerPAN"
                 maxLength={10}
                 pattern="[a-z]{5}[0-9]{4}[a-z]{1}"
                 required
@@ -344,8 +347,8 @@ const Investments = () => {
                 required
                 className="investmentsinput"
                 type="test"
-                id="mobileNumber"
-                name="mobileNumber"
+                id="customerMobileNumber"
+                name="customerMobileNumber"
                 pattern="^(?!.*[A-Za-z])[1-9][0-9]*$"
                 maxLength={10}
                 onChange={handleChange}
@@ -375,35 +378,35 @@ const Investments = () => {
                   <option value="">Select</option>
                   {currentUser.branchName && currentUser.branchCode && (
                     <option
-                      value={`${currentUser.branchName}-${currentUser.branchCode}`}
+                      value={`${currentUser.branchCode}`}
                     >
                       {currentUser.branchName}-{currentUser.branchCode}
                     </option>
                   )}
                   {currentUser.Branchname2 && currentUser.Branchcode2 && (
                     <option
-                      value={`${currentUser.Branchname2}-${currentUser.Branchcode2}`}
+                      value={`${currentUser.Branchcode2}`}
                     >
                       {currentUser.Branchname2}-{currentUser.Branchcode2}
                     </option>
                   )}
                   {currentUser.Branchname3 && currentUser.Branchcode3 && (
                     <option
-                      value={`${currentUser.Branchname3}-${currentUser.Branchcode3}`}
+                      value={`${currentUser.Branchcode3}`}
                     >
                       {currentUser.Branchname3}-{currentUser.Branchcode3}
                     </option>
                   )}
                   {currentUser.Branchname4 && currentUser.Branchcode4 && (
                     <option
-                      value={`${currentUser.Branchname4}-${currentUser.Branchcode4}`}
+                      value={`${currentUser.Branchcode4}`}
                     >
                       {currentUser.Branchname4}-{currentUser.Branchcode4}
                     </option>
                   )}
                   {currentUser.Branchname5 && currentUser.Branchcode5 && (
                     <option
-                      value={`${currentUser.Branchname5}-${currentUser.Branchcode5}`}
+                      value={`${currentUser.Branchcode5}`}
                     >
                       {currentUser.Branchname5}-{currentUser.Branchcode5}
                     </option>
@@ -422,8 +425,8 @@ const Investments = () => {
                   className="investmentsinput"
                   type="text"
                   pattern="^(?!.*[A-Za-z])[1-9][0-9]*$"
-                  id="business"
-                  name="business"
+                  id="businessAmount"
+                  name="businessAmount"
                   onChange={handleChange}
                   onInvalid={(e) =>
                     e.target.setCustomValidity("Your Business Amount")
@@ -440,9 +443,9 @@ const Investments = () => {
                 required
                 className="investmentsinput"
                 type="hidden"
-                id="vertical"
+                id="verticalName"
                 value="Investments"
-                name="vertical"
+                name="verticalName"
               />
             </label>
           </div>
@@ -470,6 +473,48 @@ const Investments = () => {
                 id="employeeCode"
                 name="employeeCode"
                 value={currentUser.employeeCode}
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              {" "}
+              <input
+                required
+                className="investmentsinput"
+                type="hidden"
+                id="leadRefID"
+                name="leadRefID"
+                value={`CL${currentUser.employeeCode}${new Date().toLocaleString('en-US', { month: 'long' }).toUpperCase()}${new Date().toISOString().replace(/[-:.Z]/g, '').replace('T', '')}`}
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              {" "}
+              <input
+                required
+                className="investmentsinput"
+                type="hidden"
+                id="branchCode"
+                name="branchCode"
+                value={currentUser.branchCode}
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              {" "}
+              <input
+                required
+                className="investmentsinput"
+                type="hidden"
+                id="branchName"
+                name="branchName"
+                value={currentUser.branchName}
               />
             </label>
           </div>

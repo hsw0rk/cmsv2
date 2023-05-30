@@ -30,7 +30,7 @@ const OrderBook = () => {
           `http://localhost:8800/api/auth/cmsverticalformdata?from=${fromDate}&to=${toDate}`
         );
         const filteredPosts = response.data.filter(
-          (post) => post.employeecode === currentUser.employeecode
+          (post) => post.employeeCode === currentUser.employeeCode
         );
         setPosts(filteredPosts);
       } catch (error) {
@@ -79,7 +79,7 @@ const OrderBook = () => {
           "http://localhost:8800/api/auth/cmsverticalformdata"
         );
         const filteredPosts = response.data.filter(
-          (post) => post.employeecode === currentUser.employeecode
+          (post) => post.employeeCode === currentUser.employeeCode
         );
         setPosts(filteredPosts);
       } catch (error) {

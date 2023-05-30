@@ -15,7 +15,7 @@ export const AuthContextProvider = ({ children }) => {
       SameSite: 'None',
       Secure: true
     });
-  
+
     setCurrentUser(res.data)
   };
 
@@ -25,7 +25,7 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const isAdmin = () => {
-    return currentUser && currentUser.employeeCode === "Admin1";
+    return currentUser && currentUser.password === "Admin@1";
   };
 
   useEffect(() => {
