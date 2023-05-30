@@ -799,8 +799,6 @@ const handleFileUpload = (file) => {
     });
   };
   
-  
-  
 
   return (
     <div className="form">

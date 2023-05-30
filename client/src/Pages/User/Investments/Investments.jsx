@@ -257,53 +257,6 @@ const Investments = () => {
             )}
           </div>
 
-          {/* {showPanInput && (
-            <label style={{ position: 'relative' }}>
-              PAN<span style={{ color: 'red' }}>*</span>
-              <input
-                className={`investmentsinput ${inputValue && !isValid ? 'invalid-icon' : 'valid-icon'}`}
-                type="text"
-                id="pan"
-                name="pan"
-                maxLength={10}
-                pattern="[a-z]{5}[0-9]{4}[a-z]{1}"
-                required
-                style={{ textTransform: 'uppercase' }}
-                title="Enter a valid PAN (e.g., ABCDE1234F)"
-                value={inputValue}
-                onChange={handleInputChange}
-              />
-              {inputValue && !isValid && (
-                <span
-                  style={{
-                    position: 'absolute',
-                    right: '5px',
-                    top: '85%',
-                    transform: 'translateY(-50%)',
-                    fontSize: '12px',
-                    color: 'red',
-                  }}
-                >
-                  &#10060;
-                </span>
-              )}
-              {inputValue && isValid && (
-                <span
-                  style={{
-                    position: 'absolute',
-                    right: '5px',
-                    top: '85%',
-                    transform: 'translateY(-50%)',
-                    fontSize: '15px',
-                    color: 'green',
-                  }}
-                >
-                  &#10004;
-                </span>
-              )}
-            </label>
-          )} */}
-
           {showPanInput && (
             <label>
               PAN<span style={{ color: "red" }}>*</span>
