@@ -189,7 +189,7 @@ const OrderBook = () => {
               <input
                 type="date"
                 id="toDate"
-                value={toDate}
+                value={toDate || new Date().toISOString().split('T')[0]}
                 className="orderbooktoDate"
                 onChange={(e) => setToDate(e.target.value)}
               />

@@ -1376,6 +1376,7 @@ export const adminlead = (req, res) => {
   const employeeCode = req.body.employeeCode;
   const branchName = req.body.branchName;
   const branchCode = req.body.branchCode;
+  const dueDate = req.body.dueDate;
   const customerCode = req.body.customerCode;
   const customerName = req.body.customerName;
   const customerPAN = req.body.customerPAN;
@@ -1394,13 +1395,14 @@ export const adminlead = (req, res) => {
 
   // Check if the data already exists in the database based on multiple fields
   const checkDuplicateQuery =
-    "SELECT * FROM leadmaster WHERE leadRefID = ? AND employeeName = ? AND employeeCode = ? AND branchName = ? AND branchCode = ? AND customerCode = ? AND customerName = ? AND customerPAN = ? AND customerAddress = ? AND customerCity = ? AND customerPinCode = ? AND customerMobileNumber = ? AND verticalName = ? AND productName = ? AND principalName = ? AND purchaseType = ? AND businessAmount = ? AND creditBranch = ? AND status = ? AND refNumber = ?";
+    "SELECT * FROM leadmaster WHERE leadRefID = ? AND employeeName = ? AND employeeCode = ? AND branchName = ? AND branchCode = ? AND dueDate = ? AND customerCode = ? AND customerName = ? AND customerPAN = ? AND customerAddress = ? AND customerCity = ? AND customerPinCode = ? AND customerMobileNumber = ? AND verticalName = ? AND productName = ? AND principalName = ? AND purchaseType = ? AND businessAmount = ? AND creditBranch = ? AND status = ? AND refNumber = ?";
   const values = [
     leadRefID,
     employeeName,
     employeeCode,
     branchName,
     branchCode,
+    dueDate,
     customerCode,
     customerName,
     customerPAN,
@@ -1424,12 +1426,13 @@ export const adminlead = (req, res) => {
     if (results.length > 0) {
       // If the data already exists, update the existing row
       const updateQuery =
-        "UPDATE leadmaster SET employeeName = ?, employeeCode = ?, branchName = ?, branchCode = ?, customerCode = ?, customerName = ?, customerPAN = ?, customerAddress = ?, customerCity = ?, customerPinCode = ?, customerMobileNumber = ?, verticalName = ?, productName = ?, principalName = ?, purchaseType = ?, businessAmount = ?, creditBranch = ?, status = ?, refNumber = ? WHERE leadRefID = ?";
+        "UPDATE leadmaster SET employeeName = ?, employeeCode = ?, branchName = ?, branchCode = ?, dueDate = ?, customerCode = ?, customerName = ?, customerPAN = ?, customerAddress = ?, customerCity = ?, customerPinCode = ?, customerMobileNumber = ?, verticalName = ?, productName = ?, principalName = ?, purchaseType = ?, businessAmount = ?, creditBranch = ?, status = ?, refNumber = ? WHERE leadRefID = ?";
       const updateValues = [
         employeeName,
         employeeCode,
         branchName,
         branchCode,
+        dueDate,
         customerCode,
         customerName,
         customerPAN,
@@ -1455,7 +1458,7 @@ export const adminlead = (req, res) => {
     } else {
       // If the data does not exist, insert the data into the database
       const insertQuery =
-        "INSERT INTO leadmaster (`leadRefID`,`employeeName`,`employeeCode`,`branchName`,`branchCode`,`customerCode`,`customerName`,`customerPAN`,`customerAddress`,`customerCity`,`customerPinCode`,`customerMobileNumber`,`verticalName`,`productName`,`principalName`,`purchaseType`,`businessAmount`,`creditBranch`,`status`,`refNumber`) VALUES (?)";
+        "INSERT INTO leadmaster (`leadRefID`,`employeeName`,`employeeCode`,`branchName`,`branchCode`,`dueDate`,`customerCode`,`customerName`,`customerPAN`,`customerAddress`,`customerCity`,`customerPinCode`,`customerMobileNumber`,`verticalName`,`productName`,`principalName`,`purchaseType`,`businessAmount`,`creditBranch`,`status`,`refNumber`) VALUES (?)";
 
       const insertValues = [
         leadRefID,
@@ -1463,6 +1466,7 @@ export const adminlead = (req, res) => {
         employeeCode,
         branchName,
         branchCode,
+        dueDate,
         customerCode,
         customerName,
         customerPAN,
@@ -1482,7 +1486,7 @@ export const adminlead = (req, res) => {
 
       db.query(insertQuery, [insertValues], (err, data) => {
         if (err) return res.status(500).json(err);
-        return res.status(200).json("User data has been created!");
+        return res.status(200).json("Lead data has been created!");
       });
     }
   });

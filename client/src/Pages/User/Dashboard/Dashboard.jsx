@@ -107,9 +107,9 @@ const Dashboard = () => {
             removableSort
             rowsPerPageOptions={[5, 10, 25, 50]}
           >
-            <Column field="leadRefID" sortable header="leadRefID"></Column>
-            <Column field="employeeCode" sortable header="employeeCode"></Column>
-            <Column field="employeeName" sortable header="employeeName"></Column>
+            <Column field="customerMobileNumber" sortable header="Customer Mobile Number"></Column>
+            <Column field="productName" sortable header="Product Name"></Column>
+            <Column field="principalName" sortable header="Principal Name"></Column>
           </DataTable>
         </div>
       </DashboardWrapperMain>

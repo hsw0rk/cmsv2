@@ -33,6 +33,7 @@ const LeadAdmin = () => {
           employeeName: "",
           branchCode: "",
           branchName: "",
+          dueDate: "",
           customerCode: "",
           customerName: "",
           customerPAN: "",
@@ -623,6 +624,7 @@ const LeadAdmin = () => {
     {
       employeeCode: "",
       branchCode: "",  
+      dueDate: "",
       customerCode: "",
       customerName: "",
       customerPAN: "",
@@ -645,6 +647,7 @@ const LeadAdmin = () => {
     {
       employeeCode: "",
       branchCode: "",  
+      dueDate: "",
       customerName: "",
       customerAddress: "",
       customerCity: "",
@@ -661,6 +664,7 @@ const LeadAdmin = () => {
     {
       employeeCode: "",
       branchCode: "",  
+      dueDate: "",
       customerName: "",
       customerAddress: "",
       customerCity: "",
@@ -676,6 +680,7 @@ const LeadAdmin = () => {
     {
       employeeCode: "",
       branchCode: "",  
+      dueDate: "",
       customerName: "",
       customerAddress: "",
       customerCity: "",
@@ -687,8 +692,15 @@ const LeadAdmin = () => {
     },
   ];
 
+  const formatDueDate = (dueDate) => {
+  const date = new Date(dueDate);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = String(date.getFullYear());
+  return `${year}-${month}-${day}`;
+};
 
-  const handleFileUpload = (file) => {
+const handleFileUpload = (file) => {
     Papa.parse(file, {
       header: true,
       complete: async (results) => {
@@ -719,15 +731,45 @@ const LeadAdmin = () => {
   
             const leadRefID = `PL${currentUser.employeeCode}${new Date().toLocaleString('en-US', { month: 'long' }).toUpperCase()}${new Date().toISOString().replace(/[-:.Z]/g, '').replace('T', '')}`;
   
+            let dueDate = formatDueDate(row.dueDate); // Format the dueDate as dd/mm/yyyy
+  
+            // Validate mandatory fields
+            if (
+              !row.employeeCode ||
+              !selectedEmployee ||
+              !row.branchCode ||
+              !selectedBranch ||
+              !dueDate ||
+              !row.customerName ||
+              !row.customerAddress ||
+              !row.customerCity ||
+              !row.customerPinCode ||
+              !row.customerMobileNumber ||
+              !row.verticalName ||
+              !row.productName ||
+              !row.principalName
+            ) {
+              console.error(`Error processing row ${i + 2}: Mandatory field(s) missing`);
+              errorCount++;
+              continue; // Skip the current iteration and move to the next row
+            }
+  
+            // Check if the dueDate is empty or not provided
+            if (!row.dueDate) {
+              console.error(`Error processing row ${i + 2}: Due Date is empty`);
+              errorCount++;
+              continue; // Skip the current iteration and move to the next row
+            }
+  
             await axios.post("http://localhost:8800/api/auth/adminlead", {
               leadRefID,
               employeeCode: row.employeeCode,
-              employeeName: selectedEmployee ? selectedEmployee.employeeName : "",
+              employeeName: selectedEmployee.employeeName,
               branchCode: row.branchCode,
-              branchName: selectedBranch ? selectedBranch.branchName : "",
+              branchName: selectedBranch.branchName,
+              dueDate,
               customerName: row.customerName,
               customerAddress: row.customerAddress,
-              customerCity: row.customerCity,
               customerCity: row.customerCity,
               customerPinCode: row.customerPinCode,
               customerMobileNumber: row.customerMobileNumber,
@@ -756,6 +798,8 @@ const LeadAdmin = () => {
       },
     });
   };
+  
+  
   
 
   return (
