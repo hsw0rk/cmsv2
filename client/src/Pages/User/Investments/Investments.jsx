@@ -57,12 +57,7 @@ const Investments = () => {
     employeeCode: currentUser.employeeCode,
     branchName: currentUser.branchName,
     branchCode: currentUser.branchCode,
-    leadRefID: `CL${currentUser.employeeCode}${new Date()
-      .toLocaleString("en-US", { month: "long" })
-      .toUpperCase()}${new Date()
-      .toISOString()
-      .replace(/[-:.Z]/g, "")
-      .replace("T", "")}`,
+    leadRefID: `CL${currentUser.employeeCode}${new Date().toLocaleString('en-US', { month: 'short' }).toUpperCase()}${new Date().toISOString().replace(/[-:.ZT]/g, '').substring(0, 14)}`
   });
 
   const [iproduct, setiproduct] = useState([]);
@@ -796,12 +791,7 @@ const Investments = () => {
                 type="hidden"
                 id="leadRefID"
                 name="leadRefID"
-                value={`CL${currentUser.employeeCode}${new Date()
-                  .toLocaleString("en-US", { month: "long" })
-                  .toUpperCase()}${new Date()
-                  .toISOString()
-                  .replace(/[-:.Z]/g, "")
-                  .replace("T", "")}`}
+                value={`CL${currentUser.employeeCode}${new Date().toLocaleString('en-US', { month: 'short' }).toUpperCase()}${new Date().toISOString().replace(/[-:.ZT]/g, '').substring(0, 14)}`}
               />
             </label>
           </div>
