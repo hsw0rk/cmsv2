@@ -330,14 +330,6 @@ const Leads = () => {
                 <span className="my-dialog-value">{selectedPost.verticalName}</span>
               </p>
             )}
-            {selectedPost.date && (
-              <p>
-                <span className="my-dialog-title">Date:</span>
-                <span className="my-dialog-value">
-                  {selectedPost.date.split("T")[0]}
-                </span>
-              </p>
-            )}
 
             {selectedPost.lastModified && (
               <p>

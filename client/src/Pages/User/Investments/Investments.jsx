@@ -102,13 +102,14 @@ const Investments = () => {
   };
 
   const [selectedProduct, setSelectedProduct] = useState("");
-  const [showFreshRenewal, setShowFreshRenewal] = useState(true);
-  const [showCreditBranch, setShowCreditBranch] = useState(true);
-  const [showPanInput, setShowPanInput] = useState(true);
-  const [showCustomerNameInput, setShowCustomerNameInput] = useState(true);
-  const [showMobileNumberInput, setShowMobileNumberInput] = useState(true);
-  const [showBusinessAmountInput, setShowBusinessAmountInput] = useState(true);
+  const [showFreshRenewal, setShowFreshRenewal] = useState(false);
+  const [showCreditBranch, setShowCreditBranch] = useState(false);
+  const [showPanInput, setShowPanInput] = useState(false);
+  const [showCustomerNameInput, setShowCustomerNameInput] = useState(false);
+  const [showMobileNumberInput, setShowMobileNumberInput] = useState(false);
+  const [showBusinessAmountInput, setShowBusinessAmountInput] = useState(false);
   const [showPrincipalDropdown, setShowPrincipalDropdown] = useState(false);
+  const [showPaymentModeDropdown, setShowPaymentModeDropdown] = useState(false);
 
   const handleProductChange = (event) => {
     const productName = event.target.value;
@@ -150,7 +151,7 @@ const Investments = () => {
       setShowCustomerNameInput(true);
       setShowMobileNumberInput(true);
       setShowBusinessAmountInput(true);
-    } else {
+    } else if (productName === "Deposits") {
       setShowPrincipalDropdown(true);
       setShowFreshRenewal(true);
       setShowCreditBranch(true);
@@ -158,6 +159,9 @@ const Investments = () => {
       setShowCustomerNameInput(true);
       setShowMobileNumberInput(true);
       setShowBusinessAmountInput(true);
+      if (value === "Fresh") {
+        setShowPaymentModeDropdown(true);
+      }
     }
   };
 
@@ -383,6 +387,27 @@ const Investments = () => {
                   onChange={handleChange}
                   onInvalid={(e) =>
                     e.target.setCustomValidity("Your Business Amount")
+                  }
+                  onInput={(e) => e.target.setCustomValidity("")}
+                />
+              </label>
+            </div>
+          )}
+
+          {showPaymentModeDropdown && (
+            <div>
+              <label>
+                Payment Mode<span style={{ color: "red" }}>*</span>
+                <input
+                  required
+                  className="investmentsinput"
+                  type="text"
+                  pattern="^(?!.*[A-Za-z])[1-9][0-9]*$"
+                  id="paymentMode"
+                  name="paymentMode"
+                  onChange={handleChange}
+                  onInvalid={(e) =>
+                    e.target.setCustomValidity("Your Payment Mode")
                   }
                   onInput={(e) => e.target.setCustomValidity("")}
                 />

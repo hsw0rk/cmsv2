@@ -227,7 +227,7 @@ export const cmsverticalformdata = (req, res) => {
 
   // Append the date filter to the query if both "from" and "to" dates are provided
   if (from && to) {
-    q += ` WHERE DATE(date) >= '${from}' AND DATE(date) <= '${to}'`;
+    q += ` WHERE DATE(lastModified) >= '${from}' AND DATE(lastModified) <= '${to}'`;
   }
 
   db.query(q, (err, data) => {
