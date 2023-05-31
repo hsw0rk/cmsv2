@@ -26,7 +26,7 @@
         width: 28rem;
     }
     .searchbar{
-        width: 15rem;
+        width: 15rem !important;
     }
     .p-float-label{
         margin-left: 25px;
@@ -36,7 +36,7 @@
 
 @media screen and (max-width: 425px) {
     .searchbar{
-        width: 7rem;
+        width: 7rem !important;
     }
 
     .clearred {

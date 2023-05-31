@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
+import { DataTable } from 'primereact/datatable';
 import { Dialog } from "primereact/dialog";
-import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
+import { Column } from 'primereact/column';
+import { InputText } from 'primereact/inputtext';
+import { Button } from 'primereact/button';
+import { FilterMatchMode } from 'primereact/api';
 import exc from "../../../Assets/exc.svg";
 import axios from "axios";
 import "./leads.css";
@@ -17,8 +17,21 @@ const Leads = () => {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [dialogVisible, setDialogVisible] = useState(false);
-  const [globalFilterValue, setGlobalFilterValue] = useState("");
-  const [filters, setFilters] = useState({});
+
+
+  const [filters, setFilters] = useState({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    leadRefID: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    customerCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    customerName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    branchCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    branchName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  });
+  const [loading, setLoading] = useState(true);
+  const [globalFilterValue, setGlobalFilterValue] = useState('');
+
+
+
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
 
@@ -52,58 +65,30 @@ const Leads = () => {
     );
   };
 
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
   const clearFilter = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      productName: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-      },
-      principal: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      freshRenewal: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-      },
-      customerName: {
-        operator: FilterOperator.OR,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-      },
+      leadRefID: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      customerCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      customerName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      branchCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      branchName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     });
-    setGlobalFilterValue("");
+    setGlobalFilterValue('');
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8800/api/auth/employeelead"
-        );
-        const filteredPosts = response.data.filter(
-          (post) => post.employeeCode === currentUser.employeeCode
-        );
-        setPosts(filteredPosts);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, [currentUser]);
 
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
     let _filters = { ...filters };
-
-    if (_filters.global) {
-      _filters.global.value = value;
-    } else {
-      _filters.global = { value, matchMode: FilterMatchMode.CONTAINS };
-    }
-
+    _filters['global'].value = value;
     setFilters(_filters);
     setGlobalFilterValue(value);
   };
-
 
 
   const downloadCSV = () => {
@@ -143,6 +128,7 @@ const Leads = () => {
             onChange={onGlobalFilterChange}
             placeholder="Search"
             className="searchbar"
+            style={{width:"32rem"}}
           />
         </span>
       </div>
@@ -179,7 +165,7 @@ const Leads = () => {
           </div>
 
 
-          <div style={{ marginLeft: "40px", }}>
+          <div style={{ marginLeft: "50px", marginBottom:".5rem"}}>
             <Button
               type="button"
               icon={<img alt="excel icon" src={exc} />}
@@ -199,38 +185,85 @@ const Leads = () => {
       </div>
 
       <DataTable
-        value={posts}
-        filters={filters}
-        responsiveLayout="scroll"
-        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-        dataKey="id"
-        paginator
-        emptyMessage="No data found."
-        className="datatable-responsive"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} posts"
-        rows={5}
-        showGridlines
-        removableSort
-        rowsPerPageOptions={[5, 10, 25, 50]}
-      >
-        <Column field="leadRefID" sortable header="leadRefID"></Column>
-        <Column field="customerCode" sortable header="Customer Code"></Column>
-        <Column field="customerName" sortable header="Customer Name"></Column>
-        <Column field="branchCode" sortable header="Branch Code"></Column>
-        <Column field="branchName" sortable header="Branch Name"></Column>
-        <Column
-          body={(rowData) => (
-            <Button
-              label="More Info"
-              icon="pi pi-info-circle"
-              onClick={() => {
-                setSelectedPost(rowData);
-                setDialogVisible(true);
-              }}
-            />
-          )}
-        />
-      </DataTable>
+      value={posts}
+      filters={filters}
+      responsiveLayout="scroll"
+      paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+      dataKey="id"
+      paginator
+      emptyMessage="No data found."
+      loading={loading}
+      className="datatable-responsive"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} posts"
+      rows={5}
+      showGridlines
+      removableSort
+      rowsPerPageOptions={[5, 10, 25, 50]}
+      filterDisplay="row"
+      globalFilterFields={['leadRefID', 'customerCode', 'customerName', 'branchCode', 'branchName']}
+    >
+      <Column
+        field="leadRefID"
+        sortable
+        header="Lead RefID"
+        filter
+        filterMatchMode={filters.leadRefID.matchMode}
+        filterField="leadRefID"
+        filterPlaceholder="Search by leadRefID"
+      />
+      <Column
+        field="customerCode"
+        sortable
+        header="Customer Code"
+        filter
+        filterMatchMode={filters.customerCode.matchMode}
+        filterField="customerCode"
+        filterPlaceholder="Search by customerCode"
+        style={{ minWidth: '11.5rem' }}
+      />
+      <Column
+        field="customerName"
+        sortable
+        header="Customer Name"
+        filter
+        filterMatchMode={filters.customerName.matchMode}
+        filterField="customerName"
+        filterPlaceholder="Search by customerName"
+        style={{ minWidth: '11.5rem' }}
+      />
+      <Column
+        field="branchCode"
+        sortable
+        header="Branch Code"
+        filter
+        filterMatchMode={filters.branchCode.matchMode}
+        filterField="branchCode"
+        filterPlaceholder="Search by branchCode"
+        style={{ minWidth: '11.5rem' }}
+      />
+      <Column
+        field="branchName"
+        sortable
+        header="Branch Name"
+        filter
+        filterMatchMode={filters.branchName.matchMode}
+        filterField="branchName"
+        filterPlaceholder="Search by branchName"
+        style={{ minWidth: '11.5rem' }}
+      />
+      <Column
+        body={(rowData) => (
+          <Button
+            label="More Info"
+            icon="pi pi-info-circle"
+            onClick={() => {
+              setSelectedPost(rowData);
+              setDialogVisible(true);
+            }}
+          />
+        )}
+      />
+    </DataTable>
       <Dialog
         header="Post Details"
         visible={dialogVisible}

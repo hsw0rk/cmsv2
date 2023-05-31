@@ -161,6 +161,7 @@ const OrderBook = () => {
             onChange={onGlobalFilterChange}
             placeholder="Search"
             className="searchbar"
+            style={{width:"32rem"}}
           />
         </span>
       </div>
@@ -197,7 +198,7 @@ const OrderBook = () => {
           </div>
 
 
-          <div style={{ marginLeft: "40px", }}>
+          <div style={{ marginLeft: "40px", marginBottom:".5rem"}}>
             <Button
               type="button"
               icon={<img alt="excel icon" src={exc} />}

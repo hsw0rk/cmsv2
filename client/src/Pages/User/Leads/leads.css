@@ -1,0 +1,205 @@
+.form{
+    padding: 15px;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    min-width: 320px;
+}
+
+.datatable-responsive{
+    border-collapse: collapse;
+    padding: 20px;
+    width: auto;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.exc img{
+    width: 30px;
+    height: 30px;
+}
+
+@media screen and (max-width: 460px) {
+
+    .clearred {
+        margin-left: 2rem;
+        width: 28rem;
+    }
+    .searchbar{
+        width: 15rem !important;
+    }
+    .p-float-label{
+        margin-left: 25px;
+    }
+
+}
+
+@media screen and (max-width: 425px) {
+    .searchbar{
+        width: 7rem !important;
+    }
+
+    .clearred {
+        width: 16rem;
+    }
+    .p-float-label{
+        margin-left: -25px;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .clearred {
+        margin-left: -1.5rem;
+    }
+}
+
+
+
+
+
+.my-dialog .p-dialog-title {
+    text-align: left;
+  }
+  
+  .my-dialog .my-dialog-title {
+    display: inline-block;
+    width: 150px;
+    text-align: right;
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  .my-dialog .my-dialog-value {
+    display: inline-block;
+    width: calc(100% - 160px);
+  }
+  
+  @media screen and (max-width: 670px) {
+
+    .my-dialog .my-dialog-title {
+        text-align: left !important;
+      }
+      
+      .my-dialog .my-dialog-value {
+        text-align: left !important;
+        margin-left: 1px;
+      }
+}
+
+@media screen and (max-width: 1215px) {
+    .datatable-responsive .p-datatable-thead > tr > th:nth-child(6),
+    .datatable-responsive .p-datatable-tfoot > tr > td:nth-child(6),
+    .datatable-responsive .p-datatable-tbody > tr > td:nth-child(6),
+    .datatable-responsive .p-datatable-thead > tr > th:nth-child(5),
+    .datatable-responsive .p-datatable-tfoot > tr > td:nth-child(5),
+    .datatable-responsive .p-datatable-tbody > tr > td:nth-child(5)  {
+      display: none !important;
+    }
+}
+
+
+@media screen and (max-width: 1000px) {
+    .datatable-responsive .p-datatable-thead > tr > th:nth-child(4),
+    .datatable-responsive .p-datatable-tfoot > tr > td:nth-child(4),
+    .datatable-responsive .p-datatable-tbody > tr > td:nth-child(4) {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 880px) {
+    .datatable-responsive .p-datatable-thead > tr > th:nth-child(3),
+    .datatable-responsive .p-datatable-tfoot > tr > td:nth-child(3),
+    .datatable-responsive .p-datatable-tbody > tr > td:nth-child(3) {
+        display: none !important;
+    }
+}
+
+  
+@media screen and (max-width: 480px) {
+    .datatable-responsive .p-datatable-thead > tr > th:nth-child(2),
+    .datatable-responsive .p-datatable-tfoot > tr > td:nth-child(2),
+    .datatable-responsive .p-datatable-tbody > tr > td:nth-child(2) {
+      display: none !important;
+    }
+  }
+  
+  @media screen and (max-width: 460px) {
+    .datatable-responsive {
+        margin-left: 40px;
+        margin-right: 40px;
+    }  
+  }    
+
+  @media screen and (max-width: 425px) {
+    .datatable-responsive {
+        margin-left: -30px;
+        margin-right: -30px;
+    }  
+  }    
+
+  @media screen and (max-width: 380px) {
+    .datatable-responsive {
+        margin-left: -50px;
+        margin-right: -30px;
+    }  
+  }  
+
+  @media screen and (max-width: 345px) {
+    .datatable-responsive {
+        margin-left: -40px;
+        margin-right: 40px;
+    }  
+  }    
+
+  .orderbook-dates {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 10px;
+  }
+  
+  .orderbook-dates label {
+    margin-right: 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .orderbook-dates .input-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  
+  .orderboofromDate,
+  .orderbooktoDate {
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    width: 14rem;
+  }
+  
+  .orderboofromDate::-webkit-inner-spin-button,
+  .orderboofromDate::-webkit-outer-spin-button,
+  .orderbooktoDate::-webkit-inner-spin-button,
+  .orderbooktoDate::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  .orderboofromDate[type="date"]::-webkit-calendar-picker-indicator,
+  .orderbooktoDate[type="date"]::-webkit-calendar-picker-indicator {
+    background-image: url(https://img.icons8.com/?size=512&id=SqCUs5XkuU76&format=png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+  
+  
+  .orderboofromDate:focus,
+  .orderbooktoDate:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  
