@@ -17,6 +17,7 @@ const Leads = () => {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [dialogVisible, setDialogVisible] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState("conversionDate");
 
 
   const [filters, setFilters] = useState({
@@ -34,13 +35,15 @@ const Leads = () => {
 
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [dueDateFrom, setDueDateFrom] = useState("");
+  const [dueDateTo, setDueDateTo] = useState("");
 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8800/api/auth/employeelead`
+          `http://localhost:8800/api/auth/employeelead?from=${fromDate}&to=${toDate}&duefrom=${dueDateFrom}&dueto=${dueDateTo}`
         );
         const filteredPosts = response.data.filter(
           (post) => post.employeeCode === currentUser.employeeCode
@@ -48,11 +51,20 @@ const Leads = () => {
         setPosts(filteredPosts);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, [currentUser, fromDate, toDate]);
+  }, [currentUser, fromDate, toDate, dueDateFrom, dueDateTo]);
+
+
+
+
+
+
+
 
 
   const dialogFooterTemplate = () => {
@@ -128,44 +140,78 @@ const Leads = () => {
             onChange={onGlobalFilterChange}
             placeholder="Search"
             className="searchbar"
-            style={{width:"32rem"}}
+            style={{ width: "32rem" }}
           />
         </span>
       </div>
 
-      <div
-        className="flex justify-content-start gap-5 clearred"
-        style={{ marginTop: "30px", marginBottom: "10px", marginLeft: "20px" }}>
-        <div className="flex align-items-end justify-content-start gap-2 exc"
-          >
 
+
+      <div className="flex justify-content-start gap-5 clearred" style={{ marginTop: "30px", marginBottom: "10px", marginLeft: "20px" }}>
+        <div className="flex align-items-end justify-content-start gap-2 exc">
           <div className="orderbook-dates">
-            <label htmlFor="fromDate">From: </label>
-            <div className="input-wrapper">
-              <input
-                type="date"
-                id="fromDate"
-                value={fromDate}
-                className="orderboofromDate"
-                onChange={(e) => setFromDate(e.target.value)}
-              />
-            </div>
+            <select className="investmentsinput" value={selectedFilter} onChange={(e) => setSelectedFilter(e.target.value)}>
+              <option value="conversionDate">Conversion Date</option>
+              <option value="dueDate">Due Date</option>
+            </select>
 
+            {selectedFilter === "conversionDate" && (
+              <>
+                <label htmlFor="fromDate">From: </label>
+                <div className="input-wrapper">
+                  <input
+                    id="fromDate"
+                    type="date"
+                    className="orderboofromDate"
+                    value={fromDate}
+                    onChange={(e) => setFromDate(e.target.value)}
+                  />
+                </div>
 
-            <label htmlFor="toDate">To: </label>
-            <div className="input-wrapper">
-              <input
-                type="date"
-                id="toDate"
-                value={toDate}
-                className="orderbooktoDate"
-                onChange={(e) => setToDate(e.target.value)}
-              />
-            </div>
+                <label htmlFor="toDate">To: </label>
+                <div className="input-wrapper">
+                  <input
+                    id="toDate"
+                    type="date"
+                    className="orderbooktoDate"
+                    value={toDate}
+                    onChange={(e) => setToDate(e.target.value)}
+                  />
+                </div>
+              </>
+            )}
+
+            {selectedFilter === "dueDate" && (
+              <>
+                <label htmlFor="duefromDate">From: </label>
+                <div className="input-wrapper">
+                  <input
+                    id="duefromDate"
+                    type="date"
+                    className="orderboofromDate"
+                    value={dueDateFrom}
+                    onChange={(e) => setDueDateFrom(e.target.value)}
+                  />
+                </div>
+
+                <label htmlFor="duetoDate">To: </label>
+                <div className="input-wrapper">
+                  <input
+                    id="duetoDate"
+                    type="date"
+                    className="orderbooktoDate"
+                    value={dueDateTo}
+                    onChange={(e) => setDueDateTo(e.target.value)}
+                  />
+                </div>
+              </>
+            )}
           </div>
+        </div>
+      </div>
 
 
-          <div style={{ marginLeft: "50px", marginBottom:".5rem"}}>
+      {/* <div style={{ marginLeft: "50px", marginBottom:".5rem"}}>
             <Button
               type="button"
               icon={<img alt="excel icon" src={exc} />}
@@ -177,93 +223,88 @@ const Leads = () => {
               }}
               title="Download CSV"
             />
-          </div>
-
-
-
-        </div>
-      </div>
+          </div> */}
 
       <DataTable
-      value={posts}
-      filters={filters}
-      responsiveLayout="scroll"
-      paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-      dataKey="id"
-      paginator
-      emptyMessage="No data found."
-      loading={loading}
-      className="datatable-responsive"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} posts"
-      rows={5}
-      showGridlines
-      removableSort
-      rowsPerPageOptions={[5, 10, 25, 50]}
-      filterDisplay="row"
-      globalFilterFields={['leadRefID', 'customerCode', 'customerName', 'branchCode', 'branchName']}
-    >
-      <Column
-        field="leadRefID"
-        sortable
-        header="Lead RefID"
-        filter
-        filterMatchMode={filters.leadRefID.matchMode}
-        filterField="leadRefID"
-        filterPlaceholder="Search by leadRefID"
-      />
-      <Column
-        field="customerCode"
-        sortable
-        header="Customer Code"
-        filter
-        filterMatchMode={filters.customerCode.matchMode}
-        filterField="customerCode"
-        filterPlaceholder="Search by customerCode"
-        style={{ minWidth: '11.5rem' }}
-      />
-      <Column
-        field="customerName"
-        sortable
-        header="Customer Name"
-        filter
-        filterMatchMode={filters.customerName.matchMode}
-        filterField="customerName"
-        filterPlaceholder="Search by customerName"
-        style={{ minWidth: '11.5rem' }}
-      />
-      <Column
-        field="branchCode"
-        sortable
-        header="Branch Code"
-        filter
-        filterMatchMode={filters.branchCode.matchMode}
-        filterField="branchCode"
-        filterPlaceholder="Search by branchCode"
-        style={{ minWidth: '11.5rem' }}
-      />
-      <Column
-        field="branchName"
-        sortable
-        header="Branch Name"
-        filter
-        filterMatchMode={filters.branchName.matchMode}
-        filterField="branchName"
-        filterPlaceholder="Search by branchName"
-        style={{ minWidth: '11.5rem' }}
-      />
-      <Column
-        body={(rowData) => (
-          <Button
-            label="More Info"
-            icon="pi pi-info-circle"
-            onClick={() => {
-              setSelectedPost(rowData);
-              setDialogVisible(true);
-            }}
-          />
-        )}
-      />
-    </DataTable>
+        value={posts}
+        filters={filters}
+        responsiveLayout="scroll"
+        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+        dataKey="id"
+        paginator
+        emptyMessage="No data found."
+        loading={loading}
+        className="datatable-responsive"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} posts"
+        rows={5}
+        showGridlines
+        removableSort
+        rowsPerPageOptions={[5, 10, 25, 50]}
+        filterDisplay="row"
+        globalFilterFields={['leadRefID', 'customerCode', 'customerName', 'branchCode', 'branchName']}
+      >
+        <Column
+          field="leadRefID"
+          sortable
+          header="Lead RefID"
+          filter
+          filterMatchMode={filters.leadRefID.matchMode}
+          filterField="leadRefID"
+          filterPlaceholder="Search by leadRefID"
+        />
+        <Column
+          field="customerCode"
+          sortable
+          header="Customer Code"
+          filter
+          filterMatchMode={filters.customerCode.matchMode}
+          filterField="customerCode"
+          filterPlaceholder="Search by customerCode"
+          style={{ minWidth: '11.5rem' }}
+        />
+        <Column
+          field="customerName"
+          sortable
+          header="Customer Name"
+          filter
+          filterMatchMode={filters.customerName.matchMode}
+          filterField="customerName"
+          filterPlaceholder="Search by customerName"
+          style={{ minWidth: '11.5rem' }}
+        />
+        <Column
+          field="branchCode"
+          sortable
+          header="Branch Code"
+          filter
+          filterMatchMode={filters.branchCode.matchMode}
+          filterField="branchCode"
+          filterPlaceholder="Search by branchCode"
+          style={{ minWidth: '11.5rem' }}
+        />
+        <Column
+          field="branchName"
+          sortable
+          header="Branch Name"
+          filter
+          filterMatchMode={filters.branchName.matchMode}
+          filterField="branchName"
+          filterPlaceholder="Search by branchName"
+          style={{ minWidth: '11.5rem' }}
+        />
+        <Column
+          body={(rowData) => (
+            <Button
+              label="More Info"
+              icon="pi pi-info-circle"
+              onClick={() => {
+                setSelectedPost(rowData);
+                setDialogVisible(true);
+              }}
+            />
+          )}
+        />
+      </DataTable>
       <Dialog
         header="Post Details"
         visible={dialogVisible}
@@ -334,7 +375,7 @@ const Leads = () => {
             {selectedPost.lastModified && (
               <p>
                 <span className="my-dialog-title">Conversion Date:</span>
-                <span className="my-dialog-value">{selectedPost.lastModified.split("T")[0]}</span>
+                <span className="my-dialog-value">{selectedPost.lastModified.substring(0, 10)}</span>
               </p>
             )}
             {selectedPost.employeeName && (

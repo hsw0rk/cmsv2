@@ -23,12 +23,12 @@ export const sidebarNav = [
     //     icon: <i className='bx bx-user'></i>,
     //     text: 'Insurance'
     // },
-    {
-        link: 'orderbook',
-        section: 'orderbook',
-        icon: <i className='bx bx-cube'></i>,
-        text: 'Order book'
-    },
+    // {
+    //     link: 'orderbook',
+    //     section: 'orderbook',
+    //     icon: <i className='bx bx-cube'></i>,
+    //     text: 'Order book'
+    // },
     {
         link: 'leads',
         section: 'leads',

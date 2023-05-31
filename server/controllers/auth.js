@@ -99,6 +99,14 @@ export const investments = (req, res) => {
   const leadRefID = req.body.leadRefID;
   const branchName = req.body.branchName;
   const branchCode = req.body.branchCode;
+  const paymentMode = req.body.paymentMode;
+  const chequeNumber = req.body.chequeNumber;
+  const onlineRefNumber = req.body.onlineRefNumber;
+  const oldTDRNumber = req.body.oldTDRNumber;
+  const renewalAmount = req.body.renewalAmount;
+  const additionalPurchaseAmount = req.body.additionalPurchaseAmount;
+  const additionalPurchaseMode = req.body.additionalPurchaseMode;
+  const dueDate = req.body.dueDate;
   const mobileNumber = req.body.mobileNumber; // Add this line to define the mobileNumber variable
 
   // Check if the mobileNumber exists in the employeemaster table
@@ -164,7 +172,7 @@ export const investments = (req, res) => {
       } else {
         // If the data does not exist, insert it into the leadmaster table
         const insertQuery =
-          "INSERT INTO leadmaster (`principalName`, `productName`, `purchaseType`, `customerPAN`, `customerMobileNumber`, `customerName`, `creditBranch`, `businessAmount`, `verticalName`, `employeeName`, `employeeCode`,`leadRefID`,`branchCode`,`branchName`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+          "INSERT INTO leadmaster (`principalName`, `productName`, `purchaseType`, `customerPAN`, `customerMobileNumber`, `customerName`, `creditBranch`, `businessAmount`, `verticalName`, `employeeName`, `employeeCode`,`leadRefID`,`branchCode`,`branchName`,`paymentMode`,`chequeNumber`,`onlineRefNumber`,`oldTDRNumber`,`renewalAmount`,`additionalPurchaseAmount`,`additionalPurchaseMode`,`dueDate`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         const insertValues = [
           principalName,
           productName,
@@ -180,6 +188,14 @@ export const investments = (req, res) => {
           leadRefID,
           branchCode,
           branchName,
+          paymentMode,
+          chequeNumber,
+          onlineRefNumber,
+          oldTDRNumber,
+          renewalAmount,
+          additionalPurchaseAmount,
+          additionalPurchaseMode,
+          dueDate
         ];
 
         db.query(insertQuery, insertValues, (err, data) => {
@@ -238,13 +254,23 @@ export const cmsverticalformdata = (req, res) => {
 
 // Leads
 export const employeelead = (req, res) => {
-  const { from, to } = req.query;
+  const { from, to, duefrom, dueto } = req.query;
 
   let q = "SELECT * FROM leadmaster";
 
   // Append the date filter to the query if both "from" and "to" dates are provided
   if (from && to) {
-    q += ` WHERE DATE(date) >= '${from}' AND DATE(date) <= '${to}'`;
+    q += ` WHERE DATE(lastModified) >= '${from}' AND DATE(lastModified) <= '${to}'`;
+  }
+
+  // Append the due date filter to the query if both "duefrom" and "dueto" dates are provided
+  if (duefrom && dueto) {
+    if (from || to) {
+      q += " AND";
+    } else {
+      q += " WHERE";
+    }
+    q += ` DATE(dueDate) >= '${duefrom}' AND DATE(dueDate) <= '${dueto}'`;
   }
 
   db.query(q, (err, data) => {
@@ -252,6 +278,7 @@ export const employeelead = (req, res) => {
     return res.status(200).json(data);
   });
 };
+
 
 export const dashboardlead = (req, res) => {
   const { from, to } = req.query;
