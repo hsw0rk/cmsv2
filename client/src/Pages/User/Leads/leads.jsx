@@ -318,16 +318,16 @@ const Leads = () => {
                 <span className="my-dialog-value">{selectedPost.creditBranch}</span>
               </p>
             )}
-            {selectedPost.business && (
+            {selectedPost.businessAmount && (
               <p>
-                <span className="my-dialog-title">Business:</span>
-                <span className="my-dialog-value">{selectedPost.business}</span>
+                <span className="my-dialog-title">Business Amount:</span>
+                <span className="my-dialog-value">{selectedPost.businessAmount}</span>
               </p>
             )}
-            {selectedPost.vertical && (
+            {selectedPost.verticalName && (
               <p>
-                <span className="my-dialog-title">Vertical:</span>
-                <span className="my-dialog-value">{selectedPost.vertical}</span>
+                <span className="my-dialog-title">Vertical Name:</span>
+                <span className="my-dialog-value">{selectedPost.verticalName}</span>
               </p>
             )}
             {selectedPost.date && (
@@ -339,10 +339,10 @@ const Leads = () => {
               </p>
             )}
 
-            {selectedPost.time && (
+            {selectedPost.lastModified && (
               <p>
-                <span className="my-dialog-title">Time:</span>
-                <span className="my-dialog-value">{selectedPost.time}</span>
+                <span className="my-dialog-title">Conversion Date:</span>
+                <span className="my-dialog-value">{selectedPost.lastModified.split("T")[0]}</span>
               </p>
             )}
             {selectedPost.employeeName && (
