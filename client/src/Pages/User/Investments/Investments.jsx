@@ -52,6 +52,7 @@ const Investments = () => {
     onlineRefNumber: "",
     oldTDRNumber: "",
     dueDate: "",
+    status: "Converted",
     verticalName: "Investments",
     employeeName: currentUser.employeeName,
     employeeCode: currentUser.employeeCode,
@@ -155,14 +156,14 @@ const Investments = () => {
   
   
   const [selectedProduct, setSelectedProduct] = useState("");
-  const [showFreshRenewal, setShowFreshRenewal] = useState(false);
+  const [showFreshRenewal, setShowFreshRenewal] = useState(true);
   const [showCreditBranch, setShowCreditBranch] = useState(false);
-  const [showPanInput, setShowPanInput] = useState(false);
-  const [showCustomerNameInput, setShowCustomerNameInput] = useState(false);
-  const [showMobileNumberInput, setShowMobileNumberInput] = useState(false);
+  const [showPanInput, setShowPanInput] = useState(true);
+  const [showCustomerNameInput, setShowCustomerNameInput] = useState(true);
+  const [showMobileNumberInput, setShowMobileNumberInput] = useState(true);
   const [showDueDate, setShowDueDate] = useState(false);
   const [showBusinessAmountInput, setShowBusinessAmountInput] = useState(false);
-  const [showPrincipalDropdown, setShowPrincipalDropdown] = useState(false);
+  const [showPrincipalDropdown, setShowPrincipalDropdown] = useState(true);
   const [showPaymentModeDropdown, setShowPaymentModeDropdown] = useState(false);
   const [showOldTDRNumber, setShowOldTDRNumber] = useState(false);
   const [showAdditional, setShowAdditional] = useState(false);
@@ -180,12 +181,12 @@ const Investments = () => {
     }));
 
     if (productName === "Select") {
-      setShowPrincipalDropdown(false);
-      setShowFreshRenewal(false);
+      setShowPrincipalDropdown(true);
+      setShowFreshRenewal(true);
       setShowCreditBranch(false);
-      setShowPanInput(false);
-      setShowCustomerNameInput(false);
-      setShowMobileNumberInput(false);
+      setShowPanInput(true);
+      setShowCustomerNameInput(true);
+      setShowMobileNumberInput(true);
       setShowDueDate(false);
       setShowBusinessAmountInput(false);
       setShowPaymentModeDropdown(false);
@@ -287,7 +288,37 @@ const Investments = () => {
     setPaymentMode(selectedOption);
   };
 
+
   console.log(err);
+
+
+  const branchOptions = [
+    {
+      name: currentUser.branchName,
+      code: currentUser.branchCode,
+    },
+    {
+      name: currentUser.Branchname2,
+      code: currentUser.Branchcode2,
+    },
+    {
+      name: currentUser.Branchname3,
+      code: currentUser.Branchcode3,
+    },
+    {
+      name: currentUser.Branchname4,
+      code: currentUser.Branchcode4,
+    },
+    {
+      name: currentUser.Branchname5,
+      code: currentUser.Branchcode5,
+    },
+  ];
+
+  const filteredBranchOptions = branchOptions.filter(
+    (branch) => branch.name && branch.code
+  );
+
 
   return (
     <>
@@ -337,7 +368,7 @@ const Investments = () => {
                     }
                     onInput={(e) => e.target.setCustomValidity("")}
                   >
-                    <option value="">select</option>
+                    <option value="">Select</option>
                     {iprincipal
                       .filter(
                         (principal) => principal.productName === selectedProduct
@@ -426,6 +457,7 @@ const Investments = () => {
                 className="investmentsinput"
                 id="dueDate"
                 name="dueDate"
+                type="date"
                 onChange={handleChange}
                 onInvalid={(e) =>
                   e.target.setCustomValidity("Mobile Number Is Missing ")
@@ -680,7 +712,7 @@ const Investments = () => {
           {paymentMode === "Online RefNumber" && freshRenewal === "Renewal + Additional" && (
             <div>
               <label>
-                Online Reg Number<span style={{ color: "red" }}>*</span>
+                Online Ref Number<span style={{ color: "red" }}>*</span>
                 <input
                   required
                   className="investmentsinput"
@@ -696,7 +728,7 @@ const Investments = () => {
             </div>
           )}
 
-{showCreditBranch && (
+{filteredBranchOptions.length >= 2 && (
             <div>
               <label>
                 Credit Branch<span style={{ color: "red" }}>*</span>
@@ -706,37 +738,15 @@ const Investments = () => {
                   id="creditBranch"
                   name="creditBranch"
                   onChange={handleChange}
-                  onInvalid={(e) =>
-                    e.target.setCustomValidity("Select Credit Branch")
-                  }
+                  onInvalid={(e) => e.target.setCustomValidity("Select Credit Branch")}
                   onInput={(e) => e.target.setCustomValidity("")}
                 >
-                  <option value="">Select</option>
-                  {currentUser.branchName && currentUser.branchCode && (
-                    <option value={`${currentUser.branchCode}`}>
-                      {currentUser.branchName}-{currentUser.branchCode}
+                  <option value="">Select</option> {/* Empty "Select" option */}
+                  {filteredBranchOptions.map((branch, index) => (
+                    <option key={index} value={`${branch.code}`}>
+                      {`${branch.name}-${branch.code}`}
                     </option>
-                  )}
-                  {currentUser.Branchname2 && currentUser.Branchcode2 && (
-                    <option value={`${currentUser.Branchcode2}`}>
-                      {currentUser.Branchname2}-{currentUser.Branchcode2}
-                    </option>
-                  )}
-                  {currentUser.Branchname3 && currentUser.Branchcode3 && (
-                    <option value={`${currentUser.Branchcode3}`}>
-                      {currentUser.Branchname3}-{currentUser.Branchcode3}
-                    </option>
-                  )}
-                  {currentUser.Branchname4 && currentUser.Branchcode4 && (
-                    <option value={`${currentUser.Branchcode4}`}>
-                      {currentUser.Branchname4}-{currentUser.Branchcode4}
-                    </option>
-                  )}
-                  {currentUser.Branchname5 && currentUser.Branchcode5 && (
-                    <option value={`${currentUser.Branchcode5}`}>
-                      {currentUser.Branchname5}-{currentUser.Branchcode5}
-                    </option>
-                  )}
+                  ))}
                 </select>
               </label>
             </div>
@@ -751,6 +761,19 @@ const Investments = () => {
                 id="verticalName"
                 value="Investments"
                 name="verticalName"
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              <input
+                required
+                className="investmentsinput"
+                type="hidden"
+                id="status"
+                value="Converted"
+                name="status"
               />
             </label>
           </div>

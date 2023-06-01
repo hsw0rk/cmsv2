@@ -107,6 +107,7 @@ export const investments = (req, res) => {
   const additionalPurchaseAmount = req.body.additionalPurchaseAmount;
   const additionalPurchaseMode = req.body.additionalPurchaseMode;
   const dueDate = req.body.dueDate;
+  const status = req.body.status;
   const mobileNumber = req.body.mobileNumber; // Add this line to define the mobileNumber variable
 
   // Check if the mobileNumber exists in the employeemaster table
@@ -157,8 +158,8 @@ export const investments = (req, res) => {
   function insertData() {
     // Check if the data already exists in the leadmaster table
     const checkDuplicateQuery =
-      "SELECT * FROM leadmaster WHERE customerMobileNumber = ?";
-    const duplicateValues = [customerMobileNumber];
+      "SELECT * FROM leadmaster WHERE renewalAmount = ?";
+    const duplicateValues = [renewalAmount];
 
     db.query(checkDuplicateQuery, duplicateValues, (err, results) => {
       if (err) return res.status(500).json(err);
@@ -172,7 +173,7 @@ export const investments = (req, res) => {
       } else {
         // If the data does not exist, insert it into the leadmaster table
         const insertQuery =
-          "INSERT INTO leadmaster (`principalName`, `productName`, `purchaseType`, `customerPAN`, `customerMobileNumber`, `customerName`, `creditBranch`, `businessAmount`, `verticalName`, `employeeName`, `employeeCode`,`leadRefID`,`branchCode`,`branchName`,`paymentMode`,`chequeNumber`,`onlineRefNumber`,`oldTDRNumber`,`renewalAmount`,`additionalPurchaseAmount`,`additionalPurchaseMode`,`dueDate`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+          "INSERT INTO leadmaster (`principalName`, `productName`, `purchaseType`, `customerPAN`, `customerMobileNumber`, `customerName`, `creditBranch`, `businessAmount`, `verticalName`, `employeeName`, `employeeCode`,`leadRefID`,`branchCode`,`branchName`,`paymentMode`,`chequeNumber`,`onlineRefNumber`,`oldTDRNumber`,`renewalAmount`,`additionalPurchaseAmount`,`additionalPurchaseMode`,`dueDate`,`status`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         const insertValues = [
           principalName,
           productName,
@@ -195,7 +196,8 @@ export const investments = (req, res) => {
           renewalAmount,
           additionalPurchaseAmount,
           additionalPurchaseMode,
-          dueDate
+          dueDate,
+          status
         ];
 
         db.query(insertQuery, insertValues, (err, data) => {
@@ -299,7 +301,7 @@ export const dashboardlead = (req, res) => {
 //dashboard counts
 export const investmentsCount = (req, res) => {
   const sql =
-    "SELECT COUNT(id) as investments FROM cmsverticalform WHERE vertical = 'investments'";
+    "SELECT COUNT(id) as investments FROM leadmaster WHERE verticalName = 'Investments'";
   db.query(sql, (err, result) => {
     if (err)
       return res.json({ Error: "Error in running investmentsCount query" });
@@ -309,7 +311,7 @@ export const investmentsCount = (req, res) => {
 
 export const homeloansCount = (req, res) => {
   const sql =
-    "SELECT COUNT(id) as homeloans FROM cmsverticalform WHERE vertical = 'homeloans'";
+    "SELECT COUNT(id) as homeloans FROM leadmaster WHERE verticalName = 'Homeloans'";
   db.query(sql, (err, result) => {
     if (err)
       return res.json({ Error: "Error in running homeloansCount query" });
@@ -319,7 +321,7 @@ export const homeloansCount = (req, res) => {
 
 export const insuranceCount = (req, res) => {
   const sql =
-    "SELECT COUNT(id) as insurance FROM cmsverticalform WHERE vertical = 'insurance'";
+    "SELECT COUNT(id) as insurance FROM leadmaster WHERE verticalName = 'Insurance'";
   db.query(sql, (err, result) => {
     if (err)
       return res.json({ Error: "Error in running insuranceCount query" });
@@ -330,9 +332,9 @@ export const insuranceCount = (req, res) => {
 export const orderbookCount = (req, res) => {
   const sql = `
     SELECT 
-      (SELECT COUNT(id) FROM cmsverticalform WHERE vertical = 'investments') as investments,
-      (SELECT COUNT(id) FROM cmsverticalform WHERE vertical = 'homeloans') as homeloans,
-      (SELECT COUNT(id) FROM cmsverticalform WHERE vertical = 'insurance') as insurance
+      (SELECT COUNT(id) FROM leadmaster WHERE verticalName = 'investments') as investments,
+      (SELECT COUNT(id) FROM leadmaster WHERE verticalName = 'homeloans') as homeloans,
+      (SELECT COUNT(id) FROM leadmaster WHERE verticalName = 'insurance') as insurance
   `;
   db.query(sql, (err, result) => {
     if (err)

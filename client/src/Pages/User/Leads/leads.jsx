@@ -5,6 +5,7 @@ import { Dialog } from "primereact/dialog";
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
+import { Dropdown } from 'primereact/dropdown';
 import { FilterMatchMode } from 'primereact/api';
 import exc from "../../../Assets/exc.svg";
 import axios from "axios";
@@ -23,13 +24,13 @@ const Leads = () => {
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     leadRefID: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    customerCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    status: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     customerName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-    branchCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     branchName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
   });
   const [loading, setLoading] = useState(true);
   const [globalFilterValue, setGlobalFilterValue] = useState('');
+  const [selectedStatusFilter, setSelectedStatusFilter] = useState(null);
 
 
 
@@ -59,14 +60,6 @@ const Leads = () => {
     fetchData();
   }, [currentUser, fromDate, toDate, dueDateFrom, dueDateTo]);
 
-
-
-
-
-
-
-
-
   const dialogFooterTemplate = () => {
     return (
       <Button
@@ -86,13 +79,14 @@ const Leads = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       leadRefID: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      customerCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      status: { value: null, matchMode: FilterMatchMode.EQUALS },
       customerName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       branchName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     });
     setGlobalFilterValue('');
+    setSelectedStatusFilter(null); // Reset the selected status filter
   };
+  
 
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
@@ -101,6 +95,19 @@ const Leads = () => {
     setFilters(_filters);
     setGlobalFilterValue(value);
   };
+  
+  const onStatusFilterChange = (e) => {
+    const value = e.value;
+    let _filters = { ...filters };
+    if (value) {
+      _filters['status'].value = value;
+    } else {
+      delete _filters['status'].value; // Remove the 'status' filter if value is cleared
+    }
+    setFilters(_filters);
+    setSelectedStatusFilter(value);
+  };
+  
 
 
   const downloadCSV = () => {
@@ -174,7 +181,7 @@ const Leads = () => {
                     id="toDate"
                     type="date"
                     className="orderbooktoDate"
-                    value={toDate}
+                    value={toDate || new Date().toISOString().split('T')[0]}
                     onChange={(e) => setToDate(e.target.value)}
                   />
                 </div>
@@ -241,7 +248,8 @@ const Leads = () => {
         removableSort
         rowsPerPageOptions={[5, 10, 25, 50]}
         filterDisplay="row"
-        globalFilterFields={['leadRefID', 'customerCode', 'customerName', 'branchCode', 'branchName']}
+        columnResizeMode="expand" resizableColumns
+        globalFilterFields={['leadRefID', 'status', 'customerName', 'branchName']}
       >
         <Column
           field="leadRefID"
@@ -253,15 +261,25 @@ const Leads = () => {
           filterPlaceholder="Search by leadRefID"
         />
         <Column
-          field="customerCode"
-          sortable
-          header="Customer Code"
-          filter
-          filterMatchMode={filters.customerCode.matchMode}
-          filterField="customerCode"
-          filterPlaceholder="Search by customerCode"
-          style={{ minWidth: '11.5rem' }}
-        />
+  field="status"
+  sortable
+  header="Status"
+  filter
+  filterMatchMode={filters.status.matchMode}
+  filterField="status"
+  filterElement={
+    <Dropdown
+      value={selectedStatusFilter}
+      options={[
+        { label: 'Converted', value: 'Converted' },
+        { label: 'Follow Up', value: 'Follow Up' }
+      ]}
+      onChange={onStatusFilterChange} // Update the onChange handler
+      placeholder="Select a status"
+    />
+  }
+/>
+
         <Column
           field="customerName"
           sortable
@@ -270,16 +288,6 @@ const Leads = () => {
           filterMatchMode={filters.customerName.matchMode}
           filterField="customerName"
           filterPlaceholder="Search by customerName"
-          style={{ minWidth: '11.5rem' }}
-        />
-        <Column
-          field="branchCode"
-          sortable
-          header="Branch Code"
-          filter
-          filterMatchMode={filters.branchCode.matchMode}
-          filterField="branchCode"
-          filterPlaceholder="Search by branchCode"
           style={{ minWidth: '11.5rem' }}
         />
         <Column

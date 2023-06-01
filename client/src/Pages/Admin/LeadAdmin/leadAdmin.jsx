@@ -28,7 +28,7 @@ const LeadAdmin = () => {
   const [msg, setMsg] = useState(null);
 
   const [inputs, setInputs] = useState({
-          leadRefID: `PL${currentUser.employeeCode}${new Date().toLocaleString('en-US', { month: 'long' }).toUpperCase()}${new Date().toISOString().replace(/[-:.Z]/g, '').replace('T', '')}`,
+          leadRefID: `PL${currentUser.employeeCode}${new Date().toLocaleString('en-US', { month: 'short' }).toUpperCase()}${new Date().toISOString().replace(/[-:.ZT]/g, '').substring(0, 14)}`,
           employeeCode: "",
           employeeName: "",
           branchCode: "",
@@ -47,7 +47,7 @@ const LeadAdmin = () => {
           purchaseType: "",
           businessAmount: "",
           creditBranch: "",
-          status: "",
+          status: "Follow Up",
           refNumber: "",
   });
 
@@ -638,7 +638,6 @@ const LeadAdmin = () => {
       purchaseType: "",
       businessAmount: "",
       creditBranch: "",
-      status: "",
       refNumber: "",
     },
   ];
@@ -693,14 +692,46 @@ const LeadAdmin = () => {
   ];
 
   const formatDueDate = (dueDate) => {
-  const date = new Date(dueDate);
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = String(date.getFullYear());
-  return `${year}-${month}-${day}`;
-};
-
-const handleFileUpload = (file) => {
+    const dateFormats = [
+      { format: "dd/mm/yyyy", delimiter: "/" }, // Example: 31/12/2023
+      { format: "dd-mm-yyyy", delimiter: "-" }, // Example: 31-12-2023
+    ];
+  
+    for (const { format, delimiter } of dateFormats) {
+      const [dayIndex, monthIndex, yearIndex] = format
+        .split(delimiter)
+        .map((part) => part.toLowerCase())
+        .map((part, index) => ({ part, index }));
+  
+      const parts = dueDate.split(delimiter).map((part) => part.trim());
+      const day = parts[dayIndex.index];
+      const month = parts[monthIndex.index];
+      const year = parts[yearIndex.index];
+  
+      if (
+        day.length === 2 &&
+        month.length === 2 &&
+        year.length === 4 &&
+        !isNaN(day) &&
+        !isNaN(month) &&
+        !isNaN(year)
+      ) {
+        const date = new Date(`${year}-${month}-${day}`);
+        if (
+          !isNaN(date) &&
+          date.getDate() === parseInt(day, 10) &&
+          date.getMonth() + 1 === parseInt(month, 10) &&
+          date.getFullYear() === parseInt(year, 10)
+        ) {
+          return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+        }
+      }
+    }
+  
+    return null;
+  };
+  
+  const handleFileUpload = async (file) => {
     Papa.parse(file, {
       header: true,
       complete: async (results) => {
@@ -708,8 +739,11 @@ const handleFileUpload = (file) => {
         const filteredData = data.filter((row) => {
           return Object.values(row).some((value) => value.trim() !== "");
         });
+  
         let successCount = 0;
         let errorCount = 0;
+        let errorRows = [];
+  
         for (let i = 0; i < filteredData.length; i++) {
           const row = filteredData[i];
   
@@ -729,9 +763,11 @@ const handleFileUpload = (file) => {
               );
             }
   
-            const leadRefID = `PL${currentUser.employeeCode}${new Date().toLocaleString('en-US', { month: 'long' }).toUpperCase()}${new Date().toISOString().replace(/[-:.Z]/g, '').replace('T', '')}`;
+            const status = "Follow Up";
   
-            let dueDate = formatDueDate(row.dueDate); // Format the dueDate as dd/mm/yyyy
+            const leadRefID = `PL${currentUser.employeeCode}${new Date().toLocaleString('en-US', { month: 'short' }).toUpperCase()}${new Date().toISOString().replace(/[-:.ZT]/g, '').substring(0, 14)}`;
+  
+            const dueDate = formatDueDate(row.dueDate);
   
             // Validate mandatory fields
             if (
@@ -751,6 +787,7 @@ const handleFileUpload = (file) => {
             ) {
               console.error(`Error processing row ${i + 2}: Mandatory field(s) missing`);
               errorCount++;
+              errorRows.push(i + 2);
               continue; // Skip the current iteration and move to the next row
             }
   
@@ -758,11 +795,13 @@ const handleFileUpload = (file) => {
             if (!row.dueDate) {
               console.error(`Error processing row ${i + 2}: Due Date is empty`);
               errorCount++;
+              errorRows.push(i + 2);
               continue; // Skip the current iteration and move to the next row
             }
   
             await axios.post("http://localhost:8800/api/auth/adminlead", {
               leadRefID,
+              status,
               employeeCode: row.employeeCode,
               employeeName: selectedEmployee.employeeName,
               branchCode: row.branchCode,
@@ -781,23 +820,26 @@ const handleFileUpload = (file) => {
           } catch (error) {
             console.error(`Error processing row ${i + 2}:`, error);
             errorCount++;
+            errorRows.push(i + 2);
+            break; // Exit the loop if there is an error in any row
           }
         }
-        if (successCount === filteredData.length) {
-          alert("Data successfully uploaded");
-        } else if (errorCount === filteredData.length) {
-          alert("Failed to upload. Retry again.");
+  
+        if (errorCount > 0) {
+          const errorMessage = `Failed to upload. Errors encountered in row(s): ${errorRows.join(", ")}`;
+          alert(errorMessage);
         } else {
-          alert(
-            `Data uploaded successfully (${successCount} row(s)), with ${errorCount} error(s).`
-          );
+          const successMessage = `Data successfully uploaded (${successCount} row(s)).`;
+          alert(successMessage);
         }
+  
         setTimeout(() => {
           window.location.reload();
         }, 2000); // Reload after 2 seconds
       },
     });
   };
+  
   
 
   return (
