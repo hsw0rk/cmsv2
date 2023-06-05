@@ -10,13 +10,13 @@ const UserInfo = ({ user }) => {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
-        try {
-          await axios.post("http://localhost:8800/api/auth/logout");
-          navigate("/login");
-        } catch (error) {
-          console.log(error);
-        }
-      };
+      try {
+        await logout();
+        navigate("/login");
+      } catch (error) {
+        console.log(error);
+      }
+    };    
   
 
     return (

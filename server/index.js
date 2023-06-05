@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 //middlewares
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Credentials", true);
+  res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5173");
   next();
 });
 app.use(express.json());

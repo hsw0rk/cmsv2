@@ -19,10 +19,18 @@ export const AuthContextProvider = ({ children }) => {
     setCurrentUser(res.data)
   };
 
-  const logout = async (inputs) => {
-    await axios.post("http://localhost:8800/api/auth/logout");
-    setCurrentUser(null);
+  const logout = async () => {
+    try {
+      await axios.post("http://localhost:8800/api/auth/logout", {}, { withCredentials: true });
+  
+      setCurrentUser(null);
+      localStorage.removeItem("user");
+    } catch (error) {
+      console.log(error);
+    }
   };
+  
+
 
   const isAdmin = () => {
     return currentUser && currentUser.password === "Admin@1";
