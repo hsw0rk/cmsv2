@@ -43,7 +43,7 @@ ChartJS.register(
   Legend
 );
 
-const Dashboard = () => {
+const employeeDashboard = () => {
   const { currentUser } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
@@ -130,7 +130,7 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default employeeDashboard;
 
 const RevenueByMonthsChart = () => {
   const chartOptions = {

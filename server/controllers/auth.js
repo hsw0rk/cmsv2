@@ -72,6 +72,46 @@ export const login = (req, res) => {
   });
 };
 
+export const isAdmin = (req, res, next) => {
+  const token = req.cookies.accessToken;
+
+  if (!token) {
+    return res.status(401).json("Unauthorized");
+  }
+
+  jwt.verify(token, "secretkey", (err, decoded) => {
+    if (err) {
+      return res.status(401).json("Unauthorized");
+    }
+
+    if (decoded.role !== "Admin") {
+      return res.status(403).json("Forbidden");
+    }
+
+    next();
+  });
+};
+
+export const isEmployee = (req, res, next) => {
+  const token = req.cookies.accessToken;
+
+  if (!token) {
+    return res.status(401).json("Unauthorized");
+  }
+
+  jwt.verify(token, "secretkey", (err, decoded) => {
+    if (err) {
+      return res.status(401).json("Unauthorized");
+    }
+
+    if (decoded.role !== "Employee") {
+      return res.status(403).json("Forbidden");
+    }
+
+    next();
+  });
+};
+
 export const logout = (req, res) => {
   res
     .clearCookie("accessToken", {
@@ -80,8 +120,9 @@ export const logout = (req, res) => {
       sameSite: "none",
     })
     .status(200)
-    .json("User has been logged out.");
+    .json({ message: "User has been logged out.", role: null });
 };
+
 
 
 // Investments

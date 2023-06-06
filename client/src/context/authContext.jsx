@@ -1,7 +1,6 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 
-
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
@@ -10,15 +9,15 @@ export const AuthContextProvider = ({ children }) => {
   );
 
   const login = async (inputs) => {
-    const res = await axios.post("http://localhost:8800/api/auth/login", inputs, {
-      withCredentials: true,
-      SameSite: 'None',
-      Secure: true
-    });
-
-    setCurrentUser(res.data)
+    const res = await axios.post(
+      "http://localhost:8800/api/auth/login",
+      inputs,
+      { withCredentials: true, SameSite: 'None', Secure: true }
+    );
+  
+    setCurrentUser(res.data);
   };
-
+  
   const logout = async () => {
     try {
       await axios.post("http://localhost:8800/api/auth/logout", {}, { withCredentials: true });
@@ -30,10 +29,8 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
   
-
-
   const isAdmin = () => {
-    return currentUser && currentUser.password === "Admin@1";
+    return currentUser && currentUser.role === "Admin";
   };
 
   useEffect(() => {

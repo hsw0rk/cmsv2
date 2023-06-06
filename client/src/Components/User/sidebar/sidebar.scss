@@ -95,7 +95,7 @@
         &__item {
             @include flex(center, flex-start);
             position: relative;
-            margin-bottom: .8rem;
+            margin-bottom: .5rem;
             padding-left: 10%;
             transition: color 0.3s ease-in-out;
 
@@ -141,7 +141,7 @@
                 --size: 40px;
                 width: var(--size);
                 height: var(--size);
-                margin-right: 3rem;
+                margin-right: 2rem;
                 @include flex(center, center);
 
                 @include tablet {

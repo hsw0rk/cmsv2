@@ -27,7 +27,7 @@ function LoginRegister() {
     e.preventDefault();
     try {
       await login(inputs);
-      if (isAdmin() || inputs.password === "Admin@1") {
+      if (isAdmin()) {
         navigate("/admin/dashboard");
       } else {
         navigate("/employee/dashboard");

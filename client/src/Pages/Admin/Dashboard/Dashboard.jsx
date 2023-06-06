@@ -31,7 +31,7 @@ ChartJS.register(
 )
 
 
-const Dashboard = () => {
+const adminDashboard = () => {
     return (
         <DashboardWrapper>
             <DashboardWrapperMain>
@@ -76,7 +76,7 @@ const Dashboard = () => {
     )
 }
 
-export default Dashboard
+export default adminDashboard
 
 const RevenueByMonthsChart = () => {
     const chartOptions = {
