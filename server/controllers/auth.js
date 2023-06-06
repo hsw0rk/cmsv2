@@ -58,9 +58,12 @@ export const login = (req, res) => {
       return res.status(400).json("Invalid employeecode/password");
 
     if (!req.body.employeeCode || !req.body.password)
-      return res.status(400).json("Fill the details");
+      return res.status(400).json("Fill in the details");
 
-    const token = jwt.sign({ id: data[0].id }, "secretkey");
+    const token = jwt.sign(
+      { id: data[0].id, role: data[0].role }, // Include the role in the token
+      "secretkey"
+    );
 
     const { password, ...others } = data[0];
 
@@ -72,45 +75,6 @@ export const login = (req, res) => {
   });
 };
 
-export const isAdmin = (req, res, next) => {
-  const token = req.cookies.accessToken;
-
-  if (!token) {
-    return res.status(401).json("Unauthorized");
-  }
-
-  jwt.verify(token, "secretkey", (err, decoded) => {
-    if (err) {
-      return res.status(401).json("Unauthorized");
-    }
-
-    if (decoded.role !== "Admin") {
-      return res.status(403).json("Forbidden");
-    }
-
-    next();
-  });
-};
-
-export const isEmployee = (req, res, next) => {
-  const token = req.cookies.accessToken;
-
-  if (!token) {
-    return res.status(401).json("Unauthorized");
-  }
-
-  jwt.verify(token, "secretkey", (err, decoded) => {
-    if (err) {
-      return res.status(401).json("Unauthorized");
-    }
-
-    if (decoded.role !== "Employee") {
-      return res.status(403).json("Forbidden");
-    }
-
-    next();
-  });
-};
 
 export const logout = (req, res) => {
   res

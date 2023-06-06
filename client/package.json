@@ -23,6 +23,7 @@
     "bootstrap": "^5.2.3",
     "bulma": "^0.9.4",
     "chart.js": "^4.2.1",
+    "crypto-js": "^4.1.1",
     "file-saver": "^2.0.5",
     "framer-motion": "^10.12.4",
     "number-to-words": "^1.2.4",

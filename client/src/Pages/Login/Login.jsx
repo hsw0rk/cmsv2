@@ -43,12 +43,14 @@ function LoginRegister() {
   };
   
 
-  const onSubmit = () => {
+  const onSubmit = (e) => {
+    e.preventDefault(); 
     setInputs({
       employeeCode: "",
       password: "",
     });
   };
+  
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -129,6 +131,7 @@ function LoginRegister() {
           placeholder="Employee Code"
           required
           onChange={handleChange}
+          autoComplete="username" 
         />
       </>
     )}
@@ -154,6 +157,7 @@ function LoginRegister() {
       required={option === 1 || option === 2 ? true : false}
       disabled={option === 3 ? true : false}
       onChange={handleChange}
+      autoComplete="current-password" 
     />
     {option === 2 && (
       <>

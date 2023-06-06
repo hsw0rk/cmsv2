@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  login,register,isAdmin,isEmployee,logout,
+  login,register,logout,
 
   investments,getproductininvestments,getprincipalininvestments,
 
@@ -47,8 +47,6 @@ const router = express.Router();
 //auth
 router.post("/login", login);
 router.post("/register", register);
-router.post("/admin/dashboard", isAdmin);
-router.post("/employee/dashboard", isEmployee);
 router.post("/logout", logout);
 
 //investments

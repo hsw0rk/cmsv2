@@ -33,6 +33,7 @@ import {
   createBrowserRouter,
   RouterProvider,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 
 
@@ -85,33 +86,63 @@ function App() {
     );
   };
 
-  const ProtectedRoute = ({ children }) => {
 
-  if (!currentUser) {
-    return <Navigate to="/login" />;
-  }
-
-  if (isAdmin()) {
-    if (!currentUser || currentUser.role !== "Admin") {
-      return <Navigate to="/employee/dashboard" />;
-    }
-  } else {
-    if (!currentUser || currentUser.role !== "Employee") {
-      return <Navigate to="/admin/dashboard" />;
-    }
-  }
-
-  return children;
-};
+  const ProtectedRoute = ({ children, allowedRoles }) => {
+    const { currentUser } = useContext(AuthContext);
+    const location = useLocation();
   
+    if (!currentUser) {
+      return <Navigate to="/login" />;
+    }
+  
+    // Check if the current user's role is in the allowedRoles array
+    if (!allowedRoles.includes(currentUser.role)) {
+      if (currentUser.role === 'Employee') {
+        return (
+          <Navigate
+            to={`/employee/dashboard${location.search}`}
+            replace
+          />
+        );
+      } else if (currentUser.role === 'Admin') {
+        return (
+          <Navigate
+            to={`/admin/dashboard${location.search}`}
+            replace
+          />
+        );
+      } else {
+        return <Navigate to="/" replace />; // Redirect to a default page if the role is not recognized
+      }
+    }
+  
+    return children;
+  };
+  
+  
+  const ProtectedAdminRoute = ({ children }) => {
+    return (
+      <ProtectedRoute allowedRoles={['Admin']}>
+        {children}
+      </ProtectedRoute>
+    );
+  };
+
+  const ProtectedEmployeeRoute = ({ children }) => {
+    return (
+      <ProtectedRoute allowedRoles={['Employee']}>
+        {children}
+      </ProtectedRoute>
+    );
+  };
 
   const router = createBrowserRouter([
     {
       path: "/admin",
       element: (
-        <ProtectedRoute>
+        <ProtectedAdminRoute>
           <AdminLayout />
-        </ProtectedRoute>
+        </ProtectedAdminRoute>
       ),
       children: [
         {
@@ -171,9 +202,9 @@ function App() {
     {
         path: "/employee",
         element: (
-          <ProtectedRoute>
+          <ProtectedEmployeeRoute>
             <MainLayout />
-          </ProtectedRoute>
+          </ProtectedEmployeeRoute>
         ),
         children: [
           {
