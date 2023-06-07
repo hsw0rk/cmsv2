@@ -4,9 +4,10 @@ import 'primereact/resources/themes/lara-light-indigo/theme.css';   // theme
 import 'primereact/resources/primereact.css';                       // core css
 import 'primeicons/primeicons.css';                                 // icons
 import 'primeflex/primeflex.css';      
-
 import Dashboard from './Pages/User/Dashboard/Dashboard'
 import AdminDashboard from './Pages/Admin/Dashboard/Dashboard'
+import MainLayout from './Layout/MainLayout'
+import AdminLayout from './Layout/AdminLayout'
 import Login from "./Pages/Login/Login";
 import Investments from "./Pages/User/Investments/Investments";
 import Homeloans from "./Pages/User/Homeloans/Homeloans";
@@ -28,64 +29,14 @@ import LeadAdmin from './Pages/Admin/LeadAdmin/leadAdmin';
 
 import React, {useContext} from 'react';
 import { AuthContext } from './context/authContext';
-
 import {
-  createBrowserRouter,
-  RouterProvider,
+  BrowserRouter, Routes, Route,
   Navigate,
   useLocation,
 } from "react-router-dom";
 
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-import './Layout/admin-layout.scss'
-import { Outlet } from 'react-router-dom'
-import ASidebar from '../src/Components/Admin/sidebar/Sidebar'
-import ATopNav from '../src/Components/Admin/topnav/TopNav'
-
-import './Layout/main-layout.scss'
-
-import Sidebar from '../src/Components/User/sidebar/Sidebar'
-import TopNav from '../src/Components/User/topnav/TopNav'
-
 function App() {
-  const { currentUser, isAdmin } = useContext(AuthContext);
-
-  const queryClient = new QueryClient();
-
-  const AdminLayout = () => {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <div>
-            <ASidebar />
-            <div className="main">
-                <div className="main__content">
-                    <ATopNav />
-                    <Outlet />
-                </div>
-            </div>
-        </div>
-      </QueryClientProvider>
-    );
-  };
-
-  const MainLayout = () => {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <div>
-            <Sidebar />
-            <div className="main">
-                <div className="main__content">
-                    <TopNav />
-                    <Outlet />
-                </div>
-            </div>
-        </div>
-      </QueryClientProvider>
-    );
-  };
-
 
   const ProtectedRoute = ({ children, allowedRoles }) => {
     const { currentUser } = useContext(AuthContext);
@@ -115,135 +66,41 @@ function App() {
         return <Navigate to="/" replace />; // Redirect to a default page if the role is not recognized
       }
     }
-  
     return children;
   };
+
   
-  
-  const ProtectedAdminRoute = ({ children }) => {
-    return (
-      <ProtectedRoute allowedRoles={['Admin']}>
-        {children}
-      </ProtectedRoute>
-    );
-  };
-
-  const ProtectedEmployeeRoute = ({ children }) => {
-    return (
-      <ProtectedRoute allowedRoles={['Employee']}>
-        {children}
-      </ProtectedRoute>
-    );
-  };
-
-  const router = createBrowserRouter([
-    {
-      path: "/admin",
-      element: (
-        <ProtectedAdminRoute>
-          <AdminLayout />
-        </ProtectedAdminRoute>
-      ),
-      children: [
-        {
-          path: "dashboard",
-          element: <AdminDashboard />,
-        },
-        {
-          path: "regionmaster",
-          element: <Region />,
-        },
-        {
-            path: "branchmaster",
-            element: <Branch />,
-          },
-          {
-            path: "verticalmaster",
-            element: <Vertical />,
-          },
-          {
-            path: "productmaster",
-            element: <Product />,
-          },
-          {
-            path: "principalmaster",
-            element: <Principal />,
-          },
-          {
-            path: "businessheadmaster",
-            element: <Businesshead />,
-          },
-          {
-            path: "regionheadmaster",
-            element: <Regionhead />,
-          },
-          {
-            path: "verticalheadmaster",
-            element: <Verticalhead />,
-          },
-          {
-            path: "employeemaster",
-            element: <User />,
-          },
-          {
-            path: "comaster",
-            element: <CO />,
-          },
-          {
-            path: "approvalmaster",
-            element: <Approval />,
-          },
-          {
-            path: "leads",
-            element: <LeadAdmin />,
-          },
-      ],
-    },
-    {
-        path: "/employee",
-        element: (
-          <ProtectedEmployeeRoute>
-            <MainLayout />
-          </ProtectedEmployeeRoute>
-        ),
-        children: [
-          {
-            path: "dashboard",
-            element: <Dashboard />,
-          },
-          {
-            path: "investments",
-            element: <Investments />,
-          },
-          {
-            path: "homeloans",
-            element: <Homeloans />,
-          },
-          {
-            path: "insurance",
-            element: <Insurance />,
-          },
-          {
-            path: "orderbook",
-            element: <OrderBook />,
-          },
-          {
-            path: "leads",
-            element: <Leads />,
-          },
-        ],
-      },
-    {
-      path: "/login",
-      element: <Login />,
-    },
-  ]);
-
   return (
-    <div>
-      <RouterProvider router={router} />
-    </div>
-  );
+    <BrowserRouter>
+        <Routes>
+            <Route path="/login" element={<Login />}/>
+            <Route path="/employee/*" element={<ProtectedRoute allowedRoles={['Employee']}><MainLayout /></ProtectedRoute>}>
+                <Route path="dashboard" index element={<Dashboard />} />
+                <Route path="investments" element={<Investments />} />
+                <Route path="homeloans" element={<Homeloans />} />
+                <Route path="insurance" element={<Insurance />} />
+                <Route path="orderbook" element={<OrderBook />} />
+                <Route path="leads" element={<Leads />} />
+            </Route>
+            <Route path="/admin/*" element={<ProtectedRoute allowedRoles={['Admin']}><AdminLayout /></ProtectedRoute>}>
+                <Route path="dashboard" index element={<AdminDashboard />} />
+                <Route path="regionmaster" index element={<Region />} />
+                <Route path="branchmaster" element={<Branch />} />
+                <Route path="verticalmaster" element={<Vertical />} />
+                <Route path="productmaster" element={<Product />} />
+                <Route path="principalmaster" element={<Principal />} />
+                <Route path="businessheadmaster" element={<Businesshead />} />
+                <Route path="regionheadmaster" element={<Regionhead />} />
+                <Route path="verticalheadmaster" element={<Verticalhead />} />
+                <Route path="employeemaster" element={<User />} />
+                <Route path="comaster" element={<CO />} />
+                
+                <Route path="approvalmaster" element={<Approval />} />
+                <Route path="leads" element={<LeadAdmin />} />
+            </Route>
+        </Routes>
+    </BrowserRouter>
+)
 }
 
-export default App;
+export default App

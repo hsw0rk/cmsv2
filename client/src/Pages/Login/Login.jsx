@@ -1,5 +1,5 @@
 import "./Login.scss";
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 import axios from "axios";
@@ -21,6 +21,7 @@ function LoginRegister() {
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
   const { login, isAdmin } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
@@ -41,16 +42,7 @@ function LoginRegister() {
       });
     }
   };
-  
 
-  const onSubmit = (e) => {
-    e.preventDefault(); 
-    setInputs({
-      employeeCode: "",
-      password: "",
-    });
-  };
-  
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -114,7 +106,7 @@ function LoginRegister() {
           Forgot Password?
         </li>
       </ul>
-      <form className="account-form" onSubmit={onSubmit}>
+      <form className="account-form">
   <div
     className={
       "account-form-fields " +
