@@ -67,25 +67,142 @@ export const login = (req, res) => {
 
     const { password, ...others } = data[0];
 
-    res.cookie("accessToken", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-    }).status(200).json(others);
+    // Check if session already exists for the employeeCode
+    const sessionCheckQuery = "SELECT * FROM session WHERE employeeCode = ?";
+    db.query(sessionCheckQuery, [req.body.employeeCode], (err, sessionData) => {
+      if (err) return res.status(500).json("Internal server error");
+
+      if (sessionData.length > 0) {
+        // Session already exists, return error
+        return res.status(400).json("User is already logged in");
+      }
+
+      const expirationTime = Math.floor(Date.now() / 1000) + 60; // Expiry after 1 minute (in UNIX timestamp format)
+      // Store session data in the database
+      const newSessionData = {
+        employeeCode: req.body.employeeCode,
+        session_id: token,
+        ip_address: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+        expires: expirationTime,
+        last_activity: expirationTime, // Set initial last activity timestamp to the session's expiration time
+        data: JSON.stringify(others),
+      };
+
+      db.query("INSERT INTO session SET ?", newSessionData, (err) => {
+        if (err) return res.status(500).json("Internal server error");
+
+        res.cookie("accessToken", token, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "None",
+        }).status(200).json(others);
+      });
+    });
+  });
+};
+
+
+export const currentuser = (req, res) => {
+  const token = req.cookies.accessToken;
+
+  const q = "SELECT * FROM session WHERE session_id = ?";
+
+  db.query(q, [token], (err, data) => {
+    if (err) return res.status(500).json(err);
+    if (data.length === 0) return res.status(401).json("User not active");
+
+    const user = JSON.parse(data[0].data);
+
+    const currentTime = Math.floor(Date.now() / 1000); // Current UNIX timestamp
+    const expirationTime = data[0].expires;
+    const lastActivityTime = data[0].last_activity;
+
+    const sessionTimeout = 900; // Session timeout set to 15 minutes (900 seconds)
+
+    if (currentTime > expirationTime) {
+      // Session expired, clear cookies and session data
+      db.query("DELETE FROM session WHERE session_id = ?", [token], (err) => {
+        if (err) return res.status(500).json("Internal server error");
+
+        res.clearCookie("accessToken", {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+        }).status(401).json("Session expired. Login again.");
+      });
+    } else {
+      const timeSinceLastActivity = currentTime - lastActivityTime;
+
+      if (timeSinceLastActivity > sessionTimeout) {
+        // Session has been inactive for more than the session timeout, prompt for reauthentication
+        db.query("DELETE FROM session WHERE session_id = ?", [token], (err) => {
+          if (err) return res.status(500).json("Internal server error");
+
+          res.clearCookie("accessToken", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+          }).status(401).json("Session expired due to inactivity. Login again.");
+        });
+      } else {
+        // Update the session's last activity timestamp to the current time
+        db.query("UPDATE session SET last_activity = ? WHERE session_id = ?", [currentTime, token], (err) => {
+          if (err) return res.status(500).json("Internal server error");
+
+          const expirationDate = new Date(expirationTime * 1000); // Convert UNIX timestamp to milliseconds
+          const formattedExpirationDate = expirationDate.toLocaleString(); // Convert to human-readable format
+
+          return res.status(200).json({ user, expires: formattedExpirationDate });
+        });
+      }
+    }
+  });
+};
+
+export const updateSessionActivity = (req, res) => {
+  const token = req.cookies.accessToken;
+
+  // Update the session's last activity and expiration timestamps in the database
+  const updateQuery = "UPDATE session SET last_activity = UNIX_TIMESTAMP(), expires = UNIX_TIMESTAMP() + 60 WHERE session_id = ?";
+  db.query(updateQuery, [token], (err) => {
+    if (err) return res.status(500).json("Internal server error");
+
+    res.sendStatus(200);
+  });
+};
+
+
+export const heartbeat = (req, res) => {
+  const token = req.cookies.accessToken;
+
+  // Update the session's last activity timestamp in the database
+  const updateQuery = "UPDATE session SET last_activity = UNIX_TIMESTAMP() WHERE session_id = ?";
+  db.query(updateQuery, [token], (err) => {
+    if (err) return res.status(500).json("Internal server error");
+
+    res.sendStatus(200);
   });
 };
 
 
 export const logout = (req, res) => {
-  res
-    .clearCookie("accessToken", {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-    })
-    .status(200)
-    .json({ message: "User has been logged out.", role: null });
+  const token = req.cookies.accessToken;
+
+  // Delete session data from the database, regardless of token validity
+  db.query("DELETE FROM session WHERE session_id = ?", [token], (err) => {
+    if (err) return res.status(500).json("Internal server error");
+
+    res
+      .clearCookie("accessToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      })
+      .status(200)
+      .json({ message: "User has been logged out.", role: null });
+  });
 };
+
 
 
 

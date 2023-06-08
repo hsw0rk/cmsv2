@@ -41,7 +41,7 @@ function App() {
   const ProtectedRoute = ({ children, allowedRoles }) => {
     const { currentUser } = useContext(AuthContext);
     const location = useLocation();
-  
+
     if (!currentUser) {
       return <Navigate to="/login" />;
     }
@@ -62,9 +62,7 @@ function App() {
             replace
           />
         );
-      } else {
-        return <Navigate to="/" replace />; // Redirect to a default page if the role is not recognized
-      }
+      } 
     }
     return children;
   };

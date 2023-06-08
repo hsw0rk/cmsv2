@@ -14,6 +14,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: "http://127.0.0.1:5173",
+    credentials: true, // Allow cookies to be sent from the frontend
   })
 );
 app.use(cookieParser());

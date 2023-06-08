@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  login,register,logout,
+  login,register,currentuser,updateSessionActivity,heartbeat,logout,
 
   investments,getproductininvestments,getprincipalininvestments,
 
@@ -47,6 +47,9 @@ const router = express.Router();
 //auth
 router.post("/login", login);
 router.post("/register", register);
+router.get("/currentuser", currentuser);
+router.post("/activity", updateSessionActivity);
+router.post("/heartbeat", heartbeat);
 router.post("/logout", logout);
 
 //investments
