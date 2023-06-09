@@ -41,14 +41,15 @@ const User = () => {
     regionHeadName: "",
     businessHeadCode: "",
     businessHeadName: "",
-    branchCode2: "",
-    branchName2: "",
-    branchCode3: "",
-    branchName3: "",
-    branchCode4: "",
-    branchName4: "",
-    branchCode5: "",
-    branchName5: "",
+    Branchcode2: "",
+    Branchname2: "",
+    Branchcode3: "",
+    Branchname3: "",
+    Branchcode4: "",
+    Branchname4: "",
+    Branchcode5: "",
+    Branchname5: "",
+    role: "",
   });
 
   const [region, setregion] = useState([]);
@@ -69,8 +70,12 @@ const User = () => {
   const [showAdditionaluser, setShowAdditionaluser] = useState(false);
 
   const [filteredEditverticals, setFilteredEditverticals] = useState([]);
-  const [filteredEditverticalheads, setFilteredEditverticalheads] = useState([]);
-  const [filteredEditbusinessheads, setFilteredEditbusinessheads] = useState([]);
+  const [filteredEditverticalheads, setFilteredEditverticalheads] = useState(
+    []
+  );
+  const [filteredEditbusinessheads, setFilteredEditbusinessheads] = useState(
+    []
+  );
   const [filteredEditregions, setFilteredEditregions] = useState([]);
   const [filteredEditbranches, setFilteredEditbranches] = useState([]);
   const [filteredEditbranchCodes, setFilteredEditbranchCodes] = useState([]);
@@ -223,8 +228,7 @@ const User = () => {
       setFilteredEditregions(filteredregions);
 
       const filteredregionheads = regionhead.filter(
-        (regionheads) =>
-          regionheads.regionCode === editedPost.regionCode
+        (regionheads) => regionheads.regionCode === editedPost.regionCode
       );
       setFilteredEditregionheads(filteredregionheads);
 
@@ -246,9 +250,15 @@ const User = () => {
       setFilteredEditbranches([]);
       setFilteredEditbranchCodes([]);
     }
-  }, [editedPost, vertical, branches, verticalhead, businesshead, region, regionhead]);
-
-
+  }, [
+    editedPost,
+    vertical,
+    branches,
+    verticalhead,
+    businesshead,
+    region,
+    regionhead,
+  ]);
 
   //input change
   const handleChange = (e) => {
@@ -271,7 +281,7 @@ const User = () => {
       }));
     }
 
-    if (name === "branchName2") {
+    if (name === "Branchname2") {
       const selectedBranch2 = branches.find(
         (branch) =>
           branch.regionCode === inputs.regionCode && branch.branchName === value
@@ -279,13 +289,13 @@ const User = () => {
       console.log("selectedBranch2:", selectedBranch2);
       setInputs((prevInputs) => ({
         ...prevInputs,
-        branchCode2: selectedBranch2 ? selectedBranch2.branchCode : "",
+        Branchcode2: selectedBranch2 ? selectedBranch2.branchCode : "",
       }));
     }
 
     // Inside the handleChange function
 
-    if (name === "branchName3") {
+    if (name === "Branchname3") {
       const selectedBranch3 = branches.find(
         (branch) =>
           branch.regionCode === inputs.regionCode && branch.branchName === value
@@ -293,11 +303,11 @@ const User = () => {
       console.log("selectedBranch3:", selectedBranch3);
       setInputs((prevInputs) => ({
         ...prevInputs,
-        branchCode3: selectedBranch3 ? selectedBranch3.branchCode : "",
+        Branchcode3: selectedBranch3 ? selectedBranch3.branchCode : "",
       }));
     }
 
-    if (name === "branchName4") {
+    if (name === "Branchname4") {
       const selectedBranch4 = branches.find(
         (branch) =>
           branch.regionCode === inputs.regionCode && branch.branchName === value
@@ -305,11 +315,11 @@ const User = () => {
       console.log("selectedBranch4:", selectedBranch4);
       setInputs((prevInputs) => ({
         ...prevInputs,
-        branchCode4: selectedBranch4 ? selectedBranch4.branchCode : "",
+        Branchcode4: selectedBranch4 ? selectedBranch4.branchCode : "",
       }));
     }
 
-    if (name === "branchName5") {
+    if (name === "Branchname5") {
       const selectedBranch5 = branches.find(
         (branch) =>
           branch.regionCode === inputs.regionCode && branch.branchName === value
@@ -317,10 +327,9 @@ const User = () => {
       console.log("selectedBranch5:", selectedBranch5);
       setInputs((prevInputs) => ({
         ...prevInputs,
-        branchCode5: selectedBranch5 ? selectedBranch5.branchCode : "",
+        Branchcode5: selectedBranch5 ? selectedBranch5.branchCode : "",
       }));
     }
-
 
     if (name === "verticalCode") {
       const selectedVerticalhead = verticalhead.find(
@@ -409,14 +418,12 @@ const User = () => {
     console.log("Selected Vertical:", selectedVertical);
 
     const selectedVerticalHead = verticalhead.find(
-      (verticalheads) =>
-        verticalheads.verticalCode === editedPost.verticalCode
+      (verticalheads) => verticalheads.verticalCode === editedPost.verticalCode
     );
     console.log("Selected Vertical Head:", selectedVerticalHead);
 
     const selectedBusinessHead = businesshead.find(
-      (businessheads) =>
-        businessheads.verticalCode === editedPost.verticalCode
+      (businessheads) => businessheads.verticalCode === editedPost.verticalCode
     );
     console.log("Selected Business Head:", selectedBusinessHead);
 
@@ -427,8 +434,7 @@ const User = () => {
     console.log("Selected Region:", selectedRegion);
 
     const selectedRegionHead = regionhead.find(
-      (regionheads) =>
-        regionheads.regionCode === editedPost.regionCode
+      (regionheads) => regionheads.regionCode === editedPost.regionCode
     );
     console.log("Selected Region Head:", selectedRegionHead);
 
@@ -439,13 +445,44 @@ const User = () => {
     );
     console.log("Selected Branch:", selectedBranch);
 
+  const selectedBranch2 = branches.find(
+    (branch) =>
+      branch.regionCode === editedPost.regionCode &&
+      branch.branchName === editedPost.Branchname2
+  );
+  console.log("Selected Branch2:", selectedBranch2);
+
+  const selectedBranch3 = branches.find(
+    (branch) =>
+      branch.regionCode === editedPost.regionCode &&
+      branch.branchName === editedPost.Branchname3
+  );
+  console.log("Selected Branch3:", selectedBranch3);
+
+  const selectedBranch4 = branches.find(
+    (branch) =>
+      branch.regionCode === editedPost.regionCode &&
+      branch.branchName === editedPost.Branchname4
+  );
+  console.log("Selected Branch4:", selectedBranch4);
+
+  const selectedBranch5 = branches.find(
+    (branch) =>
+      branch.regionCode === editedPost.regionCode &&
+      branch.branchName === editedPost.Branchname5
+  );
+  console.log("Selected Branch5:", selectedBranch5);
     if (
       selectedVertical &&
       selectedVerticalHead &&
       selectedBusinessHead &&
       selectedRegion &&
       selectedRegionHead &&
-      selectedBranch
+      selectedBranch &&
+      selectedBranch2 &&
+      selectedBranch3 &&
+      selectedBranch4 &&
+      selectedBranch5
     ) {
       const updatedPost = {
         ...editedPost,
@@ -458,6 +495,10 @@ const User = () => {
         regionHeadName: selectedRegionHead.regionHeadName,
         regionHeadCode: selectedRegionHead.regionHeadCode,
         branchCode: selectedBranch.branchCode,
+        Branchcode2: selectedBranch2 ? selectedBranch2.branchCode : null,
+        Branchcode3: selectedBranch3 ? selectedBranch3.branchCode : null,
+        Branchcode4: selectedBranch4 ? selectedBranch4.branchCode : null,
+        Branchcode5: selectedBranch5 ? selectedBranch5.branchCode : null,
       };
 
       axios
@@ -467,7 +508,9 @@ const User = () => {
         )
         .then((res) => {
           setPosts(
-            posts.map((post) => (post.id === editedPost.id ? updatedPost : post))
+            posts.map((post) =>
+              post.id === editedPost.id ? updatedPost : post
+            )
           );
           setEditedPost(null);
           setEditDialogVisible(false);
@@ -480,7 +523,6 @@ const User = () => {
       alert("One or more selected values not found.");
     }
   };
-
 
   useEffect(() => {
     if (
@@ -540,8 +582,15 @@ const User = () => {
       );
       setFilteredbusinessheads(filteredBusinessHeads);
     }
-  }, [editedPost, region, branches, vertical, verticalhead, businesshead, regionhead]);
-
+  }, [
+    editedPost,
+    region,
+    branches,
+    vertical,
+    verticalhead,
+    businesshead,
+    regionhead,
+  ]);
 
   const clearFilter = () => {
     initFilters();
@@ -787,14 +836,14 @@ const User = () => {
               businessHeadName: selectedBusinessHead
                 ? selectedBusinessHead.businessHeadName
                 : "",
-              branchCode2: row.branchCode2,
-              branchName2: row.branchName2,
-              branchCode3: row.branchCode3,
-              branchName3: row.branchName3,
-              branchCode4: row.branchCode4,
-              branchName4: row.branchName4,
-              branchCode5: row.branchCode5,
-              branchName5: row.branchName5,
+              Branchcode2: row.Branchcode2,
+              Branchname2: row.Branchname2,
+              Branchcode3: row.Branchcode3,
+              Branchname3: row.Branchname3,
+              Branchcode4: row.Branchcode4,
+              Branchname4: row.Branchname4,
+              Branchcode5: row.Branchcode5,
+              Branchname5: row.Branchname5,
             });
             successCount++;
           } catch (error) {
@@ -1026,7 +1075,6 @@ const User = () => {
                 </label>
               </div>
 
-
               <div hidden>
                 <label>
                   Branch Code
@@ -1185,18 +1233,31 @@ const User = () => {
                 </label>
               </div>
 
-
-
+              <div>
+                <label>
+                  Roles
+                  <select
+                    required
+                    className="userinput"
+                    id="role"
+                    name="role"
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Role</option>
+                    <option value="Employee">Employee</option>
+                    <option value="Admin">Admin</option>
+                  </select>
+                </label>
+              </div>
 
               <div>
                 <label>
                   Branch Name 2
                   <select
-
                     className="userinput"
-                    id="branchName2"
-                    name="branchName2"
-                    value={inputs.branchName2 || ""}
+                    id="Branchname2"
+                    name="Branchname2"
+                    value={inputs.Branchname2 || ""}
                     onChange={handleChange}
                   >
                     <option value="">Select Branch Name 2</option>
@@ -1209,15 +1270,14 @@ const User = () => {
                 </label>
               </div>
 
-
               <div hidden>
                 <label>
                   Branch Code 2
                   <select
                     className="userinput"
-                    id="branchCode2"
-                    name="branchCode2"
-                    value={inputs.branchCode2 || ""}
+                    id="Branchcode2"
+                    name="Branchcode2"
+                    value={inputs.Branchcode2 || ""}
                     onChange={handleChange}
                   >
                     {filteredbranchCodes.map((branch) => (
@@ -1233,11 +1293,10 @@ const User = () => {
                 <label>
                   Branch Name 3
                   <select
-
                     className="userinput"
-                    id="branchName3"
-                    name="branchName3"
-                    value={inputs.branchName3 || ""}
+                    id="Branchname3"
+                    name="Branchname3"
+                    value={inputs.Branchname3 || ""}
                     onChange={handleChange}
                   >
                     <option value="">Select Branch Name 3</option>
@@ -1255,9 +1314,9 @@ const User = () => {
                   Branch Code 3
                   <select
                     className="userinput"
-                    id="branchCode3"
-                    name="branchCode3"
-                    value={inputs.branchCode3 || ""}
+                    id="Branchcode3"
+                    name="Branchcode3"
+                    value={inputs.Branchcode3 || ""}
                     onChange={handleChange}
                   >
                     {filteredbranchCodes.map((branch) => (
@@ -1273,11 +1332,10 @@ const User = () => {
                 <label>
                   Branch Name 4
                   <select
-
                     className="userinput"
-                    id="branchName4"
-                    name="branchName4"
-                    value={inputs.branchName4 || ""}
+                    id="Branchname4"
+                    name="Branchname4"
+                    value={inputs.Branchname4 || ""}
                     onChange={handleChange}
                   >
                     <option value="">Select Branch Name 4</option>
@@ -1295,9 +1353,9 @@ const User = () => {
                   Branch Code 4
                   <select
                     className="userinput"
-                    id="branchCode4"
-                    name="branchCode4"
-                    value={inputs.branchCode4 || ""}
+                    id="Branchcode4"
+                    name="Branchcode4"
+                    value={inputs.Branchcode4 || ""}
                     onChange={handleChange}
                   >
                     {filteredbranchCodes.map((branch) => (
@@ -1314,9 +1372,9 @@ const User = () => {
                   Branch Name 5
                   <select
                     className="userinput"
-                    id="branchName5"
-                    name="branchName5"
-                    value={inputs.branchName5 || ""}
+                    id="Branchname5"
+                    name="Branchname5"
+                    value={inputs.Branchname5 || ""}
                     onChange={handleChange}
                   >
                     <option value="">Select Branch Name 5</option>
@@ -1334,9 +1392,9 @@ const User = () => {
                   Branch Code 5
                   <select
                     className="userinput"
-                    id="branchCode5"
-                    name="branchCode5"
-                    value={inputs.branchCode5 || ""}
+                    id="Branchcode5"
+                    name="Branchcode5"
+                    value={inputs.Branchcode5 || ""}
                     onChange={handleChange}
                   >
                     {filteredbranchCodes.map((branch) => (
@@ -1348,12 +1406,9 @@ const User = () => {
                 </label>
               </div>
 
-
               <button type="submit" className="Submitbuttonuser">
                 Submit
               </button>
-
-
             </form>
           </div>
 
@@ -1476,19 +1531,47 @@ const User = () => {
         <Column field="employeeName" sortable header="Employee Name"></Column>
         <Column field="mobileNumber" sortable header="Mobile Number"></Column>
         <Column field="emailId" sortable header="Email ID"></Column>
-        <Column field="employeeDesignation" sortable header="Employee Designation"></Column>
+        <Column
+          field="employeeDesignation"
+          sortable
+          header="Employee Designation"
+        ></Column>
         <Column field="regionCode" sortable header="Region Code"></Column>
         <Column field="regionName" sortable header="Region Name"></Column>
-        <Column field="regionHeadName" sortable header="Region Head Name"></Column>
-        <Column field="regionHeadCode" sortable header="Region Head Code"></Column>
+        <Column
+          field="regionHeadName"
+          sortable
+          header="Region Head Name"
+        ></Column>
+        <Column
+          field="regionHeadCode"
+          sortable
+          header="Region Head Code"
+        ></Column>
         <Column field="branchName" sortable header="Branch Name"></Column>
         <Column field="branchCode" sortable header="Branch Code"></Column>
         <Column field="verticalName" sortable header="Vertical Name"></Column>
         <Column field="verticalCode" sortable header="Vertical Code"></Column>
-        <Column field="verticalHeadName" sortable header="Vertical Head Name"></Column>
-        <Column field="verticalHeadCode" sortable header="Vertical Head Code"></Column>
-        <Column field="businessHeadName" sortable header="Business Head Name"></Column>
-        <Column field="businessHeadCode" sortable header="Business Head Code"></Column>
+        <Column
+          field="verticalHeadName"
+          sortable
+          header="Vertical Head Name"
+        ></Column>
+        <Column
+          field="verticalHeadCode"
+          sortable
+          header="Vertical Head Code"
+        ></Column>
+        <Column
+          field="businessHeadName"
+          sortable
+          header="Business Head Name"
+        ></Column>
+        <Column
+          field="businessHeadCode"
+          sortable
+          header="Business Head Code"
+        ></Column>
         <Column field="Branchname2" sortable header="Branch Name 2"></Column>
         <Column field="Branchcode2" sortable header="Branch Code 2"></Column>
         <Column field="Branchname3" sortable header="Branch Name 3"></Column>
@@ -1497,6 +1580,7 @@ const User = () => {
         <Column field="Branchcode4" sortable header="Branch Code 4"></Column>
         <Column field="Branchname5" sortable header="Branch Name 5"></Column>
         <Column field="Branchcode5" sortable header="Branch Code "></Column>
+        <Column field="role" sortable header="Role"></Column>
         <Column
           body={(rowData) => (
             <Button
@@ -1582,7 +1666,9 @@ const User = () => {
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="employeeDesignation">Employee Designation</label>
+                <label htmlFor="employeeDesignation">
+                  Employee Designation
+                </label>
                 <InputText
                   id="employeeDesignation"
                   required
@@ -1754,7 +1840,10 @@ const User = () => {
                 >
                   <option value="">Select Vertical Code</option>
                   {vertical.map((verticals) => (
-                    <option key={verticals.verticalCode} value={verticals.verticalCode}>
+                    <option
+                      key={verticals.verticalCode}
+                      value={verticals.verticalCode}
+                    >
                       {verticals.verticalCode}
                     </option>
                   ))}
@@ -1777,7 +1866,10 @@ const User = () => {
                   style={{ pointerEvents: "none", appearance: "none" }}
                 >
                   {filteredEditverticals.map((verticals) => (
-                    <option key={verticals.verticalName} value={verticals.verticalName}>
+                    <option
+                      key={verticals.verticalName}
+                      value={verticals.verticalName}
+                    >
                       {verticals.verticalName}
                     </option>
                   ))}
@@ -1800,7 +1892,10 @@ const User = () => {
                   style={{ pointerEvents: "none", appearance: "none" }}
                 >
                   {filteredEditverticalheads.map((verticalheads) => (
-                    <option key={verticalheads.verticalHeadName} value={verticalheads.verticalHeadName}>
+                    <option
+                      key={verticalheads.verticalHeadName}
+                      value={verticalheads.verticalHeadName}
+                    >
                       {verticalheads.verticalHeadName}
                     </option>
                   ))}
@@ -1822,13 +1917,15 @@ const User = () => {
                   className="userinput"
                 >
                   {filteredEditverticalheads.map((verticalheads) => (
-                    <option key={verticalheads.verticalHeadCode} value={verticalheads.verticalHeadCode}>
+                    <option
+                      key={verticalheads.verticalHeadCode}
+                      value={verticalheads.verticalHeadCode}
+                    >
                       {verticalheads.verticalHeadCode}
                     </option>
                   ))}
                 </select>
               </div>
-
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
                 <label htmlFor="businessHeadName">Business Head Name</label>
@@ -1846,7 +1943,10 @@ const User = () => {
                   style={{ pointerEvents: "none", appearance: "none" }}
                 >
                   {filteredEditbusinessheads.map((businessheads) => (
-                    <option key={businessheads.businessHeadName} value={businessheads.businessHeadName}>
+                    <option
+                      key={businessheads.businessHeadName}
+                      value={businessheads.businessHeadName}
+                    >
                       {businessheads.businessHeadName}
                     </option>
                   ))}
@@ -1868,7 +1968,10 @@ const User = () => {
                   className="userinput"
                 >
                   {filteredEditbusinessheads.map((businessheads) => (
-                    <option key={businessheads.businessHeadCode} value={businessheads.businessHeadCode}>
+                    <option
+                      key={businessheads.businessHeadCode}
+                      value={businessheads.businessHeadCode}
+                    >
                       {businessheads.businessHeadCode}
                     </option>
                   ))}
@@ -1876,14 +1979,36 @@ const User = () => {
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchName2">Branch Name 2</label>
+                <label htmlFor="role">Roles</label>
                 <select
-                  id="branchName2"
-                  value={editedPost.branchName2}
+                  required
+                  id="role"
+                  name="role"
+                  value={editedPost.role}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      branchName2: e.target.value,
+                      role: e.target.value,
+                    })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  <option value="">Select Role</option>
+                  <option value="Employee">Employee</option>
+                  <option value="Admin">Admin</option>
+                </select>
+              </div>
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="Branchname2">Branch Name 2</label>
+                <select
+                  id="Branchname2"
+                  value={editedPost.Branchname2}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      Branchname2: e.target.value,
                     })
                   }
                   disabled={!editedPost}
@@ -1899,14 +2024,14 @@ const User = () => {
               </div>
 
               <div hidden className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchCode2">Branch Code 2</label>
+                <label htmlFor="Branchcode2">Branch Code 2</label>
                 <select
-                  id="branchCode2"
-                  value={editedPost.branchCode2}
+                  id="Branchcode2"
+                  value={editedPost.Branchcode2}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      branchCode2: e.target.value,
+                      Branchcode2: e.target.value,
                     })
                   }
                   disabled={!editedPost}
@@ -1921,14 +2046,14 @@ const User = () => {
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchName3">Branch Name 3</label>
+                <label htmlFor="Branchname3">Branch Name 3</label>
                 <select
-                  id="branchName3"
-                  value={editedPost.branchName3}
+                  id="Branchname3"
+                  value={editedPost.Branchname3}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      branchName3: e.target.value,
+                      Branchname3: e.target.value,
                     })
                   }
                   disabled={!editedPost}
@@ -1944,14 +2069,14 @@ const User = () => {
               </div>
 
               <div hidden className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchCode3">Branch Code 3</label>
+                <label htmlFor="Branchcode3">Branch Code 3</label>
                 <select
-                  id="branchCode3"
-                  value={editedPost.branchCode3}
+                  id="Branchcode3"
+                  value={editedPost.Branchcode3}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      branchCode3: e.target.value,
+                      Branchcode3: e.target.value,
                     })
                   }
                   disabled={!editedPost}
@@ -1966,14 +2091,14 @@ const User = () => {
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchName4">Branch Name 4</label>
+                <label htmlFor="Branchname4">Branch Name 4</label>
                 <select
-                  id="branchName4"
-                  value={editedPost.branchName4}
+                  id="Branchname4"
+                  value={editedPost.Branchname4}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      branchName4: e.target.value,
+                      Branchname4: e.target.value,
                     })
                   }
                   disabled={!editedPost}
@@ -1989,14 +2114,14 @@ const User = () => {
               </div>
 
               <div hidden className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchCode4">Branch Code 4</label>
+                <label htmlFor="Branchcode4">Branch Code 4</label>
                 <select
-                  id="branchCode4"
-                  value={editedPost.branchCode4}
+                  id="Branchcode4"
+                  value={editedPost.Branchcode4}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      branchCode4: e.target.value,
+                      Branchcode4: e.target.value,
                     })
                   }
                   disabled={!editedPost}
@@ -2011,14 +2136,14 @@ const User = () => {
               </div>
 
               <div className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchName5">Branch Name 5</label>
+                <label htmlFor="Branchname5">Branch Name 5</label>
                 <select
-                  id="branchName5"
-                  value={editedPost.branchName5}
+                  id="Branchname5"
+                  value={editedPost.Branchname5}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      branchName5: e.target.value,
+                      Branchname5: e.target.value,
                     })
                   }
                   disabled={!editedPost}
@@ -2034,14 +2159,14 @@ const User = () => {
               </div>
 
               <div hidden className="p-field" style={{ paddingBottom: "10px" }}>
-                <label htmlFor="branchCode5">Branch Code 5</label>
+                <label htmlFor="Branchcode5">Branch Code 5</label>
                 <select
-                  id="branchCode5"
-                  value={editedPost.branchCode5}
+                  id="Branchcode5"
+                  value={editedPost.Branchcode5}
                   onChange={(e) =>
                     setEditedPost({
                       ...editedPost,
-                      branchCode5: e.target.value,
+                      Branchcode5: e.target.value,
                     })
                   }
                   disabled={!editedPost}
@@ -2054,8 +2179,6 @@ const User = () => {
                   ))}
                 </select>
               </div>
-
-
             </div>
             <Button label="Save" icon="pi pi-check" onClick={saveEditedPost} />
           </div>

@@ -22,7 +22,7 @@ import {
 
   getverticalName,getverticalCode,
 
-  approvaldata,editapproval,adminapproval,
+  approvaldata,approval,adminapproval,
 
   principaldata,editprincipal,adminprincipal,getverticalinprincipal,getproductinprincipal,
 
@@ -144,7 +144,7 @@ router.post("/adminco", adminco);
 
 //approvalmaster
 router.get("/approvaldata", approvaldata);
-router.put("/editapproval/:id", editapproval);
+router.put("/approval/:id", approval);
 router.put("/adminapproval", adminapproval);
 
 //leadadmin
