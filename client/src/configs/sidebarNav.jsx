@@ -17,12 +17,12 @@ export const sidebarNav = [
     //     icon: <i className='bx bx-home-alt'></i>,
     //     text: 'Home loans'
     // },
-    {
-        link: 'insurance',
-        section: 'insurance',
-        icon: <i className='bx bx-user'></i>,
-        text: 'Insurance'
-    },
+    // {
+    //     link: 'insurance',
+    //     section: 'insurance',
+    //     icon: <i className='bx bx-user'></i>,
+    //     text: 'Insurance'
+    // },
     // {
     //     link: 'orderbook',
     //     section: 'orderbook',

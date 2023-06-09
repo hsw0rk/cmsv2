@@ -77,7 +77,7 @@ export const login = (req, res) => {
         return res.status(400).json("User is already logged in");
       }
 
-      const expirationTime = Math.floor(Date.now() / 1000) + 60; // Expiry after 1 minute (in UNIX timestamp format)
+      const expirationTime = Math.floor(Date.now() / 1000) + 45 * 60; // Expiry after 45 minutes (in UNIX timestamp format)
       // Store session data in the database
       const newSessionData = {
         employeeCode: req.body.employeeCode,
@@ -100,7 +100,6 @@ export const login = (req, res) => {
     });
   });
 };
-
 
 export const currentuser = (req, res) => {
   const token = req.cookies.accessToken;
@@ -188,7 +187,7 @@ export const heartbeat = (req, res) => {
 export const logout = (req, res) => {
   const token = req.cookies.accessToken;
 
-  // Delete session data from the database, regardless of token validity
+  // Delete session data from the database
   db.query("DELETE FROM session WHERE session_id = ?", [token], (err) => {
     if (err) return res.status(500).json("Internal server error");
 

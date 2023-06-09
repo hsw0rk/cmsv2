@@ -198,13 +198,13 @@ const User = () => {
         (verticals) => verticals.verticalCode === editedPost.verticalCode
       );
       setFilteredEditverticals(filteredverticals);
-  
+
       const filteredverticalheads = verticalhead.filter(
         (verticalheads) =>
           verticalheads.verticalCode === editedPost.verticalCode
       );
       setFilteredEditverticalheads(filteredverticalheads);
-  
+
       const filteredbusinessheads = businesshead.filter(
         (businessheads) =>
           businessheads.verticalCode === editedPost.verticalCode
@@ -215,24 +215,24 @@ const User = () => {
       setFilteredEditverticalheads([]);
       setFilteredEditbusinessheads([]);
     }
-  
+
     if (editedPost && editedPost.regionCode) {
       const filteredregions = region.filter(
         (regions) => regions.regionCode === editedPost.regionCode
       );
       setFilteredEditregions(filteredregions);
-  
+
       const filteredregionheads = regionhead.filter(
         (regionheads) =>
           regionheads.regionCode === editedPost.regionCode
       );
       setFilteredEditregionheads(filteredregionheads);
-  
+
       const filteredBranches = branches.filter(
         (branch) => branch.regionCode === editedPost.regionCode
       );
       setFilteredEditbranches(filteredBranches);
-  
+
       const filteredbranchCodes = branches.filter(
         (branch) =>
           branch.regionCode === editedPost.regionCode &&
@@ -247,7 +247,7 @@ const User = () => {
       setFilteredEditbranchCodes([]);
     }
   }, [editedPost, vertical, branches, verticalhead, businesshead, region, regionhead]);
-  
+
 
 
   //input change
@@ -270,6 +270,57 @@ const User = () => {
         branchCode: selectedBranch ? selectedBranch.branchCode : "",
       }));
     }
+
+    if (name === "branchName2") {
+      const selectedBranch2 = branches.find(
+        (branch) =>
+          branch.regionCode === inputs.regionCode && branch.branchName === value
+      );
+      console.log("selectedBranch2:", selectedBranch2);
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        branchCode2: selectedBranch2 ? selectedBranch2.branchCode : "",
+      }));
+    }
+
+    // Inside the handleChange function
+
+    if (name === "branchName3") {
+      const selectedBranch3 = branches.find(
+        (branch) =>
+          branch.regionCode === inputs.regionCode && branch.branchName === value
+      );
+      console.log("selectedBranch3:", selectedBranch3);
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        branchCode3: selectedBranch3 ? selectedBranch3.branchCode : "",
+      }));
+    }
+
+    if (name === "branchName4") {
+      const selectedBranch4 = branches.find(
+        (branch) =>
+          branch.regionCode === inputs.regionCode && branch.branchName === value
+      );
+      console.log("selectedBranch4:", selectedBranch4);
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        branchCode4: selectedBranch4 ? selectedBranch4.branchCode : "",
+      }));
+    }
+
+    if (name === "branchName5") {
+      const selectedBranch5 = branches.find(
+        (branch) =>
+          branch.regionCode === inputs.regionCode && branch.branchName === value
+      );
+      console.log("selectedBranch5:", selectedBranch5);
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        branchCode5: selectedBranch5 ? selectedBranch5.branchCode : "",
+      }));
+    }
+
 
     if (name === "verticalCode") {
       const selectedVerticalhead = verticalhead.find(
@@ -351,43 +402,43 @@ const User = () => {
   const saveEditedPost = () => {
     console.log("Edited Post:", editedPost);
 
-  //vertical
+    //vertical
     const selectedVertical = vertical.find(
       (verticals) => verticals.verticalCode === editedPost.verticalCode
     );
     console.log("Selected Vertical:", selectedVertical);
-  
+
     const selectedVerticalHead = verticalhead.find(
       (verticalheads) =>
-        verticalheads.verticalCode === editedPost.verticalCode 
+        verticalheads.verticalCode === editedPost.verticalCode
     );
     console.log("Selected Vertical Head:", selectedVerticalHead);
-  
+
     const selectedBusinessHead = businesshead.find(
       (businessheads) =>
-        businessheads.verticalCode === editedPost.verticalCode 
+        businessheads.verticalCode === editedPost.verticalCode
     );
     console.log("Selected Business Head:", selectedBusinessHead);
-  
+
     //region
     const selectedRegion = region.find(
       (regions) => regions.regionCode === editedPost.regionCode
     );
     console.log("Selected Region:", selectedRegion);
-  
+
     const selectedRegionHead = regionhead.find(
       (regionheads) =>
-        regionheads.regionCode === editedPost.regionCode 
+        regionheads.regionCode === editedPost.regionCode
     );
     console.log("Selected Region Head:", selectedRegionHead);
-  
+
     const selectedBranch = branches.find(
       (branch) =>
         branch.regionCode === editedPost.regionCode &&
         branch.branchName === editedPost.branchName
     );
     console.log("Selected Branch:", selectedBranch);
-  
+
     if (
       selectedVertical &&
       selectedVerticalHead &&
@@ -408,7 +459,7 @@ const User = () => {
         regionHeadCode: selectedRegionHead.regionHeadCode,
         branchCode: selectedBranch.branchCode,
       };
-  
+
       axios
         .put(
           `http://localhost:8800/api/auth/edituser/${editedPost.id}`,
@@ -429,37 +480,37 @@ const User = () => {
       alert("One or more selected values not found.");
     }
   };
-  
-  
+
+
   useEffect(() => {
     if (
       editedPost &&
       editedPost.regionCode &&
       region.length > 0 &&
       editedPost.regionHeadCode &&
-      regionhead.length > 0 && 
+      regionhead.length > 0 &&
       editedPost.branchCode &&
       branches.length > 0
     ) {
-        const filteredRegions = region.filter(
-          (regions) => regions.regionCode === editedPost.regionCode
-        );
-        setFilteredregions(filteredRegions);
-    
-        const filteredRegionHeads = regionhead.filter(
-          (regionheads) =>
+      const filteredRegions = region.filter(
+        (regions) => regions.regionCode === editedPost.regionCode
+      );
+      setFilteredregions(filteredRegions);
+
+      const filteredRegionHeads = regionhead.filter(
+        (regionheads) =>
           regionheads.regionCode === editedPost.regionCode &&
           regionheads.regionHeadName === editedPost.regionHeadName &&
           regionheads.regionHeadCode === editedPost.regionHeadCode
-        );
-        setFilteredregionheads(filteredRegionHeads);
+      );
+      setFilteredregionheads(filteredRegionHeads);
 
-        const filteredbranchCodes = branches.filter(
-          (branch) =>
+      const filteredbranchCodes = branches.filter(
+        (branch) =>
           branch.regionCode === editedPost.regionCode &&
           branch.branchCode === editedPost.branchCode
-        );
-        setFilteredbranchCodes(filteredbranchCodes);
+      );
+      setFilteredbranchCodes(filteredbranchCodes);
     }
     if (
       editedPost &&
@@ -477,11 +528,11 @@ const User = () => {
 
       const filteredVerticalHeads = verticalhead.filter(
         (verticalheads) =>
-        verticalheads.verticalCode === editedPost.verticalCode &&
-        verticalheads.verticalHeadName === editedPost.verticalHeadName
+          verticalheads.verticalCode === editedPost.verticalCode &&
+          verticalheads.verticalHeadName === editedPost.verticalHeadName
       );
       setFilteredverticalheads(filteredVerticalHeads);
-  
+
       const filteredBusinessHeads = businesshead.filter(
         (businessheads) =>
           businessheads.verticalCode === editedPost.verticalCode &&
@@ -536,14 +587,14 @@ const User = () => {
       regionHeadName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       businessHeadCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       businessHeadName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchCode2: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName2: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchCode3: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName3: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchCode4: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName4: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchCode5: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      branchName5: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      Branchcode2: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      Branchname2: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      Branchcode3: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      Branchname3: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      Branchcode4: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      Branchname4: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      Branchcode5: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      Branchname5: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
     });
     setGlobalFilterValue("");
   };
@@ -597,14 +648,14 @@ const User = () => {
       post.regionHeadName,
       post.businessHeadCode,
       post.businessHeadName,
-      post.branchCode2,
-      post.branchName2,
-      post.branchCode3,
-      post.branchName3,
-      post.branchCode4,
-      post.branchName4,
-      post.branchCode5,
-      post.branchName5,
+      post.Branchcode2,
+      post.Branchname2,
+      post.Branchcode3,
+      post.Branchname3,
+      post.Branchcode4,
+      post.Branchname4,
+      post.Branchcode5,
+      post.Branchname5,
     ]);
 
     // Combine headers and rows into a single array
@@ -635,15 +686,10 @@ const User = () => {
       regionCode: "",
       branchCode: "",
       verticalCode: "",
-
-      branchCode2: "",
-      branchName2: "",
-      branchCode3: "",
-      branchName3: "",
-      branchCode4: "",
-      branchName4: "",
-      branchCode5: "",
-      branchName5: "",
+      Branchcode2: "",
+      Branchcode3: "",
+      Branchcode4: "",
+      Branchcode5: "",
     },
   ];
 
@@ -980,6 +1026,7 @@ const User = () => {
                 </label>
               </div>
 
+
               <div hidden>
                 <label>
                   Branch Code
@@ -1138,9 +1185,175 @@ const User = () => {
                 </label>
               </div>
 
+
+
+
+              <div>
+                <label>
+                  Branch Name 2
+                  <select
+
+                    className="userinput"
+                    id="branchName2"
+                    name="branchName2"
+                    value={inputs.branchName2 || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Branch Name 2</option>
+                    {filteredBranches.map((branch) => (
+                      <option key={branch.branchName} value={branch.branchName}>
+                        {branch.branchName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+
+              <div hidden>
+                <label>
+                  Branch Code 2
+                  <select
+                    className="userinput"
+                    id="branchCode2"
+                    name="branchCode2"
+                    value={inputs.branchCode2 || ""}
+                    onChange={handleChange}
+                  >
+                    {filteredbranchCodes.map((branch) => (
+                      <option key={branch.branchCode} value={branch.branchCode}>
+                        {branch.branchCode}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+              <div>
+                <label>
+                  Branch Name 3
+                  <select
+
+                    className="userinput"
+                    id="branchName3"
+                    name="branchName3"
+                    value={inputs.branchName3 || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Branch Name 3</option>
+                    {filteredBranches.map((branch) => (
+                      <option key={branch.branchName} value={branch.branchName}>
+                        {branch.branchName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+              <div hidden>
+                <label>
+                  Branch Code 3
+                  <select
+                    className="userinput"
+                    id="branchCode3"
+                    name="branchCode3"
+                    value={inputs.branchCode3 || ""}
+                    onChange={handleChange}
+                  >
+                    {filteredbranchCodes.map((branch) => (
+                      <option key={branch.branchCode} value={branch.branchCode}>
+                        {branch.branchCode}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+              <div>
+                <label>
+                  Branch Name 4
+                  <select
+
+                    className="userinput"
+                    id="branchName4"
+                    name="branchName4"
+                    value={inputs.branchName4 || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Branch Name 4</option>
+                    {filteredBranches.map((branch) => (
+                      <option key={branch.branchName} value={branch.branchName}>
+                        {branch.branchName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+              <div hidden>
+                <label>
+                  Branch Code 4
+                  <select
+                    className="userinput"
+                    id="branchCode4"
+                    name="branchCode4"
+                    value={inputs.branchCode4 || ""}
+                    onChange={handleChange}
+                  >
+                    {filteredbranchCodes.map((branch) => (
+                      <option key={branch.branchCode} value={branch.branchCode}>
+                        {branch.branchCode}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+              <div>
+                <label>
+                  Branch Name 5
+                  <select
+                    className="userinput"
+                    id="branchName5"
+                    name="branchName5"
+                    value={inputs.branchName5 || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Branch Name 5</option>
+                    {filteredBranches.map((branch) => (
+                      <option key={branch.branchName} value={branch.branchName}>
+                        {branch.branchName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+              <div hidden>
+                <label>
+                  Branch Code 5
+                  <select
+                    className="userinput"
+                    id="branchCode5"
+                    name="branchCode5"
+                    value={inputs.branchCode5 || ""}
+                    onChange={handleChange}
+                  >
+                    {filteredbranchCodes.map((branch) => (
+                      <option key={branch.branchCode} value={branch.branchCode}>
+                        {branch.branchCode}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+
               <button type="submit" className="Submitbuttonuser">
                 Submit
               </button>
+
+
             </form>
           </div>
 
@@ -1218,6 +1431,10 @@ const User = () => {
           />
         </div>
       </div>
+
+      {/* <form className="formuser" onSubmit={handleSubmit}>
+
+      </form> */}
       <div className="flex justify-content-between gap-5 clearred">
         <Button
           type="button"
@@ -1272,6 +1489,14 @@ const User = () => {
         <Column field="verticalHeadCode" sortable header="Vertical Head Code"></Column>
         <Column field="businessHeadName" sortable header="Business Head Name"></Column>
         <Column field="businessHeadCode" sortable header="Business Head Code"></Column>
+        <Column field="Branchname2" sortable header="Branch Name 2"></Column>
+        <Column field="Branchcode2" sortable header="Branch Code 2"></Column>
+        <Column field="Branchname3" sortable header="Branch Name 3"></Column>
+        <Column field="Branchcode3" sortable header="Branch Code 3"></Column>
+        <Column field="Branchname4" sortable header="Branch Name 4"></Column>
+        <Column field="Branchcode4" sortable header="Branch Code 4"></Column>
+        <Column field="Branchname5" sortable header="Branch Name 5"></Column>
+        <Column field="Branchcode5" sortable header="Branch Code "></Column>
         <Column
           body={(rowData) => (
             <Button
@@ -1558,7 +1783,7 @@ const User = () => {
                   ))}
                 </select>
               </div>
-             
+
               <div className="p-field" style={{ paddingBottom: "10px" }}>
                 <label htmlFor="verticalHeadName">Vertical Head Name</label>
                 <select
@@ -1650,7 +1875,187 @@ const User = () => {
                 </select>
               </div>
 
-              
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="branchName2">Branch Name 2</label>
+                <select
+                  id="branchName2"
+                  value={editedPost.branchName2}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      branchName2: e.target.value,
+                    })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  <option value="">Select Branch Name 2</option>
+                  {filteredEditbranches.map((branch) => (
+                    <option key={branch.branchName} value={branch.branchName}>
+                      {branch.branchName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div hidden className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="branchCode2">Branch Code 2</label>
+                <select
+                  id="branchCode2"
+                  value={editedPost.branchCode2}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      branchCode2: e.target.value,
+                    })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  {filteredEditbranchCodes.map((branch) => (
+                    <option key={branch.branchCode} value={branch.branchCode}>
+                      {branch.branchCode}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="branchName3">Branch Name 3</label>
+                <select
+                  id="branchName3"
+                  value={editedPost.branchName3}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      branchName3: e.target.value,
+                    })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  <option value="">Select Branch Name 3</option>
+                  {filteredEditbranches.map((branch) => (
+                    <option key={branch.branchName} value={branch.branchName}>
+                      {branch.branchName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div hidden className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="branchCode3">Branch Code 3</label>
+                <select
+                  id="branchCode3"
+                  value={editedPost.branchCode3}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      branchCode3: e.target.value,
+                    })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  {filteredEditbranchCodes.map((branch) => (
+                    <option key={branch.branchCode} value={branch.branchCode}>
+                      {branch.branchCode}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="branchName4">Branch Name 4</label>
+                <select
+                  id="branchName4"
+                  value={editedPost.branchName4}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      branchName4: e.target.value,
+                    })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  <option value="">Select Branch Name 4</option>
+                  {filteredEditbranches.map((branch) => (
+                    <option key={branch.branchName} value={branch.branchName}>
+                      {branch.branchName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div hidden className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="branchCode4">Branch Code 4</label>
+                <select
+                  id="branchCode4"
+                  value={editedPost.branchCode4}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      branchCode4: e.target.value,
+                    })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  {filteredEditbranchCodes.map((branch) => (
+                    <option key={branch.branchCode} value={branch.branchCode}>
+                      {branch.branchCode}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="branchName5">Branch Name 5</label>
+                <select
+                  id="branchName5"
+                  value={editedPost.branchName5}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      branchName5: e.target.value,
+                    })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  <option value="">Select Branch Name 5</option>
+                  {filteredEditbranches.map((branch) => (
+                    <option key={branch.branchName} value={branch.branchName}>
+                      {branch.branchName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div hidden className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="branchCode5">Branch Code 5</label>
+                <select
+                  id="branchCode5"
+                  value={editedPost.branchCode5}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      branchCode5: e.target.value,
+                    })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  {filteredEditbranchCodes.map((branch) => (
+                    <option key={branch.branchCode} value={branch.branchCode}>
+                      {branch.branchCode}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+
             </div>
             <Button label="Save" icon="pi pi-check" onClick={saveEditedPost} />
           </div>
