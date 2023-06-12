@@ -20,6 +20,7 @@ const Approval = () => {
     const [vertical, setvertical] = useState([]);
     const [verticalhead, setverticalhead] = useState([]);
     const [businesshead, setbusinesshead] = useState([]);
+    
     const [filteredEditverticals, setFilteredEditverticals] = useState([]);
     const [filteredEditverticalheads, setFilteredEditverticalheads] = useState([]);
     const [filteredEditbusinessheads, setFilteredEditbusinessheads] = useState([]);
@@ -157,7 +158,7 @@ const Approval = () => {
             const filteredRegions = region.filter(
                 (regions) => regions.regionCode === editedPost.regionCode
             );
-            setFilteredregions(filteredRegions);
+            setFilteredEditregions(filteredRegions);
 
             const filteredRegionHeads = regionhead.filter(
                 (regionheads) =>
@@ -165,14 +166,14 @@ const Approval = () => {
                     regionheads.regionHeadName === editedPost.regionHeadName &&
                     regionheads.regionHeadCode === editedPost.regionHeadCode
             );
-            setFilteredregionheads(filteredRegionHeads);
+            setFilteredEditregionheads(filteredRegionHeads);
 
             const filteredbranchCodes = branches.filter(
                 (branch) =>
                     branch.regionCode === editedPost.regionCode &&
                     branch.branchCode === editedPost.branchCode
             );
-            setFilteredbranchCodes(filteredbranchCodes);
+            setFilteredEditbranchCodes(filteredbranchCodes);
         }
         if (
             editedPost &&
@@ -186,21 +187,21 @@ const Approval = () => {
             const filteredVerticals = vertical.filter(
                 (verticals) => verticals.verticalCode === editedPost.verticalCode
             );
-            setFilteredverticals(filteredVerticals);
+            setFilteredEditverticals(filteredVerticals);
 
             const filteredVerticalHeads = verticalhead.filter(
                 (verticalheads) =>
                     verticalheads.verticalCode === editedPost.verticalCode &&
                     verticalheads.verticalHeadName === editedPost.verticalHeadName
             );
-            setFilteredverticalheads(filteredVerticalHeads);
+            setFilteredEditverticalheads(filteredVerticalHeads);
 
             const filteredBusinessHeads = businesshead.filter(
                 (businessheads) =>
                     businessheads.verticalCode === editedPost.verticalCode &&
                     businessheads.businessHeadCode === editedPost.businessHeadCode
             );
-            setFilteredbusinessheads(filteredBusinessHeads);
+            setFilteredEditbusinessheads(filteredBusinessHeads);
         }
     }, [editedPost, region, branches, vertical, verticalhead, businesshead, regionhead]);
 
@@ -298,8 +299,8 @@ const Approval = () => {
             };
 
             axios
-                .put(
-                    `http://localhost:8800/api/auth/edituser/${editedPost.id}`,
+                .post(
+                    `http://localhost:8800/api/auth/approval/${editedPost.id}`,
                     updatedPost
                 )
                 .then((res) => {
@@ -310,7 +311,7 @@ const Approval = () => {
                     );
                     setEditedPost(null);
                     setEditDialogVisible(false);
-                    alert("You have edited the data.");
+                    alert("You have approved this user.");
                 })
                 .catch((error) => console.log(error));
         } else {
@@ -333,8 +334,6 @@ const Approval = () => {
             >
                 Approval
             </p>
-
-
             <DataTable
                 value={posts}
                 responsiveLayout="scroll"
@@ -389,6 +388,7 @@ const Approval = () => {
                                 <label htmlFor="employeeName">Employee Name</label>
                                 <InputText
                                     id="employeeName"
+                                    required
                                     value={editedPost.employeeName}
                                     onChange={(e) =>
                                         setEditedPost({ ...editedPost, employeeName: e.target.value })
@@ -400,6 +400,7 @@ const Approval = () => {
                                 <label htmlFor="employeeCode">Employee Code</label>
                                 <InputText
                                     id="employeeCode"
+                                    required
                                     value={editedPost.employeeCode}
                                     onChange={(e) =>
                                         setEditedPost({ ...editedPost, employeeCode: e.target.value })
@@ -411,6 +412,7 @@ const Approval = () => {
                                 <label htmlFor="employeeDesignation">Employee Designation</label>
                                 <InputText
                                     id="employeeDesignation"
+                                    required
                                     value={editedPost.employeeDesignation}
                                     onChange={(e) =>
                                         setEditedPost({ ...editedPost, employeeDesignation: e.target.value })
@@ -422,6 +424,7 @@ const Approval = () => {
                                 <label htmlFor="emailId">Email Id</label>
                                 <InputText
                                     id="emailId"
+                                    required
                                     value={editedPost.emailId}
                                     onChange={(e) =>
                                         setEditedPost({ ...editedPost, emailId: e.target.value })
@@ -453,9 +456,32 @@ const Approval = () => {
                             </div>
 
                             <div className="p-field" style={{ paddingBottom: "10px" }}>
+                                <label htmlFor="status">Status</label>
+                                <select
+                                    required
+                                    id="status"
+                                    name="status"
+                                    value={editedPost.status}
+                                    onChange={(e) =>
+                                        setEditedPost({
+                                            ...editedPost,
+                                            status: e.target.value,
+                                        })
+                                    }
+                                    disabled={!editedPost}
+                                    className="userinput"
+                                >
+                                    <option value="">Select Status</option>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+
+                            <div className="p-field" style={{ paddingBottom: "10px" }}>
                                 <label htmlFor="mobileNumber">Mobile Number</label>
                                 <InputText
                                     id="mobileNumber"
+                                    required
                                     value={editedPost.mobileNumber}
                                     onChange={(e) =>
                                         setEditedPost({ ...editedPost, mobileNumber: e.target.value })
@@ -467,6 +493,7 @@ const Approval = () => {
                                 <label htmlFor="regionCode">Region Code</label>
                                 <select
                                     id="regionCode"
+                                    required
                                     value={editedPost.regionCode}
                                     onChange={(e) =>
                                         setEditedPost({
@@ -564,6 +591,7 @@ const Approval = () => {
                                 <label htmlFor="branchName">Branch Name</label>
                                 <select
                                     id="branchName"
+                                    required
                                     value={editedPost.branchName}
                                     onChange={(e) =>
                                         setEditedPost({
@@ -609,6 +637,7 @@ const Approval = () => {
                                 <label htmlFor="verticalCode">Vertical Code</label>
                                 <select
                                     id="verticalCode"
+                                    required
                                     value={editedPost.verticalCode}
                                     onChange={(e) =>
                                         setEditedPost({
@@ -924,7 +953,9 @@ const Approval = () => {
 
 
                         </div>
+                        <a href="/admin/approvalmaster">
                         <Button label="Approve" icon="pi pi-check" onClick={saveEditedPost} />
+                        </a>
                     </div>
                 )}
             </Dialog>

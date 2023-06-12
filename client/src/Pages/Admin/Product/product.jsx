@@ -211,7 +211,7 @@ const Product = () => {
     {
       id: "",
       verticalName: "",
-      regionCode: "",
+      verticalCode: "",
       productName: "",
       productCode: "",
     },
@@ -229,7 +229,7 @@ const Product = () => {
         for (let i = 0; i < filteredData.length; i++) {
           const row = filteredData[i];
           try {
-            await axios.post("http://localhost:8800/api/auth/adminregionhead", row);
+            await axios.post("http://localhost:8800/api/auth/adminproduct", row);
             console.log(`Inserted row ${i + 1}: ${JSON.stringify(row)}`);
           } catch (err) {
             console.error(
@@ -261,7 +261,7 @@ const Product = () => {
           fontSize: "20px",
         }}
       >
-        PRODUCT
+        Product
       </p>
 
       <p
@@ -421,7 +421,7 @@ const Product = () => {
           <Button>
             <CSVLink
               data={samplecsv}
-              filename={"sampleregionheaddata"}
+              filename={"sampleproductdata"}
               target="_blank"
             >
               Sample

@@ -297,8 +297,6 @@ const Verticalhead = () => {
       alert("One or more selected values not found.");
     }
   };
-  
-  
 
   useEffect(() => {
     if (
@@ -341,6 +339,140 @@ const Verticalhead = () => {
       setFilteredbusinessheads(filteredBusinessHeads);
     }
   }, [editedPost, region, vertical, businesshead, regionhead]);
+
+  const clearFilter = () => {
+    initFilters();
+  };
+
+  const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    let _filters = { ...filters };
+
+    if (_filters.global) {
+      _filters.global.value = value;
+    } else {
+      _filters.global = { value, matchMode: FilterMatchMode.CONTAINS };
+    }
+
+    setFilters(_filters);
+    setGlobalFilterValue(value);
+  };
+
+  const initFilters = () => {
+    setFilters({
+      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      verticalHeadName: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },
+      verticalHeadCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      verticalCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      verticalName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      businessHeadCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      businessHeadName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      regionCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      regionName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      regionHeadCode: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      regionHeadName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+    });
+    setGlobalFilterValue("");
+  };
+
+  const downloadCSV = () => {
+    // Define the headers for the CSV
+    const headers = [
+      "Vertical Head Name",
+      "vertical Head Code",
+      "Vertical Code",
+      "Vertical Name",
+      "Business Head Code",
+      "Business Head Name",
+      "Region Code",
+      "Region Name",
+      "Region Head Code",
+      "Region Head Name",
+    ];
+
+    // Create an array of rows to be included in the CSV
+    const rows = posts.map((post) => [
+      post.verticalHeadName,
+      post.verticalHeadCode,
+      post.verticalCode,
+      post.verticalName,
+      post.businessHeadCode,
+      post.businessHeadName,
+      post.regionCode,
+      post.regionName,
+      post.regionHeadName,
+      post.regionHeadCode,
+    ]);
+
+    // Combine headers and rows into a single array
+    const csvData = [headers, ...rows];
+
+    // Convert the array to CSV content
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      csvData.map((row) => row.join(",")).join("\n");
+
+    // Create a download link and trigger the download
+    const encodedURI = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedURI);
+    link.setAttribute("download", "verticalheadmaster.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const samplecsv = [
+    {
+      id: "",
+      verticalHeadName: "",
+      verticalHeadCode: "",
+      verticalCode: "",
+      verticalName: "",
+      businessHeadCode: "",
+      businessHeadName: "",
+      regionCode: "",
+      regionName: "",
+      regionHeadName: "",
+      regionHeadCode: "",
+    },
+  ];
+
+  const handleFileUpload = (file) => {
+    Papa.parse(file, {
+      header: true,
+      complete: async (results) => {
+        const { data } = results;
+        const filteredData = data.filter((row) => {
+          // Check if all values in the row are empty or not
+          return Object.values(row).some((value) => value.trim() !== "");
+        });
+        for (let i = 0; i < filteredData.length; i++) {
+          const row = filteredData[i];
+          try {
+            await axios.post("http://localhost:8800/api/auth/adminverticalhead", row);
+            console.log(`Inserted row ${i + 1}: ${JSON.stringify(row)}`);
+          } catch (err) {
+            console.error(
+              `Error inserting row ${i + 1}: ${JSON.stringify(row)}`
+            );
+            console.error(err);
+            alert("Error occurred while uploading data. Please try again.");
+            return;
+          }
+        }
+        setPosts(filteredData);
+        alert("Data has been uploaded successfully.");
+      },
+      error: (error) => {
+        console.error(error);
+        alert("Error occurred while uploading data. Please try again.");
+      },
+    });
+  };
 
   return (
     <div className="form">
@@ -600,7 +732,69 @@ const Verticalhead = () => {
               </div>
             </>
           )}
+        
+        <input
+          type="file"
+          className="branchfile"
+          onChange={(e) => handleFileUpload(e.target.files[0])}
+        />
+      <div
+          className="flex align-items-end justify-content-end gap-2 exc"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            gap: "2px",
+            marginBottom: "30px",
+            marginTop: "-60px",
+          }}
+        >
+          <Button>
+            <CSVLink
+              data={samplecsv}
+              filename={"sampleverticalheaddata"}
+              target="_blank"
+            >
+              Sample
+            </CSVLink>
+          </Button>
+
+          <Button
+            type="button"
+            icon={<img alt="excel icon" src={exc} />}
+            rounded
+            onClick={downloadCSV}
+            style={{
+              marginRight: "20px",
+              backgroundColor: "lightgreen",
+              border: "none",
+            }}
+            title="Download CSV"
+          />
         </div>
+      </div>
+        </div>
+
+        
+
+      <div className="flex justify-content-between gap-5 clearred">
+        <Button
+          type="button"
+          icon="pi pi-filter-slash"
+          label="Clear"
+          outlined
+          onClick={clearFilter}
+          style={{ marginLeft: "20px", color: "red" }}
+        />
+        <span className="p-input-icon-left search">
+          <i className="pi pi-search" />
+          <InputText
+            value={globalFilterValue}
+            onChange={onGlobalFilterChange}
+            placeholder="Search"
+            className="searchbar"
+          />
+        </span>
       </div>
 
       <DataTable

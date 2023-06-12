@@ -50,6 +50,7 @@ const User = () => {
     Branchcode5: "",
     Branchname5: "",
     role: "",
+    status: "",
   });
 
   const [region, setregion] = useState([]);
@@ -674,6 +675,8 @@ const User = () => {
       "Branch Name 4",
       "Branch Code 5",
       "Branch Name 5",
+      "Role",
+      "Status"
     ];
 
     // Create an array of rows to be included in the CSV
@@ -703,6 +706,8 @@ const User = () => {
       post.Branchname4,
       post.Branchcode5,
       post.Branchname5,
+      post.role,
+      post.status,
     ]);
 
     // Combine headers and rows into a single array
@@ -754,6 +759,18 @@ const User = () => {
           const row = filteredData[i];
 
           try {
+            if (
+              !row.employeeName ||
+              !row.employeeCode ||
+              !row.employeeDesignation ||
+              !row.mobileNumber ||
+              !row.emailId ||
+              !row.regionCode ||
+              !row.branchCode ||
+              !row.verticalCode
+            ) {
+              throw new Error("One or more mandatory fields are missing.");
+            }
             let selectedRegion = null;
             let selectedRegionHead = null;
             let selectedBranch = null;
@@ -842,6 +859,8 @@ const User = () => {
               Branchname4: row.Branchname4,
               Branchcode5: row.Branchcode5,
               Branchname5: row.Branchname5,
+              role: row.role || "Employee", 
+              status: row.status || "active", 
             });
             successCount++;
           } catch (error) {
@@ -1250,6 +1269,23 @@ const User = () => {
 
               <div>
                 <label>
+                  Status
+                  <select
+                    required
+                    className="userinput"
+                    id="status"
+                    name="status"
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </label>
+              </div>
+
+              <div>
+                <label>
                   Branch Name 2
                   <select
                     className="userinput"
@@ -1579,6 +1615,7 @@ const User = () => {
         <Column field="Branchname5" sortable header="Branch Name 5"></Column>
         <Column field="Branchcode5" sortable header="Branch Code 5"></Column>
         <Column field="role" sortable header="Role"></Column>
+        <Column field="status" sortable header="Status"></Column>
         <Column
           body={(rowData) => (
             <Button
@@ -1995,6 +2032,28 @@ const User = () => {
                   <option value="">Select Role</option>
                   <option value="Employee">Employee</option>
                   <option value="Admin">Admin</option>
+                </select>
+              </div>
+
+              <div className="p-field" style={{ paddingBottom: "10px" }}>
+                <label htmlFor="status">Status</label>
+                <select
+                  required
+                  id="status"
+                  name="status"
+                  value={editedPost.status}
+                  onChange={(e) =>
+                    setEditedPost({
+                      ...editedPost,
+                      status: e.target.value,
+                    })
+                  }
+                  disabled={!editedPost}
+                  className="userinput"
+                >
+                  <option value="">Select Status</option>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
                 </select>
               </div>
 

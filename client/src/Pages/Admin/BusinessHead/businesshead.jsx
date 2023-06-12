@@ -203,7 +203,7 @@ const Businesshead = () => {
     const encodedURI = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedURI);
-    link.setAttribute("download", "verticalheadmaster.csv");
+    link.setAttribute("download", "businessheadmaster.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -415,7 +415,7 @@ const Businesshead = () => {
           <Button>
             <CSVLink
               data={samplecsv}
-              filename={"sampleverticalheaddata"}
+              filename={"samplebusinessheaddata"}
               target="_blank"
             >
               Sample

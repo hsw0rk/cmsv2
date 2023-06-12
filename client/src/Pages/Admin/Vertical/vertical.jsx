@@ -106,7 +106,7 @@ const Vertical = () => {
           textAlign: "left",
         }}
       >
-        VERTICAL
+        Vertical
       </p>
 
       <p

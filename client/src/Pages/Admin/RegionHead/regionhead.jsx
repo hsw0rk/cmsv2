@@ -401,8 +401,6 @@ const Regionhead = () => {
           className="branchfile"
           onChange={(e) => handleFileUpload(e.target.files[0])}
         />
-
-      </div>
       <div
           className="flex align-items-end justify-content-end gap-2 exc"
           style={{
@@ -437,6 +435,8 @@ const Regionhead = () => {
             title="Download CSV"
           />
         </div>
+      </div>
+
       <div className="flex justify-content-between gap-5 clearred">
         <Button
           type="button"

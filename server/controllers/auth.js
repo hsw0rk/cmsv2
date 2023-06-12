@@ -42,7 +42,7 @@ export const register = (req, res) => {
 };
 
 export const login = (req, res) => {
-  const q = "SELECT * FROM employeemaster WHERE employeeCode = ?";
+  const q = "SELECT * FROM employeemaster WHERE employeeCode = ? AND status = 'active'";
 
   db.query(q, [req.body.employeeCode], (err, data) => {
     if (err) return res.status(500).json("Internal server error");
@@ -646,9 +646,11 @@ export const edituser = (req, res) => {
     Branchname4,
     Branchcode5,
     Branchname5,
-    role
+    role,
+    status
+
   } = req.body;
-  const q = `UPDATE employeemaster SET employeeName='${employeeName}', employeeCode='${employeeCode}', mobileNumber='${mobileNumber}',emailId='${emailId}', regionCode='${regionCode}', regionName='${regionName}', branchName='${branchName}', branchCode='${branchCode}', verticalCode='${verticalCode}', verticalName='${verticalName}', verticalHeadCode='${verticalHeadCode}',verticalHeadName='${verticalHeadName}', regionHeadCode='${regionHeadCode}', regionHeadName='${regionHeadName}', businessHeadCode='${businessHeadCode}', businessHeadName='${businessHeadName}', Branchcode2='${Branchcode2}', Branchname2='${Branchname2}', Branchcode3='${Branchcode3}',Branchname3='${Branchname3}', Branchcode4='${Branchcode4}', Branchname4='${Branchname4}', Branchcode5='${Branchcode5}', Branchname5='${Branchname5}', role='${role}' WHERE id=${id}`;
+  const q = `UPDATE employeemaster SET employeeName='${employeeName}', employeeCode='${employeeCode}', mobileNumber='${mobileNumber}',emailId='${emailId}', regionCode='${regionCode}', regionName='${regionName}', branchName='${branchName}', branchCode='${branchCode}', verticalCode='${verticalCode}', verticalName='${verticalName}', verticalHeadCode='${verticalHeadCode}',verticalHeadName='${verticalHeadName}', regionHeadCode='${regionHeadCode}', regionHeadName='${regionHeadName}', businessHeadCode='${businessHeadCode}', businessHeadName='${businessHeadName}', Branchcode2='${Branchcode2}', Branchname2='${Branchname2}', Branchcode3='${Branchcode3}',Branchname3='${Branchname3}', Branchcode4='${Branchcode4}', Branchname4='${Branchname4}', Branchcode5='${Branchcode5}', Branchname5='${Branchname5}', role='${role}', status='${status}' WHERE id=${id}`;
 
   db.query(q, (err, data) => {
     if (err) return res.status(500).json(err);
@@ -683,10 +685,11 @@ export const adminuser = (req, res) => {
   const Branchcode5 = req.body.Branchcode5;
   const Branchname5 = req.body.Branchname5;
   const role = req.body.role;
+  const status = req.body.status;
 
   // Check if the data already exists in the database based on multiple fields
   const checkDuplicateQuery =
-    "SELECT * FROM employeemaster WHERE employeeName = ? AND employeeCode = ? AND employeeDesignation = ? AND mobileNumber = ? AND emailId = ? AND regionCode = ? AND regionName = ? AND branchCode = ? AND branchName = ? AND verticalCode = ? AND verticalName = ? AND verticalHeadCode = ? AND verticalHeadName = ? AND regionHeadCode = ? AND regionHeadName = ? AND businessHeadCode = ? AND businessHeadName = ? AND Branchcode2 = ? AND Branchname2 = ? AND Branchcode3 = ? AND Branchname3 = ? AND Branchcode4 = ? AND Branchname4 = ? AND Branchcode5 = ? AND Branchname5 = ? AND role = ?";
+    "SELECT * FROM employeemaster WHERE employeeName = ? AND employeeCode = ? AND employeeDesignation = ? AND mobileNumber = ? AND emailId = ? AND regionCode = ? AND regionName = ? AND branchCode = ? AND branchName = ? AND verticalCode = ? AND verticalName = ? AND verticalHeadCode = ? AND verticalHeadName = ? AND regionHeadCode = ? AND regionHeadName = ? AND businessHeadCode = ? AND businessHeadName = ? AND Branchcode2 = ? AND Branchname2 = ? AND Branchcode3 = ? AND Branchname3 = ? AND Branchcode4 = ? AND Branchname4 = ? AND Branchcode5 = ? AND Branchname5 = ? AND role = ? AND status = ?";
   const values = [
     employeeName,
     employeeCode,
@@ -713,7 +716,8 @@ export const adminuser = (req, res) => {
     Branchname4,
     Branchcode5,
     Branchname5,
-    role
+    role,
+    status
   ];
 
   db.query(checkDuplicateQuery, values, (err, results) => {
@@ -722,7 +726,7 @@ export const adminuser = (req, res) => {
     if (results.length > 0) {
       // If the data already exists, update the existing row
       const updateQuery =
-        "UPDATE employeemaster SET employeeName = ?, employeeCode = ?, employeeDesignation = ?, mobileNumber = ?, emailId = ?, regionCode = ?, regionName = ?, branchCode = ?, branchName = ?, verticalCode = ?, verticalName = ?, verticalHeadCode = ?, verticalHeadName = ?, regionHeadCode = ?, regionHeadName = ?, businessHeadCode = ?, businessHeadName = ?, Branchcode2 = ?, Branchname2 = ?, Branchcode3 = ?, Branchname3 = ?, Branchcode4 = ?, Branchname4 = ?, Branchcode5 = ?, Branchname5 = ?, role = ?";
+        "UPDATE employeemaster SET employeeName = ?, employeeCode = ?, employeeDesignation = ?, mobileNumber = ?, emailId = ?, regionCode = ?, regionName = ?, branchCode = ?, branchName = ?, verticalCode = ?, verticalName = ?, verticalHeadCode = ?, verticalHeadName = ?, regionHeadCode = ?, regionHeadName = ?, businessHeadCode = ?, businessHeadName = ?, Branchcode2 = ?, Branchname2 = ?, Branchcode3 = ?, Branchname3 = ?, Branchcode4 = ?, Branchname4 = ?, Branchcode5 = ?, Branchname5 = ?, role = ?, status = ?";
       const updateValues = [
         employeeName,
         employeeCode,
@@ -749,7 +753,8 @@ export const adminuser = (req, res) => {
         Branchname4,
         Branchcode5,
         Branchname5,
-        role
+        role,
+        status
       ];
 
       db.query(updateQuery, updateValues, (err, data) => {
@@ -759,7 +764,7 @@ export const adminuser = (req, res) => {
     } else {
       // If the data does not exist, insert the data into the database
       const insertQuery =
-        "INSERT INTO employeemaster (`employeeName`,`employeeCode`,`employeeDesignation`,`mobileNumber`,`emailId`,`regionCode`,`regionName`,`branchCode`,`branchName`,`verticalCode`,`verticalName`,`verticalHeadCode`,`verticalHeadName`,`regionHeadCode`,`regionHeadName`,`businessHeadCode`,`businessHeadName`,`Branchcode2`,`Branchname2`,`Branchcode3`,`Branchname3`,`Branchcode4`,`Branchname4`,`Branchcode5`,`Branchname5`,`role`) VALUES (?)";
+        "INSERT INTO employeemaster (`employeeName`,`employeeCode`,`employeeDesignation`,`mobileNumber`,`emailId`,`regionCode`,`regionName`,`branchCode`,`branchName`,`verticalCode`,`verticalName`,`verticalHeadCode`,`verticalHeadName`,`regionHeadCode`,`regionHeadName`,`businessHeadCode`,`businessHeadName`,`Branchcode2`,`Branchname2`,`Branchcode3`,`Branchname3`,`Branchcode4`,`Branchname4`,`Branchcode5`,`Branchname5`,`role` ,`status` ) VALUES (?)";
 
       const insertValues = [
         employeeName,
@@ -787,7 +792,8 @@ export const adminuser = (req, res) => {
         Branchname4,
         Branchcode5,
         Branchname5,
-        role
+        role,
+        status
       ];
 
       db.query(insertQuery, [insertValues], (err, data) => {
@@ -1094,71 +1100,55 @@ export const approvaldata = (req, res) => {
 };
 
 export const approval = (req, res) => {
-  const {
-    employeeName,
-    employeeCode,
-    mobileNumber,
-    password,
-    employeeDesignation,
-    emailId,
-    role,
-    regionCode,
-    regionName,
-    branchName,
-    branchCode,
-    verticalCode,
-    verticalName,
-    verticalHeadCode,
-    verticalHeadName,
-    regionHeadCode,
-    regionHeadName,
-    businessHeadCode,
-    businessHeadName,
-    Branchcode2,
-    Branchname2,
-    Branchcode3,
-    Branchname3,
-    Branchcode4,
-    Branchname4,
-    Branchcode5,
-    Branchname5
-  } = req.body;
-
-  const q = `INSERT INTO employeemaster (employeeName, employeeCode, mobileNumber,employeeDesignation,role,emailId, password, regionCode, regionName, branchName, branchCode, verticalCode, verticalName, verticalHeadCode, verticalHeadName, regionHeadCode, regionHeadName, businessHeadCode, businessHeadName, Branchcode2, Branchname2, Branchcode3, Branchname3, Branchcode4, Branchname4, Branchcode5, Branchname5) VALUES ('${employeeName}', '${employeeCode}', '${mobileNumber}', '${password}', '${employeeDesignation}','${emailId}','${role}', '${regionCode}', '${regionName}', '${branchName}', '${branchCode}', '${verticalCode}', '${verticalName}', '${verticalHeadCode}', '${verticalHeadName}', '${regionHeadCode}', '${regionHeadName}', '${businessHeadCode}', '${businessHeadName}', '${Branchcode2}', '${Branchname2}', '${Branchcode3}', '${Branchname3}', '${Branchcode4}', '${Branchname4}', '${Branchcode5}', '${Branchname5}')`;
-
-  db.query(q, (err, data) => {
-    if (err) return res.status(500).json(err);
-    return res.status(200)
-    .json({ message: "User has been approved successfully!" });
-  });
-};
-
-
-export const adminapproval = (req, res) => {
   const row = req.body;
 
   // Insert the row into the employeemaster table
-  const insertQuery =
-    "INSERT INTO employeemaster (`employeename`,`employeecode`,`mobilenumber`,`password`,`regionCode`,`regionName`,`branchName`,`branchCode`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+  const insertQuery = "INSERT INTO employeemaster (`employeeName`,`employeeCode`,`mobileNumber`,`password`,`employeeDesignation`,`emailId`,`role`,`status`,`regionCode`,`regionName`,`branchName`,`branchCode`,`verticalCode`,`verticalName`,`verticalHeadCode`,`verticalHeadName`,`regionHeadCode`,`regionHeadName`,`businessHeadCode`,`businessHeadName`,`Branchcode2`,`Branchname2`,`Branchcode3`,`Branchname3`,`Branchcode4`,`Branchname4`,`Branchcode5`,`Branchname5`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   const values = [
-    row.employeename,
-    row.employeecode,
-    row.mobilenumber,
+    row.employeeName,
+    row.employeeCode,
+    row.mobileNumber,
     row.password,
+    row.employeeDesignation,
+    row.emailId,
+    row.role,
+    row.status,
     row.regionCode,
     row.regionName,
     row.branchName,
     row.branchCode,
+    row.verticalCode,
+    row.verticalName,
+    row.verticalHeadCode,
+    row.verticalHeadName,
+    row.regionHeadCode,
+    row.regionHeadName,
+    row.businessHeadCode,
+    row.businessHeadName,
+    row.Branchcode2,
+    row.Branchname2,
+    row.Branchcode3,
+    row.Branchname3,
+    row.Branchcode4,
+    row.Branchname4,
+    row.Branchcode5,
+    row.Branchname5,
   ];
 
   db.query(insertQuery, values, (err, data) => {
     if (err) return res.status(500).json({ error: err.message });
-    // Show a success message
-    return res
-      .status(200)
-      .json({ message: "User data has been inserted successfully!" });
+    // Delete the inserted row from the approvalmaster table
+    const deleteQuery = "DELETE FROM approvalmaster WHERE employeeCode = ?";
+    const deleteValues = [row.employeeCode];
+
+    db.query(deleteQuery, deleteValues, (err, data) => {
+      if (err) return res.status(500).json({ error: err.message });
+      // Show a success message
+      return res.status(200).json({ message: "User has been approved successfully!" });
+    });
   });
 };
+
 
 
 //businessheadmaster
