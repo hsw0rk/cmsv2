@@ -144,88 +144,6 @@ const Approval = () => {
     }, [editedPost, vertical, branches, verticalhead, businesshead, region, regionhead]);
 
 
-    const saveEditedPost = () => {
-        console.log("Edited Post:", editedPost);
-
-        //vertical
-        const selectedVertical = vertical.find(
-            (verticals) => verticals.verticalCode === editedPost.verticalCode
-        );
-        console.log("Selected Vertical:", selectedVertical);
-
-        const selectedVerticalHead = verticalhead.find(
-            (verticalheads) =>
-                verticalheads.verticalCode === editedPost.verticalCode
-        );
-        console.log("Selected Vertical Head:", selectedVerticalHead);
-
-        const selectedBusinessHead = businesshead.find(
-            (businessheads) =>
-                businessheads.verticalCode === editedPost.verticalCode
-        );
-        console.log("Selected Business Head:", selectedBusinessHead);
-
-        //region
-        const selectedRegion = region.find(
-            (regions) => regions.regionCode === editedPost.regionCode
-        );
-        console.log("Selected Region:", selectedRegion);
-
-        const selectedRegionHead = regionhead.find(
-            (regionheads) =>
-                regionheads.regionCode === editedPost.regionCode
-        );
-        console.log("Selected Region Head:", selectedRegionHead);
-
-        const selectedBranch = branches.find(
-            (branch) =>
-                branch.regionCode === editedPost.regionCode &&
-                branch.branchName === editedPost.branchName
-        );
-        console.log("Selected Branch:", selectedBranch);
-
-        if (
-            selectedVertical &&
-            selectedVerticalHead &&
-            selectedBusinessHead &&
-            selectedRegion &&
-            selectedRegionHead &&
-            selectedBranch
-        ) {
-            const updatedPost = {
-                ...editedPost,
-                verticalName: selectedVertical.verticalName,
-                verticalHeadName: selectedVerticalHead.verticalHeadName,
-                verticalHeadCode: selectedVerticalHead.verticalHeadCode,
-                businessHeadName: selectedBusinessHead.businessHeadName,
-                businessHeadCode: selectedBusinessHead.businessHeadCode,
-                regionName: selectedRegion.regionName,
-                regionHeadName: selectedRegionHead.regionHeadName,
-                regionHeadCode: selectedRegionHead.regionHeadCode,
-                branchCode: selectedBranch.branchCode,
-            };
-
-            axios
-                .put(
-                    `http://localhost:8800/api/auth/approval/${editedPost.id}`,
-                    updatedPost
-                )
-                .then((res) => {
-                    setPosts(
-                        posts.map((post) => (post.id === editedPost.id ? updatedPost : post))
-                    );
-                    setEditedPost(null);
-                    setEditDialogVisible(false);
-                    alert("You have edited the data.");
-                })
-                .catch((error) => console.log(error));
-        } else {
-            // Handle the case when a selected value is not found
-            console.log("One or more selected values not found.");
-            alert("One or more selected values not found.");
-        }
-    };
-
     useEffect(() => {
         if (
             editedPost &&
@@ -286,6 +204,121 @@ const Approval = () => {
         }
     }, [editedPost, region, branches, vertical, verticalhead, businesshead, regionhead]);
 
+    const saveEditedPost = () => {
+        console.log("Edited Post:", editedPost);
+
+        //vertical
+        const selectedVertical = vertical.find(
+            (verticals) => verticals.verticalCode === editedPost.verticalCode
+        );
+        console.log("Selected Vertical:", selectedVertical);
+
+        const selectedVerticalHead = verticalhead.find(
+            (verticalheads) => verticalheads.verticalCode === editedPost.verticalCode
+        );
+        console.log("Selected Vertical Head:", selectedVerticalHead);
+
+        const selectedBusinessHead = businesshead.find(
+            (businessheads) => businessheads.verticalCode === editedPost.verticalCode
+        );
+        console.log("Selected Business Head:", selectedBusinessHead);
+
+        //region
+        const selectedRegion = region.find(
+            (regions) => regions.regionCode === editedPost.regionCode
+        );
+        console.log("Selected Region:", selectedRegion);
+
+        const selectedRegionHead = regionhead.find(
+            (regionheads) => regionheads.regionCode === editedPost.regionCode
+        );
+        console.log("Selected Region Head:", selectedRegionHead);
+
+        const selectedBranch = branches.find(
+            (branch) =>
+                branch.regionCode === editedPost.regionCode &&
+                branch.branchName === editedPost.branchName
+        );
+        console.log("Selected Branch:", selectedBranch);
+
+        const selectedBranch2 = branches.find(
+            (branch) =>
+                branch.regionCode === editedPost.regionCode &&
+                branch.branchName === editedPost.Branchname2
+        );
+        console.log("Selected Branch2:", selectedBranch2);
+
+        const selectedBranch3 = branches.find(
+            (branch) =>
+                branch.regionCode === editedPost.regionCode &&
+                branch.branchName === editedPost.Branchname3
+        );
+        console.log("Selected Branch3:", selectedBranch3);
+
+        const selectedBranch4 = branches.find(
+            (branch) =>
+                branch.regionCode === editedPost.regionCode &&
+                branch.branchName === editedPost.Branchname4
+        );
+        console.log("Selected Branch4:", selectedBranch4);
+
+        const selectedBranch5 = branches.find(
+            (branch) =>
+                branch.regionCode === editedPost.regionCode &&
+                branch.branchName === editedPost.Branchname5
+        );
+        console.log("Selected Branch5:", selectedBranch5);
+        if (
+            selectedVertical &&
+            selectedVerticalHead &&
+            selectedBusinessHead &&
+            selectedRegion &&
+            selectedRegionHead &&
+            selectedBranch &&
+            (selectedBranch2 !== null || editedPost.Branchname2 === "") &&
+            (selectedBranch3 !== null || editedPost.Branchname3 === "") &&
+            (selectedBranch4 !== null || editedPost.Branchname4 === "") &&
+            (selectedBranch5 !== null || editedPost.Branchname5 === "")
+        ) {
+            const updatedPost = {
+                ...editedPost,
+                verticalName: selectedVertical.verticalName,
+                verticalHeadName: selectedVerticalHead.verticalHeadName,
+                verticalHeadCode: selectedVerticalHead.verticalHeadCode,
+                businessHeadName: selectedBusinessHead.businessHeadName,
+                businessHeadCode: selectedBusinessHead.businessHeadCode,
+                regionName: selectedRegion.regionName,
+                regionHeadName: selectedRegionHead.regionHeadName,
+                regionHeadCode: selectedRegionHead.regionHeadCode,
+                branchCode: selectedBranch.branchCode,
+                Branchcode2: selectedBranch2 ? selectedBranch2.branchCode : "",
+                Branchcode3: selectedBranch3 ? selectedBranch3.branchCode : "",
+                Branchcode4: selectedBranch4 ? selectedBranch4.branchCode : "",
+                Branchcode5: selectedBranch5 ? selectedBranch5.branchCode : "",
+            };
+
+            axios
+                .put(
+                    `http://localhost:8800/api/auth/edituser/${editedPost.id}`,
+                    updatedPost
+                )
+                .then((res) => {
+                    setPosts(
+                        posts.map((post) =>
+                            post.id === editedPost.id ? updatedPost : post
+                        )
+                    );
+                    setEditedPost(null);
+                    setEditDialogVisible(false);
+                    alert("You have edited the data.");
+                })
+                .catch((error) => console.log(error));
+        } else {
+            // Handle the case when a selected value is not found
+            console.log("One or more selected values not found.");
+            alert("One or more selected values not found.");
+        }
+    };
 
 
     return (
@@ -383,6 +416,40 @@ const Approval = () => {
                                         setEditedPost({ ...editedPost, employeeDesignation: e.target.value })
                                     }
                                 />
+                            </div>
+
+                            <div className="p-field" style={{ paddingBottom: "10px" }}>
+                                <label htmlFor="emailId">Email Id</label>
+                                <InputText
+                                    id="emailId"
+                                    value={editedPost.emailId}
+                                    onChange={(e) =>
+                                        setEditedPost({ ...editedPost, emailId: e.target.value })
+                                    }
+                                />
+                            </div>
+
+
+                            <div className="p-field" style={{ paddingBottom: "10px" }}>
+                                <label htmlFor="role">Roles</label>
+                                <select
+                                    required
+                                    id="role"
+                                    name="role"
+                                    value={editedPost.role}
+                                    onChange={(e) =>
+                                        setEditedPost({
+                                            ...editedPost,
+                                            role: e.target.value,
+                                        })
+                                    }
+                                    disabled={!editedPost}
+                                    className="userinput"
+                                >
+                                    <option value="">Select Role</option>
+                                    <option value="Employee">Employee</option>
+                                    <option value="Admin">Admin</option>
+                                </select>
                             </div>
 
                             <div className="p-field" style={{ paddingBottom: "10px" }}>
@@ -676,14 +743,14 @@ const Approval = () => {
                             </div>
 
                             <div className="p-field" style={{ paddingBottom: "10px" }}>
-                                <label htmlFor="branchName2">Branch Name 2</label>
+                                <label htmlFor="Branchname2">Branch Name 2</label>
                                 <select
-                                    id="branchName2"
-                                    value={editedPost.branchName2}
+                                    id="Branchname2"
+                                    value={editedPost.Branchname2}
                                     onChange={(e) =>
                                         setEditedPost({
                                             ...editedPost,
-                                            branchName2: e.target.value,
+                                            Branchname2: e.target.value,
                                         })
                                     }
                                     disabled={!editedPost}
@@ -699,14 +766,14 @@ const Approval = () => {
                             </div>
 
                             <div hidden className="p-field" style={{ paddingBottom: "10px" }}>
-                                <label htmlFor="branchCode2">Branch Code 2</label>
+                                <label htmlFor="Branchcode2">Branch Code 2</label>
                                 <select
-                                    id="branchCode2"
-                                    value={editedPost.branchCode2}
+                                    id="Branchcode2"
+                                    value={editedPost.Branchcode2}
                                     onChange={(e) =>
                                         setEditedPost({
                                             ...editedPost,
-                                            branchCode2: e.target.value,
+                                            Branchcode2: e.target.value,
                                         })
                                     }
                                     disabled={!editedPost}
@@ -721,14 +788,14 @@ const Approval = () => {
                             </div>
 
                             <div className="p-field" style={{ paddingBottom: "10px" }}>
-                                <label htmlFor="branchName3">Branch Name 3</label>
+                                <label htmlFor="Branchname3">Branch Name 3</label>
                                 <select
-                                    id="branchName3"
-                                    value={editedPost.branchName3}
+                                    id="Branchname3"
+                                    value={editedPost.Branchname3}
                                     onChange={(e) =>
                                         setEditedPost({
                                             ...editedPost,
-                                            branchName3: e.target.value,
+                                            Branchname3: e.target.value,
                                         })
                                     }
                                     disabled={!editedPost}
@@ -744,14 +811,14 @@ const Approval = () => {
                             </div>
 
                             <div hidden className="p-field" style={{ paddingBottom: "10px" }}>
-                                <label htmlFor="branchCode3">Branch Code 3</label>
+                                <label htmlFor="Branchcode3">Branch Code 3</label>
                                 <select
-                                    id="branchCode3"
-                                    value={editedPost.branchCode3}
+                                    id="Branchcode3"
+                                    value={editedPost.Branchcode3}
                                     onChange={(e) =>
                                         setEditedPost({
                                             ...editedPost,
-                                            branchCode3: e.target.value,
+                                            Branchcode3: e.target.value,
                                         })
                                     }
                                     disabled={!editedPost}
@@ -766,14 +833,14 @@ const Approval = () => {
                             </div>
 
                             <div className="p-field" style={{ paddingBottom: "10px" }}>
-                                <label htmlFor="branchName4">Branch Name 4</label>
+                                <label htmlFor="Branchname4">Branch Name 4</label>
                                 <select
-                                    id="branchName4"
-                                    value={editedPost.branchName4}
+                                    id="Branchname4"
+                                    value={editedPost.Branchname4}
                                     onChange={(e) =>
                                         setEditedPost({
                                             ...editedPost,
-                                            branchName4: e.target.value,
+                                            Branchname4: e.target.value,
                                         })
                                     }
                                     disabled={!editedPost}
@@ -789,14 +856,14 @@ const Approval = () => {
                             </div>
 
                             <div hidden className="p-field" style={{ paddingBottom: "10px" }}>
-                                <label htmlFor="branchCode4">Branch Code 4</label>
+                                <label htmlFor="Branchcode4">Branch Code 4</label>
                                 <select
-                                    id="branchCode4"
-                                    value={editedPost.branchCode4}
+                                    id="Branchcode4"
+                                    value={editedPost.Branchcode4}
                                     onChange={(e) =>
                                         setEditedPost({
                                             ...editedPost,
-                                            branchCode4: e.target.value,
+                                            Branchcode4: e.target.value,
                                         })
                                     }
                                     disabled={!editedPost}
@@ -811,14 +878,14 @@ const Approval = () => {
                             </div>
 
                             <div className="p-field" style={{ paddingBottom: "10px" }}>
-                                <label htmlFor="branchName5">Branch Name 5</label>
+                                <label htmlFor="Branchname5">Branch Name 5</label>
                                 <select
-                                    id="branchName5"
-                                    value={editedPost.branchName5}
+                                    id="Branchname5"
+                                    value={editedPost.Branchname5}
                                     onChange={(e) =>
                                         setEditedPost({
                                             ...editedPost,
-                                            branchName5: e.target.value,
+                                            Branchname5: e.target.value,
                                         })
                                     }
                                     disabled={!editedPost}
@@ -834,14 +901,14 @@ const Approval = () => {
                             </div>
 
                             <div hidden className="p-field" style={{ paddingBottom: "10px" }}>
-                                <label htmlFor="branchCode5">Branch Code 5</label>
+                                <label htmlFor="Branchcode5">Branch Code 5</label>
                                 <select
-                                    id="branchCode5"
-                                    value={editedPost.branchCode5}
+                                    id="Branchcode5"
+                                    value={editedPost.Branchcode5}
                                     onChange={(e) =>
                                         setEditedPost({
                                             ...editedPost,
-                                            branchCode5: e.target.value,
+                                            Branchcode5: e.target.value,
                                         })
                                     }
                                     disabled={!editedPost}

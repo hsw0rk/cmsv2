@@ -1099,6 +1099,9 @@ export const approval = (req, res) => {
     employeeCode,
     mobileNumber,
     password,
+    employeeDesignation,
+    emailId,
+    role,
     regionCode,
     regionName,
     branchName,
@@ -1121,7 +1124,7 @@ export const approval = (req, res) => {
     Branchname5
   } = req.body;
 
-  const q = `INSERT INTO employeemaster (employeeName, employeeCode, mobileNumber, password, regionCode, regionName, branchName, branchCode, verticalCode, verticalName, verticalHeadCode, verticalHeadName, regionHeadCode, regionHeadName, businessHeadCode, businessHeadName, Branchcode2, Branchname2, Branchcode3, Branchname3, Branchcode4, Branchname4, Branchcode5, Branchname5) VALUES ('${employeeName}', '${employeeCode}', '${mobileNumber}', '${password}', '${regionCode}', '${regionName}', '${branchName}', '${branchCode}', '${verticalCode}', '${verticalName}', '${verticalHeadCode}', '${verticalHeadName}', '${regionHeadCode}', '${regionHeadName}', '${businessHeadCode}', '${businessHeadName}', '${Branchcode2}', '${Branchname2}', '${Branchcode3}', '${Branchname3}', '${Branchcode4}', '${Branchname4}', '${Branchcode5}', '${Branchname5}')`;
+  const q = `INSERT INTO employeemaster (employeeName, employeeCode, mobileNumber,employeeDesignation,role,emailId, password, regionCode, regionName, branchName, branchCode, verticalCode, verticalName, verticalHeadCode, verticalHeadName, regionHeadCode, regionHeadName, businessHeadCode, businessHeadName, Branchcode2, Branchname2, Branchcode3, Branchname3, Branchcode4, Branchname4, Branchcode5, Branchname5) VALUES ('${employeeName}', '${employeeCode}', '${mobileNumber}', '${password}', '${employeeDesignation}','${emailId}','${role}', '${regionCode}', '${regionName}', '${branchName}', '${branchCode}', '${verticalCode}', '${verticalName}', '${verticalHeadCode}', '${verticalHeadName}', '${regionHeadCode}', '${regionHeadName}', '${businessHeadCode}', '${businessHeadName}', '${Branchcode2}', '${Branchname2}', '${Branchcode3}', '${Branchname3}', '${Branchcode4}', '${Branchname4}', '${Branchcode5}', '${Branchname5}')`;
 
   db.query(q, (err, data) => {
     if (err) return res.status(500).json(err);

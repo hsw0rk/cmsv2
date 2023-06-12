@@ -293,8 +293,6 @@ const User = () => {
       }));
     }
 
-    // Inside the handleChange function
-
     if (name === "Branchname3") {
       const selectedBranch3 = branches.find(
         (branch) =>
@@ -445,33 +443,33 @@ const User = () => {
     );
     console.log("Selected Branch:", selectedBranch);
 
-  const selectedBranch2 = branches.find(
-    (branch) =>
-      branch.regionCode === editedPost.regionCode &&
-      branch.branchName === editedPost.Branchname2
-  );
-  console.log("Selected Branch2:", selectedBranch2);
+    const selectedBranch2 = branches.find(
+      (branch) =>
+        branch.regionCode === editedPost.regionCode &&
+        branch.branchName === editedPost.Branchname2
+    );
+    console.log("Selected Branch2:", selectedBranch2);
 
-  const selectedBranch3 = branches.find(
-    (branch) =>
-      branch.regionCode === editedPost.regionCode &&
-      branch.branchName === editedPost.Branchname3
-  );
-  console.log("Selected Branch3:", selectedBranch3);
+    const selectedBranch3 = branches.find(
+      (branch) =>
+        branch.regionCode === editedPost.regionCode &&
+        branch.branchName === editedPost.Branchname3
+    );
+    console.log("Selected Branch3:", selectedBranch3);
 
-  const selectedBranch4 = branches.find(
-    (branch) =>
-      branch.regionCode === editedPost.regionCode &&
-      branch.branchName === editedPost.Branchname4
-  );
-  console.log("Selected Branch4:", selectedBranch4);
+    const selectedBranch4 = branches.find(
+      (branch) =>
+        branch.regionCode === editedPost.regionCode &&
+        branch.branchName === editedPost.Branchname4
+    );
+    console.log("Selected Branch4:", selectedBranch4);
 
-  const selectedBranch5 = branches.find(
-    (branch) =>
-      branch.regionCode === editedPost.regionCode &&
-      branch.branchName === editedPost.Branchname5
-  );
-  console.log("Selected Branch5:", selectedBranch5);
+    const selectedBranch5 = branches.find(
+      (branch) =>
+        branch.regionCode === editedPost.regionCode &&
+        branch.branchName === editedPost.Branchname5
+    );
+    console.log("Selected Branch5:", selectedBranch5);
     if (
       selectedVertical &&
       selectedVerticalHead &&
@@ -479,10 +477,10 @@ const User = () => {
       selectedRegion &&
       selectedRegionHead &&
       selectedBranch &&
-      selectedBranch2 &&
-      selectedBranch3 &&
-      selectedBranch4 &&
-      selectedBranch5
+      (selectedBranch2 !== null || editedPost.Branchname2 === "") &&
+      (selectedBranch3 !== null || editedPost.Branchname3 === "") &&
+      (selectedBranch4 !== null || editedPost.Branchname4 === "") &&
+      (selectedBranch5 !== null || editedPost.Branchname5 === "")
     ) {
       const updatedPost = {
         ...editedPost,
@@ -495,10 +493,10 @@ const User = () => {
         regionHeadName: selectedRegionHead.regionHeadName,
         regionHeadCode: selectedRegionHead.regionHeadCode,
         branchCode: selectedBranch.branchCode,
-        Branchcode2: selectedBranch2 ? selectedBranch2.branchCode : null,
-        Branchcode3: selectedBranch3 ? selectedBranch3.branchCode : null,
-        Branchcode4: selectedBranch4 ? selectedBranch4.branchCode : null,
-        Branchcode5: selectedBranch5 ? selectedBranch5.branchCode : null,
+        Branchcode2: selectedBranch2 ? selectedBranch2.branchCode : "",
+        Branchcode3: selectedBranch3 ? selectedBranch3.branchCode : "",
+        Branchcode4: selectedBranch4 ? selectedBranch4.branchCode : "",
+        Branchcode5: selectedBranch5 ? selectedBranch5.branchCode : "",
       };
 
       axios
@@ -1579,7 +1577,7 @@ const User = () => {
         <Column field="Branchname4" sortable header="Branch Name 4"></Column>
         <Column field="Branchcode4" sortable header="Branch Code 4"></Column>
         <Column field="Branchname5" sortable header="Branch Name 5"></Column>
-        <Column field="Branchcode5" sortable header="Branch Code "></Column>
+        <Column field="Branchcode5" sortable header="Branch Code 5"></Column>
         <Column field="role" sortable header="Role"></Column>
         <Column
           body={(rowData) => (
