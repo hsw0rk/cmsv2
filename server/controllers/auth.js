@@ -657,7 +657,7 @@ export const edituser = (req, res) => {
     return res.status(200).json(data);
   });
 };
-
+ 
 export const adminuser = (req, res) => {
   const employeeName = req.body.employeeName;
   const employeeCode = req.body.employeeCode;
@@ -1103,7 +1103,7 @@ export const approval = (req, res) => {
   const row = req.body;
 
   // Insert the row into the employeemaster table
-  const insertQuery = "INSERT INTO employeemaster (`employeeName`,`employeeCode`,`mobileNumber`,`password`,`employeeDesignation`,`emailId`,`role`,`status`,`regionCode`,`regionName`,`branchName`,`branchCode`,`verticalCode`,`verticalName`,`verticalHeadCode`,`verticalHeadName`,`regionHeadCode`,`regionHeadName`,`businessHeadCode`,`businessHeadName`,`Branchcode2`,`Branchname2`,`Branchcode3`,`Branchname3`,`Branchcode4`,`Branchname4`,`Branchcode5`,`Branchname5`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  const insertQuery = "INSERT INTO employeemaster (`employeeName`,`employeeCode`,`mobileNumber`,`password`,`employeeDesignation`,`emailId`,`role`,`status`,`regionCode`,`regionName`,`branchName`,`branchCode`,`verticalCode`,`verticalName`,`verticalHeadCode`,`verticalHeadName`,`regionHeadCode`,`regionHeadName`,`businessHeadCode`,`businessHeadName`,`Branchcode2`,`Branchname2`,`Branchcode3`,`Branchname3`,`Branchcode4`,`Branchname4`,`Branchcode5`,`Branchname5`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   const values = [
     row.employeeName,
     row.employeeCode,
@@ -1148,8 +1148,6 @@ export const approval = (req, res) => {
     });
   });
 };
-
-
 
 //businessheadmaster
 export const businessheaddata = (req, res) => {
